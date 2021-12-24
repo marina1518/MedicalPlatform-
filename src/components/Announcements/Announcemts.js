@@ -4,8 +4,7 @@ import { Announcements } from '../../Dummyvalues';
 import { useState } from 'react';
 import { DeleteOutline } from "@material-ui/icons";
 import { Button } from 'react-bootstrap';
-import Clinicedit from '../../components/ClinicEdit/Clinicedit';
-import Addclinic from '../ClinicEdit/ADDCLINIC/addclinic';
+
 import Addannouncment from './Add/Addanouncment';
 import Announcmentedit from './Edit/Editannouncment';
 

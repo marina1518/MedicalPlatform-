@@ -4,8 +4,7 @@ import { PharmacyList } from '../../Dummyvalues';
 import { useState } from 'react';
 import { DeleteOutline } from "@material-ui/icons";
 import { Button } from 'react-bootstrap';
-import Clinicedit from '../../components/ClinicEdit/Clinicedit';
-import Addclinic from '../ClinicEdit/ADDCLINIC/addclinic';
+
 import Addpharmacy from './Add/Pharmaadd';
 import Pharmacyedit from './EDIT/Pharmaedit';
 
@@ -27,15 +26,15 @@ export default function Pharmacies() {
         
     }
   const changeedit = ()=>{
-        //API DELETE CLINIC
+        
      setedit(true);
   }
     const changeadd = ()=>{
-        //API DELETE CLINIC
+        
      setadd(true);
   }   
     console.log(data)
-      const handleDelete = (id)=>{
+  const handleDelete = (id)=>{
         //API DELETE CLINIC
      setdata(data.filter((item) => item.id !== id))
   }

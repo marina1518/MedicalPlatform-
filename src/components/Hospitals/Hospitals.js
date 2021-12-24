@@ -4,8 +4,7 @@ import { HospitalsList } from '../../Dummyvalues';
 import { useState } from 'react';
 import { DeleteOutline } from "@material-ui/icons";
 import { Button } from 'react-bootstrap';
-import Clinicedit from '../../components/ClinicEdit/Clinicedit';
-import Addclinic from '../ClinicEdit/ADDCLINIC/addclinic';
+
 import Addhospital from './AddHospital/Addhospital';
 import Hospitaledit from './EditHospital/Edithospital'
 
