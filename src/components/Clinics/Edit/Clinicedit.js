@@ -61,7 +61,7 @@ export default function Clinicedit(props) {
         {
             //empty
             setissubmit(true);
-            props.changeedit();
+            props.changeedit(FormValues);
             //APIEDIT
             //sendpostRequest2();
             //POST

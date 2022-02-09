@@ -63,7 +63,7 @@ export default function Addclinic(props) {
         {
             //empty
             setissubmit(true);
-            props.changeadd();
+            props.changeadd(FormValues);
             //APIEDIT
             //sendpostRequest2();
             //POST

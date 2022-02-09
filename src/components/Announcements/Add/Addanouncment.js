@@ -57,7 +57,7 @@ export default function Addannouncment(props) {
         {
             //empty
             setissubmit(true);
-            props.changeadd();
+            props.changeadd();//SEARCH FOR PICTURE 
             //APIEDIT
             //sendpostRequest2();
             //POST

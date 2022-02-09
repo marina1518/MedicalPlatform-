@@ -2,30 +2,30 @@ import React,{useState} from 'react'
 import {Form,Button} from 'react-bootstrap'
 
 export default function Addhospital(props) {
-     const [FormValues, setFormvalues ] = useState({});
-    const [Formerrors, setFormerrors ] = useState({});
-    const [issubmit, setissubmit ] = useState(false);
+
+    const [FormValues, setFormvalues ] = useState({}); //FORM VALUES 
+    const [Formerrors, setFormerrors ] = useState({}); //ERROR 
+    const [issubmit, setissubmit ] = useState(false);  //SUBMITTED OR NOT 
     console.log(props);
+
     const handlechange = (e)=>{
-         
          const name = e.target.name ;
          const value = e.target.value ;
-        // console.log(value);
+        
          setFormvalues({...FormValues, [name] : value});
          
          if (issubmit)
          {
             setFormerrors(validate({...FormValues, [name] : value}))
-         }
-         
-         //console.log(FormValues);
+         }       
     }
+
     function validate (values)
     {
         const errors = {};
         const regx = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
 
-        if (!values.hospitalname)
+        if (!values.Hospitalname)
             {
                 errors.hospitalname="Hospital Name is required!";  
             }
@@ -38,11 +38,7 @@ export default function Addhospital(props) {
         {
             errors.number = "This is not a valid phone number ";
         }      
-        /*else if (!regx.test(values.email))
-        {
-            errors.email = "This is not a valid email format";
-        }*/
-        
+      
         if (!values.Admin)
             {
                 errors.Admin="Admin Name is required!";  
@@ -55,29 +51,28 @@ export default function Addhospital(props) {
         return errors ;
     }
         const submithandle =(e)=>{
+        //when submit the form     
         e.preventDefault();
-        setFormerrors(validate(FormValues))
+        setFormerrors(validate(FormValues)) //check the errors 
         setissubmit(true);
         if(Object.keys(validate(FormValues)).length === 0)
         {
             //empty
             setissubmit(true);
-            props.changeadd();
-            //APIEDIT
-            //sendpostRequest2();
-            //POST
+            props.changeadd(FormValues);
+            //API ADD HOSPITAL
            
             
         }
       }
     return (
         <div>
-                  <Form onSubmit={submithandle} className="rounded p-4" style={{ margin : '80px 20px' ,borderWidth:'1px',borderColor:'#1775ee' , borderStyle:'solid',width:'540px'} }>
+    <Form onSubmit={submithandle} className="rounded p-4" style={{ margin : '80px 20px' ,borderWidth:'1px',borderColor:'#1775ee' , borderStyle:'solid',width:'540px'} }>
   
     <p style={{textAlign: 'center',fontSize:'27px' , color :'#7672ca'} }> Add Hospital </p>
     <Form.Group className="mb-3" controlId="formGridEmail">
-      <Form.Label>Clinic Name</Form.Label>
-      <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.hospitalname} name="hospitalname" type="text" placeholder="Enter Hospital name" />
+      <Form.Label>Hospital Name</Form.Label>
+      <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.hospitalname} name="Hospitalname" type="text" placeholder="Enter Hospital name" />
       <p style={{padding:'0',color:'red',marginTop:'6px'}} >{Formerrors.hospitalname}</p>
     </Form.Group>
 

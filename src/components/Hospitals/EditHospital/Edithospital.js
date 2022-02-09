@@ -5,20 +5,18 @@ export default function Hospitaledit(props) {
     const [Formerrors, setFormerrors ] = useState({});
     const [issubmit, setissubmit ] = useState(false);
     console.log(props);
+
     const handlechange = (e)=>{
-         
-         const name = e.target.name ;
+          const name = e.target.name ;
          const value = e.target.value ;
-        // console.log(value);
+       
          setFormvalues({...FormValues, [name] : value});
          
          if (issubmit)
          {
             setFormerrors(validate({...FormValues, [name] : value}))
          }
-         
-         //console.log(FormValues);
-    }
+        }
     function validate (values)
     {
         const errors = {};
@@ -37,11 +35,6 @@ export default function Hospitaledit(props) {
         {
             errors.number = "This is not a valid phone number ";
         }      
-        /*else if (!regx.test(values.email))
-        {
-            errors.email = "This is not a valid email format";
-        }*/
-        
         if (!values.Admin)
             {
                 errors.Admin="Admin Name is required!";  
@@ -61,8 +54,11 @@ export default function Hospitaledit(props) {
         {
             //empty
             setissubmit(true);
-            props.changeedit();
-            //APIEDIT
+            //API EDIT
+            console.log(FormValues);
+
+            props.changeedit(FormValues);
+            
             //sendpostRequest2();
             //POST
            

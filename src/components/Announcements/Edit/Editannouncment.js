@@ -54,7 +54,7 @@ export default function Announcmentedit(props) {
         {
             //empty
             setissubmit(true);
-            props.changeedit();
+            props.changeedit(FormValues);
             //APIEDIT
             //sendpostRequest2();
             //POST
@@ -64,7 +64,7 @@ export default function Announcmentedit(props) {
       }
     return (
         <div>
-                        <Form onSubmit={submithandle} className="rounded p-4" style={{ margin : '80px 20px' ,borderWidth:'1px',borderColor:'#1775ee' , borderStyle:'solid',width:'540px'} }>
+      <Form onSubmit={submithandle} className="rounded p-4" style={{ margin : '80px 20px' ,borderWidth:'1px',borderColor:'#1775ee' , borderStyle:'solid',width:'540px'} }>
   
     <p style={{textAlign: 'center',fontSize:'27px' , color :'#7672ca'} }> Edit Announcment </p>
     <Form.Group className="mb-3" controlId="formGridEmail">

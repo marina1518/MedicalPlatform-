@@ -10,30 +10,48 @@ import Announcmentedit from './Edit/Editannouncment';
 
 
 export default function Announcemts() {
-    const [data,setdata] = useState(Announcements)
+    const [data,setdata] = useState(Announcements) //FROM API Announcments LIST 
 
-    const [viewedit,setedit]=useState(true)
-    const [viewadd,setadd]=useState(true)
+    const [viewedit,setedit]=useState(true)  //WHEN FALSE SHOW COMPONENT EDIT ANNOUNCMENT
+    const [viewadd,setadd]=useState(true) //WHEN FALSE SHOW COMPONENT ADD ANNOUNCMENT
 
-    const [editdata,seteditdata]=useState({});
+    const [editdata,seteditdata]=useState({}); 
     const handleEdit = (props)=>{
-        seteditdata(props); //DATA OF CLINIC
+        seteditdata(props); //DATA OF ANNOUNCMENT
         console.log(props);
-        setedit(false);
+        setedit(false); //GO TO EDIT PAGE 
         
     }
-  const changeedit = ()=>{
-        //API DELETE CLINIC
-     setedit(true);
+  const changeedit = (editedannouncment)=>{
+     //WHEN SUBMIT EDIT ANNOUNCMENT FORM 
+     var requiredid = editedannouncment.id ;
+     console.log(requiredid);
+     var updatedlist = JSON.parse(JSON.stringify(data));
+     updatedlist = updatedlist.filter((item) => item.id !== requiredid) //delete first
+     //console.log(updatedlist);
+     updatedlist.push(editedannouncment); //add edited one 
+    // console.log(updatedlist);
+     //Static update list       
+     setdata(updatedlist); 
+     setedit(true); //AFTER SUBMIT EDIT FORM [GET BACK TO announcments LIST]
+
   }
-    const changeadd = ()=>{
-        //API DELETE CLINIC
-     setadd(true);
+    const changeadd = (newannouncment)=>{
+           //WHEN SUBMIT ADD HOSPITAL FORM 
+       /* var updatedlist = JSON.parse(JSON.stringify(data));
+        const lastid = updatedlist[updatedlist.length - 1].id;
+        console.log(lastid);
+        newannouncment.id=(parseInt(lastid)+1).toString();
+        updatedlist.push(newannouncment);
+        //Static update list       
+        setdata(updatedlist); */
+        setadd(true); //AFTER SUBMIT ADD FORM [GET BACK TO announcments LIST]   
+    
   }   
-    console.log(data)
+    
       const handleDelete = (id)=>{
-        //API DELETE CLINIC
-     setdata(data.filter((item) => item.id !== id))
+        //API DELETE ANNOUNCMENT
+     setdata(data.filter((item) => item.id !== id)) //DELETE STATIC
   }
   const columns = [
 

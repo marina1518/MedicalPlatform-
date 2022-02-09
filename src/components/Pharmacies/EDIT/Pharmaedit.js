@@ -61,7 +61,7 @@ export default function Pharmacyedit(props) {
         {
             //empty
             setissubmit(true);
-            props.changeedit();
+            props.changeedit(FormValues);
             //APIEDIT
             //sendpostRequest2();
             //POST

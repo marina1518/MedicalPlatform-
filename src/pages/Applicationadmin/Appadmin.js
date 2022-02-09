@@ -11,14 +11,17 @@ import Hospitals from '../../components/Hospitals/Hospitals';
 import Clinics from '../../components/Clinics/Clinics';
 import Pharmacies from '../../components/Pharmacies/Pharmacies';
 import Announcemts from '../../components/Announcements/Announcemts';
+import {useSelector,useDispatch} from 'react-redux'
 export default function Appadmin() {
+   const chosencomp = useSelector(state => state.sidebarcomp) //state of sidebar component
+   console.log(chosencomp);
     const [response,setresponse] = useState({})
     const [prod,setprod]=useState([])
-    const [Comp,setComp]=useState('Chart')
+    //const [Comp,setComp]=useState('Chart')
 
-const changecomp =(value)=>{
-   setComp(value);
-}    
+//const changecomp =(value)=>{
+  // setComp(value);
+//}    
 const url = "https://randomuser.me/api"
 
 const get = async () => {
@@ -59,17 +62,18 @@ useEffect(()=>{
 },[])
     return (
         <div style={{display:'flex' , margin:'0'}}>
-         <Slidebar change={changecomp}>
+            
+         <Slidebar >
          </Slidebar >   
          <div className='otherpages'>
-           { (Comp==='Chart') && <Piechart/>}
-          { (Comp==='Chart') && <Chart data={data} dataKey={"Active Hospital"} title={"Hospital Analytics"}/>}
-        { (Comp==='Chart') &&  <Chart data={Clinic} dataKey={"Active Clinic"} title={"Clinic Analytics"}/>}
-        { (Comp==='Chart') && <Chart data={pharmacy} dataKey={"Active Pharmacy"} title={"Pharmacy Analytics"}/>}
-        { (Comp==='Hospital') && <Hospitals/>} 
-        { (Comp==='Clinic') && <Clinics/>}
-        { (Comp==='Pharmacy') && <Pharmacies/>}
-        { (Comp==='Announcement') && <Announcemts/>}
+           { (chosencomp==='chart') && <Piechart/>}
+          { (chosencomp==='chart') && <Chart data={data} dataKey={"Active Hospital"} title={"Hospital Analytics"}/>}
+        { (chosencomp==='chart') &&  <Chart data={Clinic} dataKey={"Active Clinic"} title={"Clinic Analytics"}/>}
+        { (chosencomp==='chart') && <Chart data={pharmacy} dataKey={"Active Pharmacy"} title={"Pharmacy Analytics"}/>}
+        { (chosencomp==='hospitals') && <Hospitals/>} 
+        { (chosencomp==='clinics') && <Clinics/>}
+        { (chosencomp==='pharmacies') && <Pharmacies/>}
+        { (chosencomp==='announcments') && <Announcemts/>}
         
          </div>
          </div>
