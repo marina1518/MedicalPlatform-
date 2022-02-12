@@ -1,0 +1,89 @@
+/* .announce-container {
+  text-align: center;
+
+  margin: 1.5rem auto; */
+/* padding: 3rem 3rem 3rem 3rem; */
+/* background-color: rgba(236, 232, 232, 0.384); */
+/* color: aquamarine; */
+
+/* border-radius: 0.1rem; */
+/* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15); */
+/* box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px; */
+/* filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.65)); */
+/* } */
+
+.info {
+  background-color: rgba(236, 232, 232, 0.384);
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  border-radius: 0.1rem;
+  /* text-align: center; */
+  margin: 3.5rem auto;
+  margin-bottom: 4.5rem;
+  overflow: hidden;
+  max-height: 13rem;
+  max-width: 77vw;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  /* width: 100%; */
+  padding: 0 4%;
+}
+@media only screen and (max-width: 1200px) {
+  .info {
+    padding: 0 3rem;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .info {
+    max-width: 60rem;
+  }
+  .announce-p {
+    font-size: 0.2;
+  }
+}
+.alert-icon {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  justify-self: start;
+  /* color: rgba(255, 166, 0, 0.527); */
+  /* width: 7rem; */
+  width: 13rem;
+  height: 15rem;
+  /* padding-top: 8vh; */
+  margin-right: 3rem;
+}
+
+.alert-icon i {
+  font-size: 5rem;
+  margin: 0rem auto;
+  color: rgba(255, 166, 0, 0.527);
+  padding: auto auto;
+}
+
+.announce-p {
+  flex-grow: 8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: justify;
+  padding-left: 6%;
+  border-left: 3px solid rgba(255, 166, 0, 0.527);
+  /* margin-left: 3rem; */
+  font-size: 1.8rem;
+  /* font-weight: bold; */
+  font-family: "Roboto", sans-serif;
+}
+.announce-p span {
+  color: rgba(255, 166, 0, 0.527);
+  font-weight: 700;
+}
