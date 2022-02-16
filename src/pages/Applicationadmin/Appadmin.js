@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from 'react'
 import axios from 'axios';
 import './Appadmin.css'
-import Slidebar from '../../components/Slidebar/slidebar';
+import Slidebar from '../../components/Slidebar/slidebar'
 import Chart from '../../components/Chart/Chart';
 import { data } from '../../Dummyvalues';
 import { Clinic } from '../../Dummyvalues';
@@ -10,7 +10,7 @@ import Piechart from '../../components/Chartpie/Piechart';
 import Hospitals from '../../components/Hospitals/Hospitals';
 import Clinics from '../../components/Clinics/Clinics';
 import Pharmacies from '../../components/Pharmacies/Pharmacies';
-import Announcemts from '../../components/Announcements/Announcemts';
+import Announcemts from '../../components/Announcements/Announcemts'
 import {useSelector,useDispatch} from 'react-redux'
 export default function Appadmin() {
    const chosencomp = useSelector(state => state.sidebarcomp) //state of sidebar component

@@ -3,7 +3,8 @@ import { HighlyRatedDr } from "../../data";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import Carousel from "react-bootstrap/Carousel";
 import "./custom.css";
-import { Link } from "react-router-dom";
+
+import Onedoctor from "./Onedoctor";
 
 const HighlyRated = () => {
   return (
@@ -14,35 +15,7 @@ const HighlyRated = () => {
         </div>
         <div className="doctors-container">
           {HighlyRatedDr.map((doctor) => (
-            <div className="doctor-item" key={doctor.id}>
-              <div className="img-container">
-                <Link to={`/profile/${doctor.id}`}>
-                  <img src={doctor.image} alt={doctor.name} />
-                </Link>
-              </div>
-              <div className="bottom-data">
-                <Link to={`/profile/${doctor.id}`}>
-                  <p className="doctor-name">Dr. {doctor.name}</p>
-                </Link>
-                <p className="doctor-spec">{doctor.specialization}</p>
-                {/* <span className="rate-star"> */}
-                {[...Array(doctor.rate)].map((star) => {
-                  return (
-                    <span className="rate-star">
-                      <i class="bi bi-star-fill"></i>
-                    </span>
-                  );
-                })}
-                {[...Array(5 - doctor.rate)].map((star) => {
-                  return (
-                    <span className="rate-star">
-                      <i class="bi bi-star"></i>
-                    </span>
-                  );
-                })}
-                {/* </span> */}
-              </div>
-            </div>
+            <Onedoctor doctor={doctor} key={doctor.id}/>
           ))}
         </div>
       </section>

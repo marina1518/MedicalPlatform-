@@ -8,6 +8,8 @@ import Appadmin from './pages/Applicationadmin/Appadmin';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import {useSelector} from 'react-redux'
+import Doctorscards from "./pages/Doctorspeacialiazation";
+
 
 function App() {
    const chosencomp = useSelector(state => state.sidebarcomp)
@@ -16,8 +18,9 @@ function App() {
     <Router>
       <Header />
       <Routes>
-        <Route path="appadmin" element={<Appadmin />}> </Route>
+        <Route path="/appadmin" element={<Appadmin />}> </Route>
         <Route path="/" element={<Home />}></Route>
+        <Route path="/Doctors/:specializationid" element={<Doctorscards/>}></Route>
       </Routes>
       <Footer />
     </Router>
