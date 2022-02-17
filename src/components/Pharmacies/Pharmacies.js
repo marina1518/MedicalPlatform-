@@ -25,6 +25,11 @@ export default function Pharmacies() {
         setedit(false); //GO TO EDIT PAGE
         
     }
+
+     const goback=()=>{
+    setedit(true);
+    setadd(true);
+  }
   const changeedit = (editedpharmacy)=>{
             //WHEN SUBMIT EDIT PHARMACY FORM 
      var requiredid = editedpharmacy.id ;
@@ -72,7 +77,13 @@ export default function Pharmacies() {
   {
     field: 'Admin',
     headerName: 'Admain Name',
-    width: 170,
+    width: 190,
+    editable: true,
+  },
+    {
+    field: 'Email',
+    headerName: 'Admain Email',
+    width: 190,
     editable: true,
   },
   {
@@ -104,8 +115,8 @@ export default function Pharmacies() {
     <div style={{ height: '75%', width: '100%' }}>
       {viewedit && viewadd && <Table rows={data} columns={columns}></Table>}
     {viewedit && viewadd &&<Button variant="primary" onClick={()=>{setadd(false)}} style={{margin:'15px'}}>Add Pharmacy</Button>  }
-    {!viewedit && <Pharmacyedit editdata={editdata} changeedit={changeedit}/>}
-    {!viewadd && <Addpharmacy changeadd={changeadd}/>}
+    {!viewedit && <Pharmacyedit editdata={editdata} changeedit={changeedit} goback={goback}/>}
+    {!viewadd && <Addpharmacy changeadd={changeadd}  goback={goback}/>}
     </div>
   );
 }

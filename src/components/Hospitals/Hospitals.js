@@ -25,6 +25,10 @@ export default function Hospitals() {
         setedit(false); //GO TO EDIT PAGE
   }
   
+  const goback=()=>{
+    setedit(true);
+    setadd(true);
+  }
   const changeedit = (editedhospital)=>{
     //WHEN SUBMIT EDIT HOSPITAL FORM 
      var requiredid = editedhospital.id ;
@@ -72,14 +76,20 @@ export default function Hospitals() {
   {
     field: 'Admin',
     headerName: 'Admain Name',
-    width: 170,
+    width: 190,
+    editable: true,
+  },
+    {
+    field: 'Email',
+    headerName: 'Admain Email',
+    width: 190,
     editable: true,
   },
   {
     field: 'Location',
     headerName: 'Location',
     editable: true,
-    width: 220,
+    width: 190,
 
   },
    {
@@ -105,8 +115,8 @@ export default function Hospitals() {
 
     {viewedit && viewadd && <Table rows={data} columns={columns}></Table>}
     {viewedit && viewadd &&<Button variant="primary" onClick={()=>{setadd(false)}} style={{margin:'15px'}}>Add Hospital</Button>  }
-    {!viewedit && <Hospitaledit editdata={editdata} changeedit={changeedit}/>}
-    {!viewadd && <Addhospital changeadd={changeadd}  />} 
+    {!viewedit && <Hospitaledit editdata={editdata} changeedit={changeedit} goback={goback}/>}
+    {!viewadd && <Addhospital changeadd={changeadd} goback={goback} />} 
     </div>
   );
 }

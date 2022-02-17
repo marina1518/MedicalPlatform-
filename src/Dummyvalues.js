@@ -155,36 +155,42 @@ export const data = [
      number : "01273419392",
      Admin : "Michael Mina",
      Location :"Shoubra",
+     Email : "marina15@gmail.com"
     },
    { id:'2',
      Hospitalname:"DR/MICHAEL For Surgery",
      number : "01273419392",
      Admin : "Michael Mina",
      Location :"Shoubra",
+     Email : "marina15@gmail.com"
     },
     {  id:'3',
       Hospitalname:"DR/MICHAEL For Surgery",
      number : "01273419392",
      Admin : "Michael Mina",
      Location :"Shoubra",
+     Email : "marina15@gmail.com"
     },
         {  id:'4',
       Hospitalname:"DR/MICHAEL For Surgery",
      number : "01273419392",
      Admin : "Michael Mina",
      Location :"Shoubra",
+     Email : "marina15@gmail.com"
     },
         {  id:'5',
       Hospitalname:"DR/MICHAEL For Surgery",
      number : "01273419392",
      Admin : "Michael Mina",
      Location :"Shoubra",
+     Email : "marina15@gmail.com"
     },
         {  id:'6',
       Hospitalname:"DR/MICHAEL For Surgery",
      number : "01273419392",
      Admin : "Michael Mina",
      Location :"Shoubra",
+     Email : "marina15@gmail.com"
     },
 
         {  id:'7',
@@ -192,12 +198,14 @@ export const data = [
      number : "01273419392",
      Admin : "Michael Mina",
      Location :"Shoubra",
+     Email : "marina15@gmail.com"
     },
         {  id:'8',
       Hospitalname:"DR/MICHAEL For Surgery",
      number : "01273419392",
      Admin : "Michael Mina",
      Location :"Shoubra",
+     Email : "marina15@gmail.com"
     }
   ]
     export const ClinicsList = [

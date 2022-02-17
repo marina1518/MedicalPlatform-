@@ -13,24 +13,24 @@ export default function Slidebar() {
             
             <ul style={{padding:'0 25px' ,marginTop:'80px'}}>
                  <li className='item' onClick={()=>{dispatch(chart())}} >
-                    <DashboardIcon htmlColor='#7672ca' />
+                    <DashboardIcon htmlColor='#06a3da' />
                     Dashboard
                 </li>
                 <li className='item'  onClick={()=>{dispatch(hospitals())}}>
-                    <LocalHospitalIcon htmlColor='#7672ca' />
+                    <LocalHospitalIcon htmlColor='#06a3da' />
                     Hospitals
                 </li>
                 <li className='item' onClick={()=>{dispatch(clinics())}}>
-                    <LocalHospitalIcon htmlColor='#7672ca'/>
+                    <LocalHospitalIcon htmlColor='#06a3da'/>
                     Clinics
                 </li>
                 <li className='item'onClick={()=>{dispatch(pharmacies())}}>
-                    <LocalPharmacyIcon htmlColor='#7672ca' />
+                    <LocalPharmacyIcon htmlColor='#06a3da' />
                    Pharmacies
                 </li>
                 
                  <li className='item' onClick={()=>{dispatch(announcments())}}>
-                     <AnnouncementIcon htmlColor='#7672ca' />
+                     <AnnouncementIcon htmlColor='#06a3da' />
                    Announcements
                 </li>
             </ul>

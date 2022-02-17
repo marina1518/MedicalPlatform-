@@ -23,6 +23,12 @@ export default function Clinics() {
         console.log(props);
         setedit(false); //GO TO EDIT PAGE 
     }
+
+    const goback=()=>{
+    setedit(true);
+    setadd(true);
+  }
+
   const changeedit = (editedclinic)=>{
     //WHEN SUBMIT EDIT CLINIC FORM 
      var requiredid = editedclinic.id ;
@@ -70,7 +76,13 @@ export default function Clinics() {
   {
     field: 'Admin',
     headerName: 'Admain Name',
-    width: 170,
+    width: 190,
+    editable: true,
+  },
+    {
+    field: 'Email',
+    headerName: 'Admain Email',
+    width: 190,
     editable: true,
   },
   {
@@ -102,8 +114,8 @@ export default function Clinics() {
     <div style={{ height: '75%', width: '100%' }}>
       {viewedit && viewadd &&<Table rows={data} columns={columns}></Table>}
     {viewedit && viewadd &&<Button variant="primary" onClick={()=>{setadd(false)}} style={{margin:'15px'}}>Add Clinic</Button>  }
-    {!viewedit && <Clinicedit editdata={editdata} changeedit={changeedit}/>}
-    {!viewadd && <Addclinic changeadd={changeadd}/>}
+    {!viewedit && <Clinicedit editdata={editdata} changeedit={changeedit}  goback={goback}/>}
+    {!viewadd && <Addclinic changeadd={changeadd}  goback={goback}/>}
     </div>
   );
 }

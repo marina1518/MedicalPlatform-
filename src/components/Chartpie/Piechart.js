@@ -10,7 +10,7 @@ export default function Piechart() {
         
           <Card className='PIE' >
             <div   >
-          <h3 style={{color:'#7672ca',fontSize:'20px'}}> Application Contacts</h3>
+          <h3 style={{color:'#06a3da',fontSize:'20px'}}> Application Contacts</h3>
           
    <Chart 
   width={'400px'}

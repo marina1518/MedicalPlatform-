@@ -1,6 +1,6 @@
 
 import React,{useState} from 'react'
-import {Form,Button} from 'react-bootstrap'
+import {Form,Button,Row,Col} from 'react-bootstrap'
 
 export default function Addclinic(props) {
      const [FormValues, setFormvalues ] = useState({});
@@ -52,7 +52,23 @@ export default function Addclinic(props) {
             {
                 errors.Location="Location is required!";  
             }
-        
+        if (!values.Email)
+            {
+                errors.Email="Admin's Email is required!";  
+            }
+        else if (!regx.test(values.Email))
+        {
+            errors.email = "This is not a valid email format";
+        }    
+        if (!values.Password)
+            {
+                errors.Password="Admin's Password is required!";  
+            }    
+       if (values.Gender ==="Select Admin Gender" || !values.Gender )
+            {
+                
+                errors.Gender="Admin Gender is required!";  
+            }  
         return errors ;
     }
         const submithandle =(e)=>{
@@ -73,9 +89,11 @@ export default function Addclinic(props) {
       }
     return (
         <div>
-                  <Form onSubmit={submithandle} className="rounded p-4" style={{ margin : '80px 20px' ,borderWidth:'1px',borderColor:'#1775ee' , borderStyle:'solid',width:'540px'} }>
-  
-    <p style={{textAlign: 'center',fontSize:'27px' , color :'#7672ca'} }> Add Clinic </p>
+                  <Form onSubmit={submithandle} className="rounded p-4" style={{ margin : '80px 20px' ,borderWidth:'1px',borderColor:'#06a3da' , borderStyle:'solid',width:'90%'} }>
+  <Row>
+    <p style={{textAlign: 'center',fontSize:'27px' , color :'#06a3da'} }> Add Clinic </p>
+     <Col>
+    <h6>Clinic Information</h6>
     <Form.Group className="mb-3" controlId="formGridEmail">
       <Form.Label>Clinic Name</Form.Label>
       <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.clinicname} name="clinicname" type="text" placeholder="Enter Clinic name" />
@@ -100,11 +118,46 @@ export default function Addclinic(props) {
     <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.Location} name="Location" type="string" placeholder="Enter the locaion of the clinic " />
   <p style={{padding:'0',color:'red',marginTop:'6px'}} >{Formerrors.Location}</p>
   </Form.Group>
-  
-      <Button style={{marginLeft:'190px'}} variant="primary" type="submit">
+  </Col>
+  <Col>
+      <h6>Admin Account Information</h6>
+      <Form.Group  className="mb-3" controlId="formGridAddress1">
+    <Form.Label>Email</Form.Label>
+    <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.Email} name="Email" type="email" placeholder="Enter Admin's Email " />
+  <p style={{padding:'0',color:'red',marginTop:'6px'}} >{Formerrors.Email}</p>
+  </Form.Group>
+
+  <Form.Group  className="mb-3" controlId="formGridAddress3">
+      <Form.Label>Password</Form.Label>
+    <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.Password} name="Password" type="password" placeholder="Enter Admin's Password " />
+  <p style={{padding:'0',color:'red',marginTop:'6px'}} >{Formerrors.Password}</p>
+  </Form.Group>
+
+<Form.Group  className="mb-3" controlId="formGridAddress2">
+    <Form.Label>Gender</Form.Label>
+  <Form.Select aria-label="Default select example" defaultValue="Select Admin Gender" name="Gender" value={FormValues.Gender} onChange={(e)=>handlechange(e)}>      
+  <option>Select Admin Gender</option>
+  <option >Male</option>
+  <option >Female</option>
+</Form.Select>
+<p style={{padding:'0',color:'red',marginTop:'6px'}} >{Formerrors.Gender}</p>
+  </Form.Group>
+
+  </Col>
+  </Row>
+  <Row>
+      <Col>
+      <Button style={{width:'100%'}} variant="primary" type="submit">
     Submit
   </Button>
-</Form>
+  </Col>
+  <Col>
+    <Button style={{width:'100%'}} variant="primary" onClick={props.goback}>
+   Go back
+  </Button>
+  </Col>
+  </Row>
+  </Form>
         </div>
     )
 }
