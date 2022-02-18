@@ -1,20 +1,14 @@
-import * as React from 'react';
+import  React,{useState} from 'react';
 import { DataGrid } from '@material-ui/data-grid';
-import { HospitalsList } from '../../Dummyvalues';
-import { useState } from 'react';
+import {DoctorsHospital} from '../../data'
 import { DeleteOutline } from "@material-ui/icons";
 import { Button } from 'react-bootstrap';
-import Table from '../Table/Table';
-import Addhospital from './AddHospital/Addhospital';
-import Hospitaledit from './EditHospital/Edithospital'
+import Table from '../../components/Table/Table';
+import Adddoctor from './Adddoctor';
+import Editdoctor from './Editdoctor';
 
-
-
-
-export default function Hospitals() {
-
-    const [data,setdata] = useState(HospitalsList) //FROM API HOSPITALS LIST 
-
+export default function Adminhospital() {
+    const [data,setdata] = useState(DoctorsHospital) //FROM API HOSPITALS LIST 
     const [viewedit,setedit]=useState(true) //WHEN FALSE SHOW COMPONENT ADD HOSPITAL 
     const [viewadd,setadd]=useState(true)  //WHEN FALSE SHOW COMPONENT EDIT HOSPITAL
     const [editdata,seteditdata]=useState({}); //EDITED DATA FOR HOSPITAL 
@@ -62,20 +56,14 @@ export default function Hospitals() {
   const columns = [
 
   {
-    field: 'Hospitalname',
-    headerName: 'Hospital Name',
+    field: 'name',
+    headerName: 'Doctor Name',
     width: 220,
     editable: true,
   },
   {
     field: 'number',
     headerName: 'Contact Number',
-    width: 190,
-    editable: true,
-  },
-  {
-    field: 'Admin',
-    headerName: 'Admain Name',
     width: 190,
     editable: true,
   },
@@ -86,8 +74,8 @@ export default function Hospitals() {
     editable: true,
   },
   {
-    field: 'Location',
-    headerName: 'Location',
+    field: 'specialization',
+    headerName: 'Specialization',
     editable: true,
     width: 190,
 
@@ -101,8 +89,7 @@ export default function Hospitals() {
           <>       
               <Button variant="outline-primary" onClick={() => handleEdit(params.row)}>Edit</Button>
              <DeleteOutline htmlColor='red' style={{cursor:'pointer' , marginLeft:'30px'}} onClick={() => handleDelete(params.row.id)}
-         
-                        
+                               
             />
           </>
         );
@@ -111,11 +98,22 @@ export default function Hospitals() {
 ];
 
   return (
-    <div style={{ height: '75%', width: '100%' }}>
-    {viewedit && viewadd && <Table rows={data} columns={columns}></Table>}
-    {viewedit && viewadd &&<Button variant="primary" onClick={()=>{setadd(false)}} style={{margin:'15px'}}>Add Hospital</Button>  }
-    {!viewedit && <Hospitaledit editdata={editdata} changeedit={changeedit} goback={goback}/>}
-    {!viewadd && <Addhospital changeadd={changeadd} goback={goback} />} 
-    </div>
+    <>
+    <div style={{ height: 510, width: '100%'  }}>
+      {/*<DataGrid
+        rows={data}
+        columns={columns}
+        pageSize={5}
+        checkboxSelection
+        disableSelectionOnClick
+      />*/}
+    {viewedit && viewadd && <Table rows={data} columns={columns}></Table> }
+    {!viewedit && <Editdoctor editdata={editdata} changeedit={changeedit} goback={goback}/>}
+    {!viewadd && <Adddoctor changeadd={changeadd} goback={goback} />} 
+      </div>
+    {viewedit && viewadd &&<Button variant="primary" onClick={()=>{setadd(false)}} style={{margin:'15px'}}>Add Doctor</Button>  }
+
+    
+    </>
   );
 }

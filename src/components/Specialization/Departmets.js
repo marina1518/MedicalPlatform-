@@ -1,10 +1,13 @@
 import React from "react";
 import "./departments.css";
 import { Specialization } from "../../data";
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 
-const Departmets = () => {
-  return (
+const Departmets = (props) => {
+  
+ 
+  //props.clicked_department
+  return (    
     <div>
       <section className="section-container">
         <div className="spec-title-info">
