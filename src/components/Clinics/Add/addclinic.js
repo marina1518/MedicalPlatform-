@@ -1,8 +1,36 @@
-
+import axios from 'axios'
 import React,{useState} from 'react'
 import {Form,Button,Row,Col} from 'react-bootstrap'
 
 export default function Addclinic(props) {
+
+ const Add_clinic_api = ()=>{
+            axios.post('https://future-medical.herokuapp.com/registration/clinicAdmin',
+         {
+                    username: FormValues.Admin,
+                    email : FormValues.Email,
+                    password : FormValues.Password,
+                    gender : FormValues.Gender,
+                    clinicname : FormValues.clinicname,
+                    address : FormValues.Location ,
+                    telephone : FormValues.number
+         }).then((res)=>{
+           console.log(res.data);
+           props.changeadd(FormValues);  //go to all hospitals
+                     
+         }).catch(function (error) {
+    if (error.response) {    
+      console.log(error.response.data);
+      console.log(error.response.status);
+      const errors = {};  
+      errors.clinicname = "the clinic or admin already exist"
+      setFormerrors(errors);
+
+    }
+})
+    }  
+
+
      const [FormValues, setFormvalues ] = useState({});
     const [Formerrors, setFormerrors ] = useState({});
     const [issubmit, setissubmit ] = useState(false);
@@ -79,7 +107,8 @@ export default function Addclinic(props) {
         {
             //empty
             setissubmit(true);
-            props.changeadd(FormValues);
+            Add_clinic_api();
+            //props.changeadd(FormValues);
             //APIEDIT
             //sendpostRequest2();
             //POST

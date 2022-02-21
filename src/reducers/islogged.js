@@ -1,12 +1,13 @@
-const logged = (state = false , action)=>{
+const auth_reducer = (state = {token:"",usertype:""} , action)=>{
 switch(action.type){
-    case "SIGNIN" :
-        return !state ;
-    case "LOGOUT" :
-        return state;    
-    default :
-         return state;
+case "Signin":
+    return {token : action.token , usertype : action.usertype } 
+    //return action.token,action.usertype ; 
+case "logout" :
+    return {token : "" , usertype : "" }     //remove token 
+default :
+     return state ;
+}
+}
 
-}
-}
-export default logged ;
+export default auth_reducer ;

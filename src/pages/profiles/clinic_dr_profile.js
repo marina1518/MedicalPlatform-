@@ -7,7 +7,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import Avatar from '@material-ui/core/Avatar';
 import BackupIcon from '@material-ui/icons/Backup';
 
-const Profile =()=>{
+const Clinicdoctor =()=>{
     const user_data = {
         email:"",
         username:"madonna",
@@ -293,4 +293,4 @@ const Profile =()=>{
 
     )
 }
-export default Profile;
+export default Clinicdoctor;

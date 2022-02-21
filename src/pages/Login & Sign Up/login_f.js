@@ -3,16 +3,62 @@ import { Form,Button,Container,Row,Col,Figure,Carousel } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {FaUser,FaLock} from 'react-icons/fa';
 import {MdMedicalServices} from 'react-icons/md';
-import pass from "./../image/pass.png";
+import { Link , useNavigate} from "react-router-dom";
+import {useSelector,useDispatch} from 'react-redux'
+import axios from "axios";
+import { signin,logout } from "../../actions";
+import { useJwt } from "react-jwt";
+//import pass from "./../image/pass.png";
 //import './login.css'
 
 
 const Login=()=>{
+  
+    let navigate = useNavigate();
+    const routing_login =(type)=>{
+      if (type === "owner"){navigate ('/appadmin')}
+      else if (type === "user"){navigate ('/')}
+      else if (type === "c_admin"){navigate('/clinicdoctor')}
+      else if (type === "p_admin"){navigate('/pharmacyadmin')}
+      else if (type === "h_admin"){navigate('/hospitaladmin')}
+      else if (type === "doctor"){navigate('/doctor')}
+    }
+    const token = useSelector(state => state.auth) //state of token 
+    //console.log(token)
+    const { decodedToken, isExpired } = useJwt(token);
 
-      
+    const dispatch = useDispatch();
+    const login_api = ()=>{
+            axios.post('https://future-medical.herokuapp.com/login',
+         {
+                    email : data.email ,
+                    pass : data.password ,  
+                    type : data.type
+         }).then((res)=>{
+           console.log(res.data);
+           if (data.type === "admin"){
+           dispatch(signin(res.data.token,res.data.adminRole));
+           console.log(token)
+           routing_login(res.data.adminRole);}
+           else {
+            dispatch(signin(res.data.token,data.type));
+           console.log(token)
+           routing_login(data.type);
+           }
+           
+         }).catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      ///Handle data => [incorrect email , incorrect password ]
+      //console.log(error.response.headers);
+    }
+})
+    }  
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [type, setType] = useState("");
+    //const [token , settoken] = useState("");
     //const [data, submit] = useState([{"email":null, "password":null}]);
 
     const data = [
@@ -26,7 +72,9 @@ const Login=()=>{
         data.email=email;
         data.password=password;
         data.type=type;
-        console.log(data);
+        login_api(); //Call login Api 
+        //console.log(data);
+
     };
 
 
@@ -52,7 +100,7 @@ const Login=()=>{
   <Carousel.Item>
     <img
       className="d-block w-100"
-      src={pass}
+      //src={pass}
       alt="First slide"
     />
    
@@ -103,10 +151,12 @@ const Login=()=>{
                     <Form.Group >
                     <MdMedicalServices/> <Form.Label>Type</Form.Label>
                     <div>
-                    <input type="radio" id="gender1" name="gender" value="Dr" onChange={(e)=>setType(e.target.value)} />
+                    <input type="radio" id="gender1" name="gender" value="doctor" onChange={(e)=>setType(e.target.value)} />
                     <label for="gender1">  Dr</label><br/>
-                    <input type="radio" id="gender2" name="gender" value="Patient"  onChange={(e)=>setType(e.target.value)}></input>
-                    <label for="gender2">  Patient</label>
+                    <input type="radio" id="gender2" name="gender" value="user"  onChange={(e)=>setType(e.target.value)}></input>
+                    <label for="gender2">  Patient</label><br/>
+                    <input type="radio" id="gender3" name="gender" value="admin"  onChange={(e)=>setType(e.target.value)}></input>
+                    <label for="gender3">  Admin</label>
                 </div>
                 </Form.Group>
                     <br></br>
@@ -121,7 +171,9 @@ const Login=()=>{
                 <div className="text-center">
                 <p >
                     join us now   
+                    <Link to={'/signup'}>
                     <a className="ml-1 text-blue-900 ">  Register here</a>
+                    </Link>
                 </p>
             </div>
             </Col>

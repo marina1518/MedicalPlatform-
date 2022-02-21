@@ -1,17 +1,45 @@
 import React,{useState} from 'react'
 import {Form,Button,Row,Col} from 'react-bootstrap'
-
+import axios from 'axios'
 export default function Addhospital(props) {
 
+
+    const Add_hospital_api = ()=>{
+            axios.post('https://future-medical.herokuapp.com/registration/hospitalAdmin',
+         {
+                    username: FormValues.Admin,
+                    email : FormValues.Email,
+                    password : FormValues.Password,
+                    gender : FormValues.Gender,
+                    hospitalname : FormValues.Hospitalname,
+                    address : FormValues.Location ,
+                    telephone : FormValues.number
+         }).then((res)=>{
+           console.log(res.data);
+           props.changeadd(FormValues);  //go to all hospitals
+                     
+         }).catch(function (error) {
+    if (error.response) {
+      //Formerrors.Admin = "the hospital or doctor already exist" ;
+      console.log(error.response.data);
+      console.log(error.response.status);
+      const errors = {};
+      //errors.username ="wrong username"
+      errors.hospitalname = "the hospital or admin already exist"
+      setFormerrors(errors);
+      ///Handle data => [incorrect email , incorrect password ]
+      //console.log(error.response.headers);
+    }
+})
+    }  
     const [FormValues, setFormvalues ] = useState({}); //FORM VALUES 
     const [Formerrors, setFormerrors ] = useState({}); //ERROR 
     const [issubmit, setissubmit ] = useState(false);  //SUBMITTED OR NOT 
-    console.log(props);
+    //console.log(props);
 
     const handlechange = (e)=>{
          const name = e.target.name ;
          const value = e.target.value ;
-        
          setFormvalues({...FormValues, [name] : value});
          
          if (issubmit)
@@ -76,10 +104,10 @@ export default function Addhospital(props) {
         if(Object.keys(validate(FormValues)).length === 0)
         {
             //empty
-            setissubmit(true);
-            props.changeadd(FormValues);
-            //API ADD HOSPITAL
-           
+            setissubmit(true);            
+            console.log(FormValues)
+            Add_hospital_api() ;//API ADD HOSPITAL 
+                   
             
         }
       }

@@ -1,12 +1,41 @@
 
 import React,{useState} from 'react'
 import {Form,Button,Row,Col} from 'react-bootstrap'
+import axios from 'axios'
 
 export default function Addpharmacy(props) {
+
+ const Add_pharmacy_api = ()=>{
+   //console.log("in api")
+            axios.post('https://future-medical.herokuapp.com/registration/pharmacyAdmin',
+         {
+                    username: FormValues.Admin,
+                    email : FormValues.Email,
+                    password : FormValues.Password,
+                    gender : FormValues.Gender,
+                    pharmacyname : FormValues.pharmacyname,
+                    address : FormValues.Location ,
+                    telephone : FormValues.number
+         }).then((res)=>{
+           console.log(res.data);
+           props.changeadd(FormValues);  //go to all pharmacies
+                     
+         }).catch(function (error) {
+    if (error.response) {      
+      console.log(error.response.data);
+      console.log(error.response.status);
+      const errors = {};      
+      errors.pharmacyname = "the pharmacy or admin already exist"
+      setFormerrors(errors);
+    }
+})
+    }  
+
+
      const [FormValues, setFormvalues ] = useState({});
     const [Formerrors, setFormerrors ] = useState({});
     const [issubmit, setissubmit ] = useState(false);
-    console.log(props);
+    //console.log(props);
     const handlechange = (e)=>{
          
          const name = e.target.name ;
@@ -58,7 +87,7 @@ export default function Addpharmacy(props) {
             }
         else if (!regx.test(values.Email))
         {
-            errors.email = "This is not a valid email format";
+            errors.Email = "This is not a valid email format";
         }    
         if (!values.Password)
             {
@@ -75,11 +104,15 @@ export default function Addpharmacy(props) {
         e.preventDefault();
         setFormerrors(validate(FormValues))
         setissubmit(true);
+        //console.log(validate(FormValues))
         if(Object.keys(validate(FormValues)).length === 0)
         {
+            
             //empty
             setissubmit(true);
-            props.changeadd(FormValues);
+            console.log(FormValues)            
+            Add_pharmacy_api();
+                  
             //APIEDIT
             //sendpostRequest2();
             //POST

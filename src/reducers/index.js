@@ -1,12 +1,12 @@
 import sidebarstate_reducer from "./sidebarcomp";
 
-import islogged from "./islogged"
+import auth_reducer from "./islogged";
 
 import {combineReducers} from 'redux'
 
 const allreducers = combineReducers ({
    sidebarcomp:sidebarstate_reducer,
-    islogged:islogged
+   auth:auth_reducer
 })
 
 export default allreducers ;

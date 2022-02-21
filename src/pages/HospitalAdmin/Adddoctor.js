@@ -1,8 +1,37 @@
 
 import React,{useState} from 'react'
 import {Form,Button,Row,Col} from 'react-bootstrap'
-
+import axios from 'axios'
 export default function Adddoctor(props) {
+
+const Add_doctor_api = ()=>{
+   //console.log("in api")
+            axios.post('https://future-medical.herokuapp.com/registration/doctor',
+         {
+                    username: FormValues.name,
+                    email : FormValues.Email,
+                    password : FormValues.Password,
+                    gender : FormValues.Gender,
+                    specialization : FormValues.specialization,
+                    entityName:"jirar15"
+                    //address : FormValues.Location ,
+                    //telephone : FormValues.number
+         }).then((res)=>{
+           console.log(res.data);
+           props.changeadd(FormValues);  //go to all pharmacies
+                     
+         }).catch(function (error) {
+    if (error.response) {      
+      console.log(error.response.data);
+      console.log(error.response.status);
+      /*const errors = {};      
+      errors.pharmacyname = "the pharmacy or admin already exist"
+      setFormerrors(errors);*/
+    }
+})
+    }  
+
+
      const [FormValues, setFormvalues ] = useState({});
     const [Formerrors, setFormerrors ] = useState({});
     const [issubmit, setissubmit ] = useState(false);
@@ -54,7 +83,7 @@ export default function Adddoctor(props) {
             }
         else if (!regx.test(values.Email))
         {
-            errors.email = "This is not a valid email format";
+            errors.Email = "This is not a valid email format";
         }    
         if (!values.Password)
             {
@@ -75,11 +104,7 @@ export default function Adddoctor(props) {
         {
             //empty
             setissubmit(true);
-            props.changeadd(FormValues);
-            //APIEDIT
-            //sendpostRequest2();
-            //POST
-           
+            Add_doctor_api();     
             
         }
       }

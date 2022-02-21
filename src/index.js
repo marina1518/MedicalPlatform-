@@ -9,6 +9,7 @@ import allreducers from './reducers/index'
 import {Provider} from 'react-redux'
 import {PersistGate} from 'redux-persist/es/integration/react'
 import {BrowserRouter } from 'react-router-dom'
+import Scrolltop from './components/ScrollToTop/Scrolltop';
 const persistConfig ={
   key:'main-root',
   storage,
@@ -22,7 +23,9 @@ ReactDOM.render(
     <BrowserRouter>
     <Provider store={mystore}>
       <PersistGate loading={null} persistor={persistor}>
+        
     <App />
+    
     </PersistGate >
     </Provider>
     </BrowserRouter>

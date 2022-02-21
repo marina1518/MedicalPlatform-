@@ -5,12 +5,46 @@ import {FaUser,FaLock, FaBirthdayCake} from 'react-icons/fa';
 import {BsFillTelephoneFill} from 'react-icons/bs';
 import {MdBloodtype,MdLocationOn} from 'react-icons/md';
 import {BiMessageRoundedDetail} from 'react-icons/bi'
-import pass from "./../image/pass.png";
+import {useSelector,useDispatch} from 'react-redux'
+import axios from "axios";
+import { signin,logout } from "../../actions";
+import {Link,useNavigate} from 'react-router-dom'
+//import pass from "./../image/pass.png";
 //import './login.css'
 
 
 const Signup=()=>{
+     
+    const token = useSelector(state => state.auth) //state of token 
+    const dispatch = useDispatch();
+      let navigate = useNavigate();
+    const routing_login =(type)=>{
+     navigate ('/')
+    }
 
+
+    const register_api = ()=>{
+            axios.post('https://future-medical.herokuapp.com/registration/user',
+         {
+                    username : data.username,
+                    email : data.email ,
+                    password : data.password ,  
+                    type : data.type
+         }).then((res)=>{
+           console.log(res.data);
+           dispatch(signin(res.data.token,"user"));
+           console.log(token)
+           routing_login(data.type);
+           
+         }).catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      ///Handle data => [email already exist]
+      //console.log(error.response.headers);
+    }
+})
+    }  
       
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -21,10 +55,11 @@ const Signup=()=>{
     const [blood,setblood]=useState("");
     const [history,seth]=useState("");
     const [msg,setmsg]=useState("");
+    const [username,setusername]=useState("");
     //const [data, submit] = useState([{"email":null, "password":null}]);
 
     const data = [
-        {email: "", password : "" , dob:"", add:"", phone:"", history:"", blood:""}
+        {email: "", password : "" , dob:"", add:"", phone:"", history:"", blood:"" , username:""}
     ];
     
     
@@ -42,7 +77,9 @@ const Signup=()=>{
             data.add=add;
             data.blood=blood;
             data.history=history;
+            data.username=username;
             console.log(data);
+            register_api();
         }      
         
         else {
@@ -73,7 +110,7 @@ const Signup=()=>{
   <Carousel.Item>
     <img
       className="d-block w-100"
-      src={pass}
+      //src={pass}
       alt="First slide"
     />
    
@@ -111,7 +148,12 @@ const Signup=()=>{
             <br/>
             <h1 className="text-center text-danger ">{msg}</h1>
                 <Form onSubmit={submit_value}>
-               
+
+                    <Form.Group controlId="formBasicusername">
+                    <FaUser/> <Form.Label>  User name </Form.Label>
+                     <Form.Control type="text" placeholder="Enter username" required onChange={(e)=>setusername(e.target.value)}/>   
+                    </Form.Group>     
+
                     <Form.Group controlId="formBasicEmail">
                     <FaUser/> <Form.Label>  Email address </Form.Label>
                      <Form.Control type="email" placeholder="Enter email" required onChange={(e)=>setEmail(e.target.value)}/>   
