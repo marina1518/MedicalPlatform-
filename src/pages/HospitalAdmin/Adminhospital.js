@@ -12,32 +12,33 @@ import {useSelector,useDispatch} from 'react-redux'
 
 
 export default function Adminhospital() {
-  //const initstate = {username :"jirar" , email : "jirar155@yahoo.com" , number : '01273193582' , hospitalname : "hayah" , image:"https://identity-mag.com/wp-content/uploads/2015/04/mcdreamy14.jpg"};
-  const [admindata,setadmindata] = useState({})
+  const initstate = {username :"" , email : "" , number : '' , hospitalname : "" , image:""};
+  var [admindata,setadmindata] = useState(initstate)
   const token = useSelector(state => state.auth) //state of token 
 
-  const [data,setdata] = useState(DoctorsHospital) //FROM API HOSPITALS LIST 
-  var hospitals_list = JSON.parse(JSON.stringify(data));
-let hospital = {} ;
-    const Get_Hospitals_Api = ()=>{
+  var [data,setdata] = useState([]) //FROM API HOSPITALS LIST 
+
+//const [data,setdata] = useState([]) 
+let admin = {};
+var doctors_list = JSON.parse(JSON.stringify(data));
+let doctor = {} ;
+    const Get_Doctors_Api = (hospitalname)=>{
       return new Promise ((resolve,reject)=>{
-      axios.get('https://future-medical.herokuapp.com/doctors/el haiah Hospital').then((res)=>{
+      axios.get(`https://future-medical.herokuapp.com/doctors/${hospitalname}`).then((res)=>{
 
             console.log(res.data)
             for(var i = 0 ; i < res.data.length ; i++ )
             {
-                console.log(res.data[i].name)
-               hospital.Hospitalname = res.data[i].name;
-                hospital.id = res.data[i]._id;
-                hospital.number = res.data[i].telephone[0];
-                hospital.Admin = res.data[i].admin.username;
-                hospital.Email = res.data[i].admin.email;
-                hospital.Location = res.data[i].address;
-                hospitals_list.push(hospital);
-                hospital={}
-                //setdata(hospitals_list);
+                
+                doctor.name = res.data[i].username;
+                doctor.id = res.data[i]._id;                
+                doctor.Email = res.data[i].email;
+                doctor.specialization = res.data[i].specialization;
+                doctors_list.push(doctor);
+                doctor={}
+               
             }
-            resolve(hospitals_list);
+            resolve(doctors_list);
             
             //console.log(hospitals_list)
             
@@ -49,27 +50,36 @@ let hospital = {} ;
 
       
     }
+
+
 const Get_Admin_data =()=>{  
-  console.log(token.token)
+
+  //console.log(token.token)
+return new Promise ((resolve,reject)=>{
   axios.get('https://future-medical.herokuapp.com/profile', {
    headers: {
     'Authorization': `Bearer ${token.token}`
   }
 })
-.then((res) => {
+.then((res) => {  
   console.log(res.data)
-  setadmindata(res.data)
+  admin.username = res.data.admin.username;
+  admin.number = res.data.entity.telephone[0];
+  admin.email = res.data.admin.email;
+  admin.hospitalname = res.data.entity.name;
+  admin.address = res.data.entity.address;
+  resolve(admin);
+  Get_Doctors_Api(res.data.entity.name).then((res)=>{console.log(res); setdata(res) }) 
 })
 .catch((error) => {
   console.error(error)
-})}
+  reject(error);
+})})}
 
- useEffect(()=>{
-   Get_Admin_data();
-    Get_Hospitals_Api().then((res)=>{ setdata(res)}).catch((err)=>{console.log(err)})
- },[])   
+useEffect(()=>{
+ Get_Admin_data().then((res)=>{console.log(res); setadmindata(res)})   
+},[])   
 
-     
     const [viewedit,setedit]=useState(true) //WHEN FALSE SHOW COMPONENT ADD HOSPITAL 
     const [viewadd,setadd]=useState(true)  //WHEN FALSE SHOW COMPONENT EDIT HOSPITAL
     const [editdata,seteditdata]=useState({}); //EDITED DATA FOR HOSPITAL 
@@ -166,13 +176,13 @@ const Get_Admin_data =()=>{
           <div className="card-header bg-transparent text-center">
            <Avatar className="profile_img" src={admindata.image}  />
            {!admindata.image && <input type="file"></input>}           
-          <h3>{admindata.admin.username} </h3>
+          <h3>{admindata.username} </h3>
           </div>
           <div className="card-body">
-            <p className="mb-0"><strong className="pr-1">Contact Number: </strong> {admindata.entity.telephone[0]} </p>               
-            <p className="mb-0"><strong className="pr-1">Hospital Name: </strong>{admindata.entity.name}</p>
-            <p className="mb-0"><strong className="pr-1">Hospital Address: </strong>{admindata.entity.address}</p>   
-            <p className="mb-0"><strong className="pr-1">Email:  </strong>{admindata.admin.email}</p>          
+            <p className="mb-0"><strong className="pr-1">Contact Number: </strong> {admindata.number} </p>               
+            <p className="mb-0"><strong className="pr-1">Hospital Name: </strong>{admindata.hospitalname}</p>
+            {<p className="mb-0"><strong className="pr-1">Hospital Address: </strong>{admindata.address}</p>}   
+            <p className="mb-0"><strong className="pr-1">Email:  </strong>{admindata.email}</p>          
           </div>     
       </div>
      </div>
