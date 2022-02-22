@@ -198,3 +198,37 @@ export const DoctorsHospital = [
     number : "01283491692"
   },
 ];
+
+
+export const hospitals = [
+  {
+    id: 1,
+    name: "Alhayah hospital",
+    address: "50 abdobasha street",
+    telephone: "01225266716",
+  },
+  {
+    id: 2,
+    name: "Alhayah hospital",
+    address: "50 abdobasha street",
+    telephone: "01225266716",
+  },
+  {
+    id: 3,
+    name: "Alhayah hospital",
+    address: "50 abdobasha street",
+    telephone: "01225266716",
+  },
+  {
+    id: 4,
+    name: "Alhayah hospital",
+    address: "50 abdobasha street",
+    telephone: "01225266716",
+  },
+  {
+    id: 5,
+    name: "Alhayah hospital",
+    address: "50 abdobasha street",
+    telephone: "01225266716",
+  },
+];
