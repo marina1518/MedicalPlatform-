@@ -73,7 +73,7 @@ const Add_doctor_api = ()=>{
             errors.email = "This is not a valid email format";
         }*/
         
-        if (!values.specialization)
+        if (values.specialization ==="Select Doctor Specialization" ||!values.specialization)
             {
                 errors.specialization="Specialization is required!";  
             }
@@ -88,7 +88,11 @@ const Add_doctor_api = ()=>{
         if (!values.Password)
             {
                 errors.Password="Doctor's Password is required!";  
-            }    
+            }   
+        else if (values.Password.length<8)
+            {
+                errors.Password="Password shouldn't be less than 8 characters";  
+            }       
        if (values.Gender ==="Select Doctor Gender" || !values.Gender )
             {
                 
@@ -128,7 +132,20 @@ const Add_doctor_api = ()=>{
     </Form.Group>
       <Form.Group className="mb-3" controlId="formGridspecial">
       <Form.Label>Specialization</Form.Label>
-      <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.specialization} name="specialization" type="text" placeholder="Enter Doctor Specialization" />
+  <Form.Select aria-label="Default select example2" defaultValue="Select Doctor Specialization" name="specialization" value={FormValues.specialization} onChange={(e)=>handlechange(e)}>      
+  <option>Select Doctor Specialization</option>
+  <option >Emergency Medicine</option>
+  <option >Obstetrics & Gynecology</option>
+  <option >Dermatology (Skin)</option>
+  <option >Cardiologist</option>
+  <option >Chest/Respiratory Medicine</option>
+  <option >Dietetics</option>
+   <option >Gastroenterology (Bowel)</option>
+  <option >Pediatrics</option>
+  <option >Urology</option>
+  <option >Psychiatry</option>
+  <option >Plastic Surgery</option>
+</Form.Select>     
     <p style={{padding:'0',color:'red',marginTop:'6px'}} >{Formerrors.specialization}</p>
     </Form.Group>
   </Col>

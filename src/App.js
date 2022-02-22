@@ -24,15 +24,26 @@ import Privatehospitaladmin from "./components/PrivateRoutes/Privatehospitaladmi
 import Privatepharmacyadmin from "./components/PrivateRoutes/Privatepharmacyadmin";
 import Privatedoctor from "./components/PrivateRoutes/Privatedoctor";
 import ScrollToTop from "./components/ScrollToTop/Scrolltop";
+import HospitalsPage from './pages/HospitalsPage/HospitalsPage'
 function App() {
 
   let navigate = useNavigate();
   const [clicked_department , setclicked_department] = useState("")
   const alan_key = "b94fcad9e16e84e2cfb67521c2729b4b2e956eca572e1d8b807a3e2338fdd0dc/stage";
+  var greetingWasSaid = false;
+//var alanBtnInstance = alanBtn({ });
 useEffect(()=>{
-  window.scrollTo(0, 0);
-alanBtn({
+var alanBtnInstance = alanBtn({
   key: alan_key , 
+  onButtonState: async function(status) {
+    if (status === 'ONLINE') {
+      if (!this.greetingWasSaid) {
+        await alanBtnInstance.activate();
+        alanBtnInstance.playText("Hello! I'm Alan. How can I help you?");
+        this.greetingWasSaid = true
+      }
+    }
+  },
   onCommand : ({command , chosen_department})=>{
    switch(command){
      case "DepartmentDoctors" :
@@ -63,6 +74,7 @@ alanBtn({
         {/*<Route path="/pharmacyadmin" element={<Ph_admin />}> </Route>*/}
         <Route path="/login" element={<Login/>}> </Route>
         <Route path="/signup" element={<Signup/>}> </Route>
+        <Route path="/hospitals" element={<HospitalsPage/>}> </Route>
         {/*<Route path="/user" element={<Profile/>} > </Route>*/}
         {/*<Route path="/doctor" element={<Dr_Profile/>}> </Route>*/}
         {/*<Route path="/clinicdoctor" element={<Clinicdoctor/>}> </Route>*/}

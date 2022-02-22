@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React,{useEffect} from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { HospitalsList } from '../../Dummyvalues';
 import { useState } from 'react';
@@ -7,13 +7,51 @@ import { Button } from 'react-bootstrap';
 import Table from '../Table/Table';
 import Addhospital from './AddHospital/Addhospital';
 import Hospitaledit from './EditHospital/Edithospital'
-
+import axios from 'axios'
 
 
 
 export default function Hospitals() {
+//const [hospitaldata,sethospitaldata]=useState([]);
 
-    const [data,setdata] = useState(HospitalsList) //FROM API HOSPITALS LIST 
+const [data,setdata] = useState([]) //FROM API HOSPITALS LIST
+var hospitals_list = JSON.parse(JSON.stringify(data));
+let hospital = {} ;
+    const Get_Hospitals_Api = ()=>{
+      return new Promise ((resolve,reject)=>{
+      axios.get('https://future-medical.herokuapp.com/hospitals').then((res)=>{
+
+            console.log(res.data)
+            for(var i = 0 ; i < res.data.length ; i++ )
+            {
+                console.log(res.data[i].name)
+               hospital.Hospitalname = res.data[i].name;
+                hospital.id = res.data[i]._id;
+                hospital.number = res.data[i].telephone[0];
+                hospital.Admin = res.data[i].admin.username;
+                hospital.Email = res.data[i].admin.email;
+                hospital.Location = res.data[i].address;
+                hospitals_list.push(hospital);
+                hospital={}
+                //setdata(hospitals_list);
+            }
+            resolve(hospitals_list);
+            
+            //console.log(hospitals_list)
+            
+      }).catch((err)=>{
+        console.log(err)
+        reject(err)
+      })
+      })
+
+      
+    }
+
+    useEffect(()=>{
+      Get_Hospitals_Api().then((res)=>{ setdata(res)}).catch((err)=>{console.log(err)})      
+    },[])
+    
 
     const [viewedit,setedit]=useState(true) //WHEN FALSE SHOW COMPONENT ADD HOSPITAL 
     const [viewadd,setadd]=useState(true)  //WHEN FALSE SHOW COMPONENT EDIT HOSPITAL

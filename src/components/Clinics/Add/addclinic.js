@@ -122,7 +122,7 @@ export default function Addclinic(props) {
   <Row>
     <p style={{textAlign: 'center',fontSize:'27px' , color :'#06a3da'} }> Add Clinic </p>
      <Col>
-    <h6>Clinic Information</h6>
+    <h6><strong>Clinic Information</strong></h6>
     <Form.Group className="mb-3" controlId="formGridEmail">
       <Form.Label>Clinic Name</Form.Label>
       <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.clinicname} name="clinicname" type="text" placeholder="Enter Clinic name" />
@@ -149,7 +149,7 @@ export default function Addclinic(props) {
   </Form.Group>
   </Col>
   <Col>
-      <h6>Admin Account Information</h6>
+      <h6><strong>Admin Account Information</strong></h6>
       <Form.Group  className="mb-3" controlId="formGridAddress1">
     <Form.Label>Email</Form.Label>
     <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.Email} name="Email" type="email" placeholder="Enter Admin's Email " />

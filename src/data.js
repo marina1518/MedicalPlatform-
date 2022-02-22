@@ -50,7 +50,7 @@ export const Specialization = [
     image: "assets/images/Psychiatry-blue.png",
   },
   {
-    id: 10,
+    id: 11,
     name: "Plastic Surgery",
     image: "assets/images/Plastic Surgery-blue.png",
   },

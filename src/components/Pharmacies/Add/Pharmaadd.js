@@ -126,7 +126,7 @@ export default function Addpharmacy(props) {
   <Row>
     <p style={{textAlign: 'center',fontSize:'27px' , color :'#06a3da'} }> Add Pharmacy </p>
         <Col>
-    <h6>Pharmacy Information</h6>
+    <h6><strong>Pharmacy Information</strong></h6>
     <Form.Group className="mb-3" controlId="formGridEmail">
       <Form.Label>Pharmacy Name</Form.Label>
       <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.pharmacyname} name="pharmacyname" type="text" placeholder="Enter Pharmacy name" />
@@ -153,7 +153,7 @@ export default function Addpharmacy(props) {
   </Form.Group>
   </Col>
   <Col>
-      <h6>Admin Account Information</h6>
+      <h6><strong>Admin Account Information</strong></h6>
       <Form.Group  className="mb-3" controlId="formGridAddress1">
     <Form.Label>Email</Form.Label>
     <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.Email} name="Email" type="email" placeholder="Enter Admin's Email " />

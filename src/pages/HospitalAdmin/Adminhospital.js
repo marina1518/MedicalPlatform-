@@ -1,4 +1,4 @@
-import  React,{useState} from 'react';
+import  React,{useState,useEffect} from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import {DoctorsHospital} from '../../data'
 import { DeleteOutline } from "@material-ui/icons";
@@ -6,9 +6,70 @@ import { Button } from 'react-bootstrap';
 import Table from '../../components/Table/Table';
 import Adddoctor from './Adddoctor';
 import Editdoctor from './Editdoctor';
+import Avatar from '@material-ui/core/Avatar';
+import axios from 'axios';
+import {useSelector,useDispatch} from 'react-redux'
+
 
 export default function Adminhospital() {
-    const [data,setdata] = useState(DoctorsHospital) //FROM API HOSPITALS LIST 
+  //const initstate = {username :"jirar" , email : "jirar155@yahoo.com" , number : '01273193582' , hospitalname : "hayah" , image:"https://identity-mag.com/wp-content/uploads/2015/04/mcdreamy14.jpg"};
+  const [admindata,setadmindata] = useState({})
+  const token = useSelector(state => state.auth) //state of token 
+
+  const [data,setdata] = useState(DoctorsHospital) //FROM API HOSPITALS LIST 
+  var hospitals_list = JSON.parse(JSON.stringify(data));
+let hospital = {} ;
+    const Get_Hospitals_Api = ()=>{
+      return new Promise ((resolve,reject)=>{
+      axios.get('https://future-medical.herokuapp.com/doctors/el haiah Hospital').then((res)=>{
+
+            console.log(res.data)
+            for(var i = 0 ; i < res.data.length ; i++ )
+            {
+                console.log(res.data[i].name)
+               hospital.Hospitalname = res.data[i].name;
+                hospital.id = res.data[i]._id;
+                hospital.number = res.data[i].telephone[0];
+                hospital.Admin = res.data[i].admin.username;
+                hospital.Email = res.data[i].admin.email;
+                hospital.Location = res.data[i].address;
+                hospitals_list.push(hospital);
+                hospital={}
+                //setdata(hospitals_list);
+            }
+            resolve(hospitals_list);
+            
+            //console.log(hospitals_list)
+            
+      }).catch((err)=>{
+        console.log(err)
+        reject(err)
+      })
+      })
+
+      
+    }
+const Get_Admin_data =()=>{  
+  console.log(token.token)
+  axios.get('https://future-medical.herokuapp.com/profile', {
+   headers: {
+    'Authorization': `Bearer ${token.token}`
+  }
+})
+.then((res) => {
+  console.log(res.data)
+  setadmindata(res.data)
+})
+.catch((error) => {
+  console.error(error)
+})}
+
+ useEffect(()=>{
+   Get_Admin_data();
+    Get_Hospitals_Api().then((res)=>{ setdata(res)}).catch((err)=>{console.log(err)})
+ },[])   
+
+     
     const [viewedit,setedit]=useState(true) //WHEN FALSE SHOW COMPONENT ADD HOSPITAL 
     const [viewadd,setadd]=useState(true)  //WHEN FALSE SHOW COMPONENT EDIT HOSPITAL
     const [editdata,seteditdata]=useState({}); //EDITED DATA FOR HOSPITAL 
@@ -70,14 +131,14 @@ export default function Adminhospital() {
     {
     field: 'Email',
     headerName: 'Admain Email',
-    width: 190,
+    width: 230,
     editable: true,
   },
   {
     field: 'specialization',
     headerName: 'Specialization',
     editable: true,
-    width: 190,
+    width: 210,
 
   },
    {
@@ -99,21 +160,34 @@ export default function Adminhospital() {
 
   return (
     <>
-    <div style={{ height: 510, width: '100%'  }}>
-      {/*<DataGrid
-        rows={data}
-        columns={columns}
-        pageSize={5}
-        checkboxSelection
-        disableSelectionOnClick
-      />*/}
-    {viewedit && viewadd && <Table rows={data} columns={columns}></Table> }
-    {!viewedit && <Editdoctor editdata={editdata} changeedit={changeedit} goback={goback}/>}
-    {!viewadd && <Adddoctor changeadd={changeadd} goback={goback} />} 
+   <div className="student-profile py-4" style={{width:'50%' ,margin: '0 auto'}}>
+  <div className="container">       
+        <div className="card shadow-sm">             
+          <div className="card-header bg-transparent text-center">
+           <Avatar className="profile_img" src={admindata.image}  />
+           {!admindata.image && <input type="file"></input>}           
+          <h3>{admindata.admin.username} </h3>
+          </div>
+          <div className="card-body">
+            <p className="mb-0"><strong className="pr-1">Contact Number: </strong> {admindata.entity.telephone[0]} </p>               
+            <p className="mb-0"><strong className="pr-1">Hospital Name: </strong>{admindata.entity.name}</p>
+            <p className="mb-0"><strong className="pr-1">Hospital Address: </strong>{admindata.entity.address}</p>   
+            <p className="mb-0"><strong className="pr-1">Email:  </strong>{admindata.admin.email}</p>          
+          </div>     
       </div>
-    {viewedit && viewadd &&<Button variant="primary" onClick={()=>{setadd(false)}} style={{margin:'15px'}}>Add Doctor</Button>  }
+     </div>
+      </div>
+     
+    {viewedit && viewadd && <h3 className="spec-title" style={{color:'#06a3da' , marginTop:'15px' , textAlign:'center' }}><strong>Doctors List</strong></h3>}
+      
+    <div style={{ height: 540, width: '80%' , margin: '0 auto' ,marginBottom:'60px' }}>
+     {viewedit && viewadd && <Table rows={data} columns={columns}></Table> }
+    {!viewedit && <Editdoctor editdata={editdata} changeedit={changeedit} goback={goback}/>}
+    {!viewadd && <Adddoctor changeadd={changeadd} goback={goback} />}  
+      
+    {viewedit && viewadd &&<Button variant="primary" onClick={()=>{setadd(false)}} style={{marginTop:'10px'}}>Add Doctor</Button>  }
 
-    
+    </div>
     </>
   );
 }

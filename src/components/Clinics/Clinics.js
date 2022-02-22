@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React,{useEffect} from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { ClinicsList } from '../../Dummyvalues';
 import { useState } from 'react';
@@ -7,13 +7,49 @@ import { Button } from 'react-bootstrap';
 import Clinicedit from './Edit/Clinicedit';
 import Addclinic from './Add/addclinic';
 import Table from '../Table/Table';
-
+import axios from 'axios';
 
 
 export default function Clinics() {
 
-    const [data,setdata] = useState(ClinicsList) //FROM API CLINICS LIST
+    const [data,setdata] = useState([]) //FROM API CLINICS LIST
+var clinics_list = JSON.parse(JSON.stringify(data));
+let clinic = {} ;
+    const Get_Clinics_Api = ()=>{
+      return new Promise ((resolve,reject)=>{
+      axios.get('https://future-medical.herokuapp.com/clinics').then((res)=>{
 
+            console.log(res.data)
+            for(var i = 0 ; i < res.data.length ; i++ )
+            {
+                console.log(res.data[i].name)
+               clinic.clinicname = res.data[i].name;
+                clinic.id = res.data[i]._id;
+                clinic.number = res.data[i].telephone[0];
+                clinic.Admin = res.data[i].admin.username;
+                clinic.Email = res.data[i].admin.email;
+                clinic.Location = res.data[i].address;
+                clinics_list.push(clinic);
+                clinic={}
+                //setdata(hospitals_list);
+            }
+            resolve(clinics_list);
+            
+            //console.log(hospitals_list)
+            
+      }).catch((err)=>{
+        console.log(err)
+        reject(err)
+      })
+      })
+
+      
+    }
+
+    useEffect(()=>{
+      Get_Clinics_Api().then((res)=>{ setdata(res)}).catch((err)=>{console.log(err)})      
+    },[])
+    
     const [viewedit,setedit]=useState(true) //WHEN FALSE SHOW COMPONENT EDIT CLINIC
     const [viewadd,setadd]=useState(true) //WHEN FALSE SHOW COMPONENT ADD CLINIC
 

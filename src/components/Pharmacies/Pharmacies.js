@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React,{useEffect} from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { PharmacyList } from '../../Dummyvalues';
 import { useState } from 'react';
@@ -7,13 +7,49 @@ import { Button } from 'react-bootstrap';
 import Table from '../Table/Table';
 import Addpharmacy from './Add/Pharmaadd';
 import Pharmacyedit from './EDIT/Pharmaedit';
-
+import axios from 'axios';
 
 
 
 export default function Pharmacies() {
 
-    const [data,setdata] = useState(PharmacyList) //FROM API PHARMACIES LIST 
+    const [data,setdata] = useState([]) //FROM API PHARMACIES LIST 
+    var pharmacies_list = JSON.parse(JSON.stringify(data));
+let pharmacy = {} ;
+    const Get_Pharmacies_Api = ()=>{
+      return new Promise ((resolve,reject)=>{
+      axios.get('https://future-medical.herokuapp.com/pharmacies').then((res)=>{
+
+            console.log(res.data)
+            for(var i = 0 ; i < res.data.length ; i++ )
+            {
+                console.log(res.data[i].name)
+               pharmacy.pharmacyname = res.data[i].name;
+                pharmacy.id = res.data[i]._id;
+                pharmacy.number = res.data[i].telephone[0];
+                pharmacy.Admin = res.data[i].admin.username;
+                pharmacy.Email = res.data[i].admin.email;
+                pharmacy.Location = res.data[i].address;
+                pharmacies_list.push(pharmacy);
+                pharmacy={}
+                //setdata(hospitals_list);
+            }
+            resolve(pharmacies_list);
+            
+            //console.log(hospitals_list)
+            
+      }).catch((err)=>{
+        console.log(err)
+        reject(err)
+      })
+      })
+
+      
+    }
+
+    useEffect(()=>{
+      Get_Pharmacies_Api().then((res)=>{ setdata(res)}).catch((err)=>{console.log(err)})      
+    },[])
 
     const [viewedit,setedit]=useState(true) //WHEN FALSE SHOW COMPONENT EDIT PHARMACY
     const [viewadd,setadd]=useState(true) //WHEN FALSE SHOW COMPONENT ADD PHARMACY
