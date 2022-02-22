@@ -1,12 +1,29 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { HighlyRatedDr } from "../../data";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import Carousel from "react-bootstrap/Carousel";
 import "./custom.css";
-
+import axios from "axios";
 import Onedoctor from "./Onedoctor";
 
 const HighlyRated = () => {
+
+const [doctors,setdoctors] =useState([])  
+const Get_Doctors_Entity =()=>{
+axios.get(`https://future-medical.herokuapp.com/home`).then((res)=>{
+console.log(res.data);
+if(res.data !== "this entity has no doctors right now") //not rated 
+{
+setdoctors(res.data)}
+}).catch((err)=>{console.log(err)})
+}
+useEffect(()=>{
+Get_Doctors_Entity();
+},[])
+
+
+
+
   return (
     <div>
       <section className="section-container">
@@ -14,7 +31,7 @@ const HighlyRated = () => {
           <h1 className="title-h1">Top Rated Doctors</h1>
         </div>
         <div className="doctors-container">
-          {HighlyRatedDr.map((doctor) => (
+          {(doctors.length !==0 )&& doctors.map((doctor) => (
             <Onedoctor doctor={doctor} key={doctor.id}/>
           ))}
         </div>

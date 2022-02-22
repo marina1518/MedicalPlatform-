@@ -4,29 +4,28 @@ import { useParams } from "react-router-dom";
 import {DoctorsSpecialization} from '../data'
 import Onedoctor from '../components/Highly_Rated_DR/Onedoctor';
 import axios from 'axios';
-function Doctorscards() {
+function DoctorsHospitals() {
     const [doctors,setdoctors] =  useState([]);
     const params = useParams();
-    const Deptname = params.Deptname ; ///TO GET DOCTORS IN THIS DEPARTMENT 
+    const entityname = params.entityname; ///TO GET DOCTORS IN THIS DEPARTMENT 
+    console.log(entityname)
 
-const Get_Doctors_Department =()=>{
-axios.get(`https://future-medical.herokuapp.com/department/${Deptname}`).then((res)=>{
+const Get_Doctors_Entity =()=>{
+axios.get(`https://future-medical.herokuapp.com/doctors/${entityname}`).then((res)=>{
 console.log(res.data);
-if(res.data !== "no doctors found in this department"){
+if(res.data !== "this entity has no doctors right now"){
 setdoctors(res.data)}
 }).catch((err)=>{console.log(err)})
 }
 useEffect(()=>{
-Get_Doctors_Department();
+Get_Doctors_Entity();
 },[])
-
-
   return (
     <>
            <div>
       <section className="section-container">
         <div className="doctors-container">
-          {(doctors.length !==0 )&& doctors.map((doctor) => (
+           {(doctors.length !==0 )&&doctors.map((doctor) => (
             <Onedoctor doctor={doctor} key={doctor.id}/>
           ))}
         </div>
@@ -36,4 +35,4 @@ Get_Doctors_Department();
   )
 }
 
-export default Doctorscards
+export default DoctorsHospitals

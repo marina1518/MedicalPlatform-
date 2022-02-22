@@ -17,12 +17,12 @@ const Departmets = (props) => {
           {Specialization.map((item) => (
             <div className="specs-item" key={item.id}>
               <div className="specs-image-container">
-                <Link to={`/Doctors/${item.id}`}> {/*Go to doctors page for this department//*/}
+                <Link to={`/Doctors/${item.name}`}> {/*Go to doctors page for this department//*/}
                   <img src={item.image} alt={item.name} />
                 </Link>
               </div>
               <div className="specs-data">
-                 <Link to={`/Doctors/${item.id}`}>
+                 <Link to={`/Doctors/${item.name}`}>
                   <p className="specs-name">{item.name}</p>
                 </Link>
               </div>

@@ -1,9 +1,24 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import "./hospitals.css";
 import { hospitals } from "../../data";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 const HospitalsPage = () => {
+
+  const [hospitalsdata,sethospitalsdata] =  useState([]);
+  const Get_Hospitals_Api = ()=>{
+      
+      axios.get('https://future-medical.herokuapp.com/hospitals').then((res)=>{
+
+            console.log(res.data)
+            sethospitalsdata(res.data)  
+      }).catch((err)=>{
+        console.log(err)        
+      })     
+    }
+    useEffect(()=>{
+      Get_Hospitals_Api();
+    },[])
   return (
     <div>
       <section className="section-container">
@@ -12,9 +27,9 @@ const HospitalsPage = () => {
           <hr />
         </div>
         <div className="hosp-container">
-          {hospitals.map((hospital) => (
+          {hospitalsdata.map((hospital) => (
             <div className="hosp-item" key={hospital.id}>
-              <Link to={`/profile/${hospital.id}`}>
+              <Link to={`/DoctorsEntity/${hospital.name}`}>
                 <div className="hosp-image-container">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -30,14 +45,14 @@ const HospitalsPage = () => {
                 </div>
               </Link>
               <div className="hosp-data">
-                <Link to={`/profile/${hospital.id}`}>
+                <Link to={`/DoctorsEntity/${hospital.name}`}>
                   <p className="hosp-name">{hospital.name}</p>
                   <p className="hosp-address">
                     {/* <strong>Address: </strong> */}
-                    <i class="bi bi-geo-alt-fill"></i> {hospital.address}
+                    <i class="bi bi-geo-alt-fill"></i> {hospital.address[0]}
                   </p>
                   <p className="hosp-tele">
-                    <i class="bi bi-telephone-fill"></i> {hospital.telephone}
+                    <i class="bi bi-telephone-fill"></i> {hospital.telephone[0]}
                   </p>
                 </Link>
               </div>

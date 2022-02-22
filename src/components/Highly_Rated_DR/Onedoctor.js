@@ -8,13 +8,13 @@ function Onedoctor(props) {
     <div>
     <div className="doctor-item" >
               <div className="img-container">
-                <Link to={`/profile/${doctor.id}`}>
-                  <img src={doctor.image} alt={doctor.name} />
+                <Link to={`/clinicdoctor/${doctor._id}`}>
+                  <img src={doctor.image} alt={doctor.username} />
                 </Link>
               </div>
               <div className="bottom-data">
-                <Link to={`/profile/${doctor.id}`}>
-                  <p className="doctor-name">Dr. {doctor.name}</p>
+                <Link to={`/clinicdoctor/${doctor._id}`}>
+                  <p className="doctor-name">Dr. {doctor.username}</p>
                 </Link>
                 <p className="doctor-spec">{doctor.specialization}</p>
                 {/* <span className="rate-star"> */}

@@ -25,6 +25,7 @@ import Privatepharmacyadmin from "./components/PrivateRoutes/Privatepharmacyadmi
 import Privatedoctor from "./components/PrivateRoutes/Privatedoctor";
 import ScrollToTop from "./components/ScrollToTop/Scrolltop";
 import HospitalsPage from './pages/HospitalsPage/HospitalsPage'
+import DoctorsHospitals from "./pages/DoctorsHospitals";
 function App() {
 
   let navigate = useNavigate();
@@ -66,15 +67,18 @@ var alanBtnInstance = alanBtn({
     
       <Header />
       <ScrollToTop>
+        <div className="body">
       <Routes>
         {/*<Route path="/appadmin" element={<Appadmin />}> </Route>*/}
         <Route path="/" element={<Home />}></Route>
-        <Route path="/Doctors/:specializationid" element={<Doctorscards />}></Route>
+        <Route path="/Doctors/:Deptname" element={<Doctorscards />}></Route>
         {/*<Route path="/hospitaladmin" element={<Adminhospital />}> </Route>*/}
         {/*<Route path="/pharmacyadmin" element={<Ph_admin />}> </Route>*/}
         <Route path="/login" element={<Login/>}> </Route>
         <Route path="/signup" element={<Signup/>}> </Route>
         <Route path="/hospitals" element={<HospitalsPage/>}> </Route>
+        <Route path="/clinicdoctor/:doctorid" element={<Clinicdoctor/>}> </Route>
+        <Route path="/DoctorsEntity/:entityname" element={<DoctorsHospitals/>}> </Route>
         {/*<Route path="/user" element={<Profile/>} > </Route>*/}
         {/*<Route path="/doctor" element={<Dr_Profile/>}> </Route>*/}
         {/*<Route path="/clinicdoctor" element={<Clinicdoctor/>}> </Route>*/}
@@ -86,6 +90,7 @@ var alanBtnInstance = alanBtn({
         <Route path="/user"  element={ <Privateuser> <Profile/>  </Privateuser> }/>       
       </Routes>
       <Footer />
+      </div>
       </ScrollToTop>
     </>
   );

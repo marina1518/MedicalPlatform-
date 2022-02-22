@@ -3,8 +3,8 @@ import "./footer.css";
 
 const Footer = () => {
   return (
-    <div>
-      <div className="footer-container">
+    <div style={{marginTop:'auto'}}>
+      <div className="footer-container" >
         <p className="footer-p">© COPY RIGHT BY 2021</p>
       </div>
     </div>
