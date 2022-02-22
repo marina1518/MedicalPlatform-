@@ -26,7 +26,8 @@ const Login=()=>{
     const token = useSelector(state => state.auth) //state of token 
     //console.log(token)
     const { decodedToken, isExpired } = useJwt(token);
-
+    const [error_email,sete_error]=useState("");
+    const [error_pass, setp_error]=useState("");
     const dispatch = useDispatch();
     const login_api = ()=>{
             axios.post('https://future-medical.herokuapp.com/login',
@@ -50,6 +51,15 @@ const Login=()=>{
     if (error.response) {
       console.log(error.response.data);
       console.log(error.response.status);
+      if (error.response.data === "incorrect email")
+      {
+        sete_error("!! incorrect email");
+      }
+      else if (error.response.data === "incorrect password")
+      {
+        setp_error("!! incorrect password");
+      }
+      
       ///Handle data => [incorrect email , incorrect password ]
       //console.log(error.response.headers);
     }
@@ -134,18 +144,20 @@ const Login=()=>{
            
 
 
-            <h1 className="shadow-sm text-primary mt-5 p-3 text-center rounded">Welcome Back</h1>
+            <h1 className="shadow-sm mt-5 p-3 text-center rounded" style={{color:"#06a3da"}}>Welcome Back</h1>
             <br/>
                 <Form onSubmit={submit_value}>
                
                     <Form.Group controlId="formBasicEmail">
                     <FaUser/> <Form.Label>  Email address </Form.Label>
-                     <Form.Control type="email" placeholder="Enter email" required onChange={(e)=>setEmail(e.target.value)}/>   
+                     <Form.Control type="email" placeholder="Enter email" required onChange={(e)=>setEmail(e.target.value)}/> 
+                     <h6 style={{color:"red"}}>{error_email}</h6>  
                     </Form.Group>
 <br/>
                     <Form.Group controlId="formBasicPassword">
                     <FaLock/> <Form.Label>Password</Form.Label>
                         <Form.Control type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} required/>
+                        <h6 style={{color:"red"}}>{error_pass}</h6> 
                     </Form.Group>
                     <br/>
                     <Form.Group >
@@ -172,7 +184,7 @@ const Login=()=>{
                 <p >
                     join us now   
                     <Link to={'/signup'}>
-                    <a className="ml-1 text-blue-900 ">  Register here</a>
+                    <a className="ml-1 text-blue-900 ">  <u>Register here</u></a>
                     </Link>
                 </p>
             </div>
