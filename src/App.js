@@ -82,7 +82,7 @@ var alanBtnInstance = alanBtn({
         {/*<Route path="/user" element={<Profile/>} > </Route>*/}
         {/*<Route path="/doctor" element={<Dr_Profile/>}> </Route>*/}
         {/*<Route path="/clinicdoctor" element={<Clinicdoctor/>}> </Route>*/}
-        <Route path="/doctor"  element={ <Privatedoctor> <Dr_Profile />  </Privatedoctor> }/> 
+        <Route path="/doctor"  element={ <Privatedoctor> <Clinicdoctor />  </Privatedoctor> }/> 
         <Route path="/pharmacyadmin"  element={ <Privatepharmacyadmin> <Ph_admin />  </Privatepharmacyadmin> }/> 
         <Route path="/hospitaladmin"  element={ <Privatehospitaladmin> <Adminhospital />  </Privatehospitaladmin> }/> 
         <Route path="/clinicdoctor"  element={ <Privateclinicadmin> <Clinicdoctor />  </Privateclinicadmin> }/> 

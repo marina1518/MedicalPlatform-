@@ -1,24 +1,89 @@
-import React , {useState} from "react";
+import React , {useState , useEffect} from "react";
 import './profile.css';
-import { Alert ,Button,ButtonGroup,Form, Stack} from "react-bootstrap";
+import { Alert ,Button,ButtonGroup,Form, Table} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EditIcon from '@material-ui/icons/Edit';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Avatar from '@material-ui/core/Avatar';
 import BackupIcon from '@material-ui/icons/Backup';
+import {BsInfoCircleFill} from 'react-icons/bs';
+import {BiMessageDetail} from 'react-icons/bi';
+import {AiFillClockCircle} from 'react-icons/ai';
+import axios from 'axios';
+import { useSelector } from "react-redux";
+
 
 const Profile =()=>{
-    const user_data = {
-        email:"",
-        username:"madonna",
-        history:"gg",
-        gender:"Female",
-        blood:"O",
-        date:"12/5/1999",
-        app:"",
-        pic:"https://source.unsplash.com/600x300/?student",
-        address:"42 london st"
-    }
+    // const user_data = {
+    //     email:"",
+    //     username:"madonna",
+    //     history:"gg",
+    //     gender:"Female",
+    //     blood:"O",
+    //     date:"12/5/1999",
+    //     app:"",
+    //     pic:"https://source.unsplash.com/600x300/?student",
+    //     address:"42 london st"
+    // }
+
+    const [user_data, setuser_data] = useState(
+   
+      {
+             email:"",
+            username:"",
+            history:[],
+            gender:"",
+            blood:"",
+            date:"",
+            app:"",
+            pic:"https://source.unsplash.com/600x300/?student",
+            address:""
+      }
+  
+  
+  );
+  
+  let user_data2 = {};
+    const token = useSelector(state => state.auth);
+    console.log(token.token);
+    const Get_info_api=()=>{
+      return new Promise ((resolve,reject)=> {
+        axios.get("https://future-medical.herokuapp.com/profile",
+        {
+         headers: {
+          'Authorization': `Bearer ${token.token}`
+        }
+      }
+       ).then((res)=>{
+         console.log(res.data);
+        // setuser_data()
+         user_data2.email = res.data.email;
+         user_data2.username = res.data.username;
+         for(var i =0 ; i< res.data.history.disease ; i++)
+         {
+          user_data2.history[i] = res.data.history[i];
+         }
+         
+         user_data2.pic = res.data.icon;
+  
+         //setuser_data(user_data);
+         resolve(user_data2);
+       }).catch((err) =>{
+         console.log(err);
+         reject(err);
+       });
+      })
+      
+    };
+    useEffect(()=>{
+      Get_info_api().then((res)=>{console.log(res); setuser_data(res);})   
+     },[]) 
+  
+
+
+
+
+
     const app=[
         {id:"0",date:"10/12/2021",time:"10:00", dr_name:"kk",state:""},
         {id:"1",date:"15/12/2021", time:"10:00" , dr_name:"mm",state:""},
@@ -118,7 +183,7 @@ const Profile =()=>{
            {edit_photo ? <input type="file"></input>:""}
            
            </div> */}
-           <Avatar className="profile_img" src="/broken-image.jpg" onClick={(e)=>setEdit_photo(true)} />
+           <Avatar style={{ cursor: "pointer"}} className="profile_img" src="/broken-image.jpg" onClick={(e)=>setEdit_photo(true)} />
            {edit_photo ? <input type="file"></input>:""}
          
             
@@ -136,7 +201,7 @@ const Profile =()=>{
       <div className="col-lg-8">
         <div className="card shadow-sm">
           <div className="card-header bg-transparent border-0">
-            <h3 className="mb-0"><i className="far fa-clone pr-1"></i>Personal Information <EditIcon onClick={(e)=>setEdit(true)}></EditIcon></h3>  
+            <h3 className="mb-0"><BsInfoCircleFill /> Personal Information <EditIcon style={{ cursor: "pointer"}} onClick={(e)=>setEdit(true)}></EditIcon></h3>  
             {/* <Button variant="outline-secondary">Secondary</Button> 
             <svg data-testid="EditIcon"></svg>
             */}
@@ -152,15 +217,15 @@ const Profile =()=>{
               <tr>
                 <th width="30%">Date of Birth	</th>
                 <td width="2%">:</td>
-                <td>{edit ? <input placeholder={edit_data.date} type="date" onChange={(e)=>setDob(e.target.value)}></input>:edit_data.date}</td>
+                <td>{edit ? <input style={{ cursor: "pointer"}} placeholder={edit_data.date} type="date" onChange={(e)=>setDob(e.target.value)}></input>:edit_data.date}</td>
               </tr>
               <tr>
                 <th width="30%">Gender</th>
                 <td width="2%">:</td>
                 <td>{edit ? <div>
-                    <input type="radio" id="gender1" name="gender" value="Male" onChange={(e)=>setGender(e.target.value)} />
+                    <input style={{ cursor: "pointer"}} type="radio" id="gender1" name="gender" value="Male" onChange={(e)=>setGender(e.target.value)} />
                     <label for="gender1"> Male</label><br/>
-                    <input type="radio" id="gender2" name="gender" value="Female"  onChange={(e)=>setGender(e.target.value)}></input>
+                    <input style={{ cursor: "pointer"}} type="radio" id="gender2" name="gender" value="Female"  onChange={(e)=>setGender(e.target.value)}></input>
                     <label for="gender2"> Female</label>
                 </div>:edit_data.gender}</td>
               </tr>
@@ -170,7 +235,7 @@ const Profile =()=>{
                 <td width="2%">:</td>
                 <td>{edit ? 
                 <div>
-                    <select onChange={(e)=>setblood(e.target.value)}>
+                    <select style={{ cursor: "pointer"}} onChange={(e)=>setblood(e.target.value)}>
                         <option value="A+">A+</option>
                         <option value="A-">A-</option>
                         <option value="B+">B+</option>
@@ -202,7 +267,7 @@ const Profile =()=>{
         <div className="card shadow-sm">
           <div className="card-header bg-transparent border-0">
             
-            <h3 className="mb-0"><i className="far fa-clone pr-1"></i>History  <EditIcon onClick={(e)=>setEdit_h(true)}/></h3>
+            <h3 className="mb-0"><BiMessageDetail/> History  <EditIcon style={{ cursor: "pointer"}} onClick={(e)=>setEdit_h(true)}/></h3>
           </div>
           <div className="card-body pt-0">
               <p>{edit_h ? 
@@ -232,10 +297,20 @@ const Profile =()=>{
         <div className="card shadow-sm">
           <div className="card-header bg-transparent border-0">
             
-            <h3 className="mb-0"><i className="far fa-clone pr-1"></i>Appointments</h3>
+            <h3 className="mb-0"><AiFillClockCircle/> Appointments</h3>
           </div>
           <div className="card-body pt-0">
-          <tr>
+
+          <div>
+
+
+
+
+
+
+<Table responsive="sm">
+<thead>
+<tr>
                 <th width="30%">Date</th>
                 <th width="30%">Time</th>
                 <th width="30%">Dr Name</th>
@@ -243,7 +318,10 @@ const Profile =()=>{
                 <th width="30%">State</th>
                
               </tr>
-              {
+</thead>
+<tbody>
+
+{
                   newapp.map((item)=>
                     <tr key={item.id}>
                     <td width="33%">{item.date}</td>
@@ -260,6 +338,18 @@ const Profile =()=>{
                   </tr>
                   )
               }
+
+</tbody>
+</Table>
+</div>
+
+
+
+
+
+
+         
+            
              
           </div>
         </div>

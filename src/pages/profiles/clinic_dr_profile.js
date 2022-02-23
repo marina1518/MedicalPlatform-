@@ -1,27 +1,113 @@
-import React , {useState} from "react";
+import React , {useState, useEffect} from "react";
 import './profile.css';
-import { Alert ,Button,ButtonGroup,ListGroup, Stack} from "react-bootstrap";
+import { Alert ,Button,ButtonGroup,ListGroup, Stack , Table} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EditIcon from '@material-ui/icons/Edit';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Avatar from '@material-ui/core/Avatar';
 import BackupIcon from '@material-ui/icons/Backup';
+import {BsInfoCircleFill} from 'react-icons/bs';
+//import {AiOutlineComment} from 'react-icons/bi';
+import {AiFillClockCircle,AiOutlineComment} from 'react-icons/ai';
+import {MdAdd} from 'react-icons/md';
+import {MdOutlineDoneOutline,MdOutlineDone,MdCancel} from 'react-icons/md';
+import {RiSubtractLine} from 'react-icons/ri';
+import { Icon123 } from "react-bootstrap-icons";
+import axios from 'axios';
+import { useSelector } from "react-redux";
+import {GiNotebook} from 'react-icons/gi';
 
 const Clinicdoctor =()=>{
-    const user_data = {
-        email:"",
-        username:"madonna",
-        gender:"Female",
-        date:"12/5/1999",
-        pic:"https://source.unsplash.com/600x300/?student",
-       personal_phone:"",
-       name_hospital:"",
-        edu:"",
-        university:"",
-        clinic_add:"",
-        clinic_phone:"",
+  
 
+//   var user_data = {
+//     email:"",
+//     username:"",
+//     gender:"",
+//     date:"",
+//     pic:"https://source.unsplash.com/600x300/?student",
+//    personal_phone:"",
+//    name_hospital:"",
+//     edu:"",
+//     university:"",
+//     clinic_add:"",
+//     clinic_phone:"",
+
+// };
+const [user_data, setuser_data] = useState(
+   
+    {email:"",
+    username:"",
+    gender:"",
+    date:"",
+    pic:"https://source.unsplash.com/600x300/?student",
+   personal_phone:"",
+   name_hospital:"",
+    edu:"",
+    university:"",
+    clinic_name:"",
+    clinic_add:"",
+    clinic_phone:"",}
+
+
+);
+// const [app,setapp] = useState(
+//  [ {id:"",date:"",time:"", dr_name:"",state:""} ]
+       
+// );
+let user_data2 = {};
+let app3 = {};
+let app2 = [];
+  const token = useSelector(state => state.auth);
+  console.log(token.token);
+  const Get_info_api=()=>{
+    return new Promise ((resolve,reject)=> {
+      axios.get("https://future-medical.herokuapp.com/profile",
+      {
+       headers: {
+        'Authorization': `Bearer ${token.token}`
+      }
     }
+     ).then((res)=>{
+       console.log(res.data);
+      // setuser_data()
+       user_data2.email = res.data.email;
+       user_data2.username = res.data.username;
+       user_data2.spec = res.data.specialization;
+       user_data2.name_hospital = res.data.entity_name;
+      //  for(var i=0; i<res.data.meetings; i++)
+      //  {
+      //     app3.id = i;
+      //     app3.date = 
+      //  }
+      //  for(var i=0; i<res.data.timetable; i++)
+      //  {
+         
+      //  }
+      // user_data2.gender = res.data.admin.gender;
+      //  user_data2.clinic_name = res.data.entity.name;
+      //  user_data2.clinic_add = res.data.entity.address[0];
+      //  user_data2.clinic_phone = res.data.entity.telephone[0];
+       user_data2.pic = res.data.icon;
+
+       //setuser_data(user_data);
+       resolve(user_data2);
+     }).catch((err) =>{
+       console.log(err);
+       reject(err);
+     });
+    })
+    
+  };
+  useEffect(()=>{
+    Get_info_api().then((res)=>{console.log(res); setuser_data(res);})   
+   },[]) 
+
+
+
+
+ 
+    
     const app=[
         {id:"0",date:"25/12/2021",time:"10:00", dr_name:"kk",state:""},
         {id:"1",date:"15/2/2022", time:"10:00" , dr_name:"mm",state:""},
@@ -58,6 +144,7 @@ const Clinicdoctor =()=>{
      }
      console.log(app);
     const [clinic_add, setclinic] = useState(null);
+    const [clinic_name,setclinic_name] = useState(null);
     const [spec, setspec] = useState(null);
     const [hos, sethosp] = useState(null);
     const [uni, setuni] = useState(null);
@@ -70,14 +157,15 @@ const Clinicdoctor =()=>{
  
   const [edit_photo,setEdit_photo]=useState(false);
 
-  const [edit_data,seteditdata]=useState(user_data);
+  const [edit_data,seteditdata]=useState(user_data2);
  
  
-   const editted = {...user_data};
+   const editted = {...user_data2};
   
    const setdata=()=>{
        
         editted.clinic_add=clinic_add;
+        editted.clinic_name=clinic_name;
         editted.edu=spec;
         editted.gender=gender;
         editted.name_hospital=hos;
@@ -109,6 +197,91 @@ const Clinicdoctor =()=>{
     const newp = newapp.filter((item)=> item.id !== id );
     setnewapp(newp);
    }
+
+   const my_timetable = [
+     {id:"0",day:"sun" , from:"12:00", to:"13:00"},
+     {id:"1",day:"sun" , from:"12:00", to:"13:00"}
+   ];
+   const [newtime, setnew_time] = useState(my_timetable);
+   const remove_time =(e,id)=>{
+    const newp = newtime.filter((item)=> item.id !== id );
+    setnew_time(newp);
+   }
+   const [add,setadd] = useState(0);
+   const [day, setday] = useState("");
+   var [from , setfrom] =useState(0);
+   var [to, setto] = useState(0);
+   
+
+   const inc1 = ()=>{
+     from+=1;
+     if (from <=24)
+     {
+      setfrom(from);
+      console.log(from)
+     }
+     else if (from === 24 || from > 24 )
+     {
+      from =24; 
+      setfrom(24);
+       
+       console.log(from)
+     }
+     
+   };
+   const inc2 = ()=>{
+    to+=1;
+    if (to <=24)
+    {
+     setto(to);
+     console.log(to)
+    }
+    else  if (to === 24 || to > 24 )
+    {
+      to =24; 
+      setto(24);
+      console.log(to)
+    }
+    
+  };
+
+  const dec1 = ()=>{
+    from-=1;
+    if (from >=0)
+    {
+     setfrom(from);
+    }
+    else if (from ===0 || from <0 )
+    {
+     from =0;
+      setfrom(0);
+    }
+    
+  };
+
+  const dec2 = ()=>{
+    to-=1;
+    if (to >=0)
+    {
+     setto(to);
+    }
+    else  if (to ===0 || to <0 )
+    {
+      to = 0;
+      setto(0);
+    }
+    
+  };
+  const [enlarge, setenlarge] = useState(false);
+  const add_slot = ()=>{
+    const len = newtime.length;
+   var get_id = parseInt(newtime[len-1].id);
+   get_id+=1;
+   newtime.push({id:`${get_id}` , day:`${day}`, from:`${from}:00`, to:`${to}:00`});
+   console.log(newtime);
+
+  }
+
     return(
 
         <div className="student-profile py-4">
@@ -132,9 +305,31 @@ const Clinicdoctor =()=>{
            {edit_photo ? <input type="file"></input>:""}
            
            </div> */}
-           <Avatar className="profile_img" src="/broken-image.jpg" onClick={(e)=>setEdit_photo(true)} />
+           <Avatar style={{ cursor: "pointer"}} className="profile_img" src="/broken-image.jpg" onClick={(e)=>{
+             if (token.usertype === "user") 
+             {
+               setenlarge(true);
+             }
+             else 
+            { setEdit_photo(true);}
+
+            } } />
+           
            {edit_photo ? <input type="file"></input>:""}
-         
+           { enlarge ? 
+           
+                 <div id="myModal" class="modal">
+
+
+<span class="close">&times;</span>
+
+
+<img class="modal-content" id="img01"/>
+
+
+<div id="caption"></div>
+              </div>  :""
+          }
             
           
             <h3>Dr {user_data.username}</h3>
@@ -145,12 +340,22 @@ const Clinicdoctor =()=>{
             
           </div>
           </div>
+
+
+
+         
+
+
+
+
+
           <br/>
           <div styled="height: 26px"></div>
           <div className="card shadow-sm">
              
              <div className="card-header bg-transparent">
-             <p className="mb-0"><strong className="pr-1">Reviews: </strong></p>
+             <p className="mb-0"><strong className="pr-1"> <AiOutlineComment/> Reviews: </strong></p>
+             <br/>
              {
                  reviews.map((r=>
                     <ListGroup variant="flush">
@@ -178,7 +383,11 @@ const Clinicdoctor =()=>{
       <div className="col-lg-8">
         <div className="card shadow-sm">
           <div className="card-header bg-transparent border-0">
-            <h3 className="mb-0"><i className="far fa-clone pr-1"></i>Personal Information <EditIcon onClick={(e)=>setEdit(true)}></EditIcon></h3>  
+            <h3 className="mb-0"><BsInfoCircleFill/> Personal Information 
+            {
+              token.usertype === "patient" ? "" : <EditIcon style={{ cursor: "pointer"}} onClick={(e)=>setEdit(true)}></EditIcon>
+            }
+            </h3>  
             {/* <Button variant="outline-secondary">Secondary</Button> 
             <svg data-testid="EditIcon"></svg>
             */}
@@ -201,18 +410,44 @@ const Clinicdoctor =()=>{
                 <td width="2%">:</td>
                 <td>{edit ? <input placeholder={edit_data.name_hospital} type="text" onChange={(e)=>sethosp(e.target.value)}></input>:edit_data.name_hospital}</td>
               </tr>
-              <tr>
+              {
+                token.usertype === "doctor" ? 
+                
+                <tr>
+                <th width="30%">Clinic Name	</th>
+                <td width="2%">:</td>
+                <td>{edit ? <input placeholder={edit_data.clinic_name} type="text" onChange={(e)=>setclinic_name(e.target.value)}></input>:edit_data.clinic_name}</td>
+              </tr>
+
+                :""
+              }
+               {
+                token.usertype === "doctor" ? 
+                
+                <tr>
                 <th width="30%">Clinic Address	</th>
                 <td width="2%">:</td>
                 <td>{edit ? <input placeholder={edit_data.clinic_add} type="text" onChange={(e)=>setclinic(e.target.value)}></input>:edit_data.clinic_add}</td>
               </tr>
 
-              <tr>
+                :""
+              }
+
+              {
+                token.usertype === "doctor" ? 
+                
+                <tr>
                 <th width="30%">Clinic Phone Number	</th>
                 <td width="2%">:</td>
                 <td>{edit ? <input placeholder={edit_data.clinic_phone}  type="tel" name="telefono" pattern="\([0-9]{3}\) [0-9]{3}[ -][0-9]{4}" onChange={(e)=>setc_ph(e.target.value)}></input>:edit_data.clinic_phone}</td>
               </tr>
-              <tr>
+
+                :""
+              }
+
+
+            
+                <tr>
                 <th width="30%">Personal Phone Number	</th>
                 <td width="2%">:</td>
                 <td>{edit ? <input placeholder={edit_data.personal_phone} type="text" onChange={(e)=>setp_ph(e.target.value)}></input>:edit_data.personal_phone}</td>
@@ -220,15 +455,15 @@ const Clinicdoctor =()=>{
               <tr>
                 <th width="30%">Date of Birth	</th>
                 <td width="2%">:</td>
-                <td>{edit ? <input placeholder={edit_data.date} type="date" onChange={(e)=>setDob(e.target.value)}></input>:edit_data.date}</td>
+                <td>{edit ? <input style={{ cursor: "pointer"}} placeholder={edit_data.date} type="date" onChange={(e)=>setDob(e.target.value)}></input>:edit_data.date}</td>
               </tr>
               <tr>
                 <th width="30%">Gender</th>
                 <td width="2%">:</td>
                 <td>{edit ? <div>
-                    <input type="radio" id="gender1" name="gender" value="Male" onChange={(e)=>setGender(e.target.value)} />
+                    <input style={{ cursor: "pointer"}} type="radio" id="gender1" name="gender" value="Male" onChange={(e)=>setGender(e.target.value)} />
                     <label for="gender1"> Male</label><br/>
-                    <input type="radio" id="gender2" name="gender" value="Female"  onChange={(e)=>setGender(e.target.value)}></input>
+                    <input style={{ cursor: "pointer"}} type="radio" id="gender2" name="gender" value="Female"  onChange={(e)=>setGender(e.target.value)}></input>
                     <label for="gender2"> Female</label>
                 </div>:edit_data.gender}</td>
               </tr>
@@ -247,45 +482,270 @@ const Clinicdoctor =()=>{
              
           </div>
         </div>
-        <br/>
+       {
+         token.usertype === "user" ? "" :
+         <div>
+                              <br/>
+                              
+                              
+                              <div styled="height: 26px"></div>
+                              
+                            <div className="card shadow-sm">
+                              <div className="card-header bg-transparent border-0">
+                                
+                                <h3 className="mb-0"><AiFillClockCircle/> Appointments</h3>
+                              </div>
+                              <div className="card-body pt-0">
+
+
+
+                              <div>
+
+
+
+
+
+
+                      <Table responsive="sm">
+                      <thead>
+                      <tr>
+                                    <th width="30%">Date</th>
+                                    <th width="30%">Time</th>
+                                    <th width="30%">Patient Name</th>
+                                    
+                                    <th width="30%">State</th>
+                                    
+                                  </tr>
+                      </thead>
+                      <tbody>
+
+                      {
+                                      newapp.map((item)=>
+                                        <tr key={item.id}>
+                                        <td width="33%">{item.date}</td>
+                                        <td width="33%">{item.time}</td>
+                                        <td width="33%">{item.dr_name}</td>
+                                        <td width="33%">{item.state==="pending" ? 
+                                          <Button variant="outline-danger" onClick={(e)=>remove(e,item.id)}><CancelIcon/></Button>
+                                        // <Button variant="outline-danger" onClick={(e)=>remove(e,item.id)}><CancelIcon/></Button>
+                                        
+                                        :item.state==="today" ? 
+                                        <Alert variant="danger" >
+                                        Today
+                                      </Alert>
+                                        :"Done"}</td>
+                                        
+                                      </tr>
+                                      )
+                                  }
+
+                      </tbody>
+                      </Table>
+                      </div>
+
+                              </div>
+                            </div> 
+
+
+
+                            
+       <br/>
          
         
-          <div styled="height: 26px"></div>
-          
-        <div className="card shadow-sm">
-          <div className="card-header bg-transparent border-0">
+         <div styled="height: 26px"></div>
+         
+       <div className="card shadow-sm">
+         <div className="card-header bg-transparent border-0">
+           
+           <h3 className="mb-0"><AiFillClockCircle/> Set Timetable  <button onClick={(e)=>setadd(1)}>  <MdAdd/></button>  </h3>
+         </div>
+         <div className="card-body pt-0">
+         <div>
+
+
+         {
+                add === 1 ? 
+                <ListGroup variant="flush" >
+                <div>
+                <ListGroup.Item > 
+                <tr key="0">
+                   <td width="33%"><div>
+                    <select onChange={(e)=>setday(e.target.value)} className="ll">
+                        <option value="Sunday">Sunday</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                       
+                    </select>
+                </div></td>
+                   <td width="33%"><button onClick={inc1}><MdAdd/></button><label>{from}</label><button onClick={dec1}><RiSubtractLine/></button></td>
+                   <td width="33%"><button onClick={inc2}><MdAdd/></button><label>{to}</label><button onClick={dec2}><RiSubtractLine/></button></td>
+                   <td width="33%">
+                   <ButtonGroup>
+              <Button variant="outline-success" className="col-md-12 text-right" onClick={(e)=>{setadd(0); add_slot()}}><MdOutlineDone/></Button>
+              <Button variant="outline-danger" className="col-md-12 text-right" onClick={(e)=>setadd(0)} ><MdCancel/></Button>
+              </ButtonGroup>
+                   </td>
+                   </tr>
+                </ListGroup.Item>
+                </div>
+                <br/>
             
-            <h3 className="mb-0"><i className="far fa-clone pr-1"></i>Appointments</h3>
-          </div>
-          <div className="card-body pt-0">
-          <tr>
-                <th width="30%">Date</th>
-                <th width="30%">Time</th>
-                <th width="30%">Patient Name</th>
-               
-                <th width="30%">State</th>
-               
-              </tr>
-              {
-                  newapp.map((item)=>
-                    <tr key={item.id}>
-                    <td width="33%">{item.date}</td>
-                    <td width="33%">{item.time}</td>
-                    <td width="33%">{item.dr_name}</td>
-                    <td width="33%">{item.state==="pending" ? <Button variant="outline-danger" onClick={(e)=>remove(e,item.id)}><CancelIcon/></Button>
-                    
-                    :item.state==="today" ? 
-                    <Alert variant="danger" >
-                   Today
-                  </Alert>
-                    :"Done"}</td>
-                   
-                  </tr>
-                  )
+           
+          </ListGroup>
+
+              
+             : ""
               }
-             
-          </div>
-        </div>
+
+        
+
+  <Table responsive="sm">
+    <thead>
+    <tr>
+         <th width="35%">Day</th>
+               {/* <th width="30%">Date</th> */}
+               <th width="33%">From</th>
+               <th width="33%">To</th> </tr>
+    </thead>
+    <tbody>
+      {
+        newtime.length ===0 ?  
+        <Alert  variant="danger">
+       Please enter your weekly timetable.
+      </Alert> :""
+      }
+    {
+                 newtime.map((item)=>
+                   <tr key={item.id}>
+                   <td width="33%">{item.day}</td>
+                   <td width="33%">{item.from}</td>
+                   <td width="33%">{item.to}</td>
+                    <td width="33%"> <Button variant="outline-danger" onClick={(e)=>remove_time(e,item.id)}><CancelIcon/></Button></td>
+                   {/* <td width="33%">{item.state==="pending" ? <Button variant="outline-danger" onClick={(e)=>remove(e,item.id)}><CancelIcon/></Button>
+                   
+                   :item.state==="today" ? 
+                   <Alert variant="danger" >
+                  Today
+                 </Alert>
+                   :"Done"}</td> */}
+                  
+                 </tr>
+                 )
+             }
+      
+    </tbody>
+  </Table>
+  </div>
+ 
+         </div>
+       </div>
+                            </div>
+                            }
+
+
+       
+
+   {
+     token.usertype === "user" ? 
+     
+<div>
+
+<br/>
+  
+ 
+  <div styled="height: 26px"></div>
+  
+<div className="card shadow-sm">
+  <div className="card-header bg-transparent border-0">
+    
+    <h3 className="mb-0"><GiNotebook/> Reserve your meeting </h3>
+  </div>
+  <div className="card-body pt-0">
+  <div>
+
+
+  {
+         add === 1 ? 
+         <ListGroup variant="flush" >
+         <div>
+         <ListGroup.Item > 
+         <tr key="0">
+            <td width="33%"><div>
+             <select onChange={(e)=>setday(e.target.value)} className="ll">
+                 <option value="Sunday">Sunday</option>
+                 <option value="Monday">Monday</option>
+                 <option value="Tuesday">Tuesday</option>
+                 <option value="Wednesday">Wednesday</option>
+                 <option value="Thursday">Thursday</option>
+                 <option value="Friday">Friday</option>
+                 <option value="Saturday">Saturday</option>
+                
+             </select>
+         </div></td>
+            <td width="33%"><button onClick={inc1}><MdAdd/></button><label>{from}</label><button onClick={dec1}><RiSubtractLine/></button></td>
+            <td width="33%"><button onClick={inc2}><MdAdd/></button><label>{to}</label><button onClick={dec2}><RiSubtractLine/></button></td>
+            <td width="33%">
+            <ButtonGroup>
+       <Button variant="outline-success" className="col-md-12 text-right" onClick={(e)=>{setadd(0); add_slot()}}><MdOutlineDone/></Button>
+       <Button variant="outline-danger" className="col-md-12 text-right" onClick={(e)=>setadd(0)} ><MdCancel/></Button>
+       </ButtonGroup>
+            </td>
+            </tr>
+         </ListGroup.Item>
+         </div>
+         <br/>
+     
+    
+   </ListGroup>
+
+       
+      : ""
+       }
+
+ 
+
+<Table responsive="sm">
+<thead>
+<tr>
+  <th width="35%">Day</th>
+        {/* <th width="30%">Date</th> */}
+        <th width="33%">From</th>
+        <th width="33%">To</th> </tr>
+</thead>
+<tbody>
+
+{
+          newtime.map((item)=>
+            <tr key={item.id}>
+            <td width="33%">{item.day}</td>
+            <td width="33%">{item.from}</td>
+            <td width="33%">{item.to}</td>
+             <td width="33%"> <Button variant="outline-success" className="col-md-12 text-right" >Reserve</Button></td>
+            {/* <td width="33%">{item.state==="pending" ? <Button variant="outline-danger" onClick={(e)=>remove(e,item.id)}><CancelIcon/></Button>
+            
+            :item.state==="today" ? 
+            <Alert variant="danger" >
+           Today
+          </Alert>
+            :"Done"}</td> */}
+           
+          </tr>
+          )
+      }
+
+</tbody>
+</Table>
+</div>
+
+  </div>
+</div>
+</div> :""
+   }
+
       </div>
     </div>
   </div>
