@@ -1,0 +1,137 @@
+ul {
+  list-style-type: none;
+  margin-left: -4%;
+}
+a {
+  text-decoration: none;
+}
+
+nav {
+  background: hsl(210, 36%, 96%);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  /* position: fixed; */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+  /* max-height: 70px; */
+}
+.nav-header {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.logo-image {
+  /* max-height: 31px; */
+  object-fit: cover;
+  /* padding-right: 0.5rem; */
+  height: 28px;
+}
+
+/*.logo-name {
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  /* font-size: 23px; */
+/* font-size: 20px; */
+/* max-width: 5rem; */
+/* line-height: 38px; */
+/* margin-left: 12px; */
+/*color: #06a3da;
+  margin-top: 5px;
+  text-decoration: none;
+  letter-spacing: 0.1rem;
+}*/
+.logo-left {
+  display: flex;
+  align-items: center;
+}
+/* .nav-toggle i {
+  color: #06a3da;
+} */
+.nav-toggle {
+  font-size: 1.5rem;
+  color: #06a3da;
+  background: transparent;
+  border-color: transparent;
+  transition: all 0.3s linear;
+  cursor: pointer;
+}
+.nav-toggle:hover {
+  /* color: hsl(205, 86%, 17%); */
+  transform: rotate(90deg);
+}
+.links-container {
+  height: 0;
+  overflow: hidden;
+  transition: all 0.3s linear;
+}
+.login-container {
+  height: 0;
+  overflow: hidden;
+  transition: all 0.3s linear;
+}
+.show-container {
+  height: 10rem;
+}
+.links a {
+  color: #5a5e66;
+  font-size: 1rem;
+  text-transform: capitalize;
+  letter-spacing: 0.1rem;
+  display: block;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s linear;
+  /* background-color: transparent; */
+}
+.links a:hover {
+  background: hsl(205, 86%, 86%);
+  color: #06a3da;
+  padding-left: 1.5rem;
+}
+@media screen and (min-width: 800px) {
+  nav {
+    max-height: 70px;
+  }
+  .nav-center {
+    /* max-width: 1170px; */
+    max-width: 1386px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+  .nav-header {
+    display: flex;
+
+    flex-direction: row;
+    padding: 0;
+  }
+  .logo-left {
+    display: flex;
+    align-items: center;
+  }
+  .nav-toggle {
+    display: none;
+  }
+  .links-container {
+    height: auto !important;
+  }
+  .login-container {
+    height: auto !important;
+  }
+  .links {
+    display: flex;
+  }
+  .links a {
+    padding: 0;
+    margin: 0 0.5rem;
+  }
+  .links a:hover {
+    padding: 0;
+    background: transparent;
+  }
+}
