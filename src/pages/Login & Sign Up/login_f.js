@@ -75,15 +75,35 @@ const Login=()=>{
         {email: "", password : "" , type:""}
     ];
     
-    
+    const [error_e,seterror_e] = useState("");
+    const [error_p,seterror_p] = useState("");
+    const [flag,setflag] = useState(0);
     const submit_value =(e) => {
         e.preventDefault();
-        //submit(email,password);        
-        data.email=email;
-        data.password=password;
-        data.type=type;
-        login_api(); //Call login Api 
-        //console.log(data);
+        //submit(email,password); 
+       var flag = 0; 
+        if (email==="")
+        {
+          seterror_e("Email required");
+          //setflag(1);
+          flag=1;
+         console.log(flag);
+        }
+        if (password==="")
+        {
+          seterror_p("Password required");
+         // setflag(1);
+         flag=1;
+        }
+        if (flag === 0)
+        {
+          data.email=email;
+          data.password=password;
+          data.type=type;
+          login_api(); //Call login Api 
+          //console.log(data);
+        }
+        
 
     };
 
@@ -149,19 +169,21 @@ const Login=()=>{
                 <Form onSubmit={submit_value}>
                
                     <Form.Group controlId="formBasicEmail">
-                    <FaUser/> <Form.Label>  Email address </Form.Label>
-                     <Form.Control type="email" placeholder="Enter email" required onChange={(e)=>setEmail(e.target.value)}/> 
-                     <h6 style={{color:"red"}}>{error_email}</h6>  
+                    <FaUser style={{color:"#06a3da"}}/> <Form.Label>  Email address </Form.Label>
+                     <Form.Control type="email" placeholder="Enter email"  onChange={(e)=>{setEmail(e.target.value); seterror_e("");}}/> 
+                     <h6 style={{color:"red"}}>{error_email}</h6>
+                     <h6 style={{color:"red"}}>{error_e}</h6>  
                     </Form.Group>
 <br/>
                     <Form.Group controlId="formBasicPassword">
-                    <FaLock/> <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} required/>
+                    <FaLock style={{color:"#06a3da"}}/> <Form.Label>Password</Form.Label>
+                        <Form.Control type="password" placeholder="Password" onChange={(e)=>{setPassword(e.target.value); seterror_p("");}} />
                         <h6 style={{color:"red"}}>{error_pass}</h6> 
+                        <h6 style={{color:"red"}}>{error_p}</h6>
                     </Form.Group>
                     <br/>
                     <Form.Group >
-                    <MdMedicalServices/> <Form.Label>Type</Form.Label>
+                    <MdMedicalServices style={{color:"#06a3da"}}/> <Form.Label>Type</Form.Label>
                     <div>
                     <input type="radio" id="gender1" name="gender" value="doctor" onChange={(e)=>setType(e.target.value)} />
                     <label for="gender1">  Dr</label><br/>

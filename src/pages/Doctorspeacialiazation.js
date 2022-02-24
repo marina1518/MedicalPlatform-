@@ -8,7 +8,7 @@ function Doctorscards() {
     const [doctors,setdoctors] =  useState([]);
     const params = useParams();
     const Deptname = params.Deptname ; ///TO GET DOCTORS IN THIS DEPARTMENT 
-
+    console.log(Deptname);
 const Get_Doctors_Department =()=>{
 axios.get(`https://future-medical.herokuapp.com/department/${Deptname}`).then((res)=>{
 console.log(res.data);
