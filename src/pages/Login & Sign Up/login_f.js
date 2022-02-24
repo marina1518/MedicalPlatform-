@@ -169,21 +169,21 @@ const Login=()=>{
                 <Form onSubmit={submit_value}>
                
                     <Form.Group controlId="formBasicEmail">
-                    <FaUser/> <Form.Label>  Email address </Form.Label>
+                    <FaUser style={{color:"#06a3da"}}/> <Form.Label>  Email address </Form.Label>
                      <Form.Control type="email" placeholder="Enter email"  onChange={(e)=>{setEmail(e.target.value); seterror_e("");}}/> 
                      <h6 style={{color:"red"}}>{error_email}</h6>
                      <h6 style={{color:"red"}}>{error_e}</h6>  
                     </Form.Group>
 <br/>
                     <Form.Group controlId="formBasicPassword">
-                    <FaLock/> <Form.Label>Password</Form.Label>
+                    <FaLock style={{color:"#06a3da"}}/> <Form.Label>Password</Form.Label>
                         <Form.Control type="password" placeholder="Password" onChange={(e)=>{setPassword(e.target.value); seterror_p("");}} />
                         <h6 style={{color:"red"}}>{error_pass}</h6> 
                         <h6 style={{color:"red"}}>{error_p}</h6>
                     </Form.Group>
                     <br/>
                     <Form.Group >
-                    <MdMedicalServices/> <Form.Label>Type</Form.Label>
+                    <MdMedicalServices style={{color:"#06a3da"}}/> <Form.Label>Type</Form.Label>
                     <div>
                     <input type="radio" id="gender1" name="gender" value="doctor" onChange={(e)=>setType(e.target.value)} />
                     <label for="gender1">  Dr</label><br/>
