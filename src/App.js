@@ -26,6 +26,7 @@ import Privatedoctor from "./components/PrivateRoutes/Privatedoctor";
 import ScrollToTop from "./components/ScrollToTop/Scrolltop";
 import HospitalsPage from './pages/HospitalsPage/HospitalsPage'
 import DoctorsHospitals from "./pages/DoctorsHospitals";
+import Chatbotui from "./components/ChatBotUI/Chatbotui";
 function App() {
 
   let navigate = useNavigate();
@@ -89,6 +90,7 @@ var alanBtnInstance = alanBtn({
         <Route path="/appadmin"  element={ <Privateroute> <Appadmin />  </Privateroute> }/>    
         <Route path="/user"  element={ <Privateuser> <Profile/>  </Privateuser> }/>       
       </Routes>
+      <Chatbotui />
       <Footer />
       </div>
       </ScrollToTop>
