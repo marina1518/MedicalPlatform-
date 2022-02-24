@@ -187,11 +187,14 @@ const Profile =()=>{
            {edit_photo ? <input type="file"></input>:""}
          
             
-          
-            <h3>{user_data.username}</h3>
+          {token.usertype === "user" ?
+            <h3>{user_data.username}</h3>: <h3></h3> }
           </div>
           <div className="card-body">
-            <p className="mb-0"><strong className="pr-1">Email: </strong>{user_data.email}</p>
+            {token.usertype === "user" ? 
+            <p className="mb-0"><strong className="pr-1">Email: </strong>{user_data.email}</p> : 
+            <p className="mb-0"><strong className="pr-1">Email: </strong></p> 
+            }
             
             
           </div>
@@ -201,7 +204,9 @@ const Profile =()=>{
       <div className="col-lg-8">
         <div className="card shadow-sm">
           <div className="card-header bg-transparent border-0">
-            <h3 className="mb-0"><BsInfoCircleFill /> Personal Information <EditIcon style={{ cursor: "pointer"}} onClick={(e)=>setEdit(true)}></EditIcon></h3>  
+            <h3 className="mb-0"><BsInfoCircleFill /> Personal Information 
+            {token.usertype === "user" ? <EditIcon style={{ cursor: "pointer"}} onClick={(e)=>setEdit(true)}></EditIcon> : ""}
+            </h3>  
             {/* <Button variant="outline-secondary">Secondary</Button> 
             <svg data-testid="EditIcon"></svg>
             */}
@@ -267,7 +272,9 @@ const Profile =()=>{
         <div className="card shadow-sm">
           <div className="card-header bg-transparent border-0">
             
-            <h3 className="mb-0"><BiMessageDetail/> History  <EditIcon style={{ cursor: "pointer"}} onClick={(e)=>setEdit_h(true)}/></h3>
+            <h3 className="mb-0"><BiMessageDetail/> History  
+            {token.usertype === "user" ? <EditIcon style={{ cursor: "pointer"}} onClick={(e)=>setEdit_h(true)}/> : ""}
+            </h3>
           </div>
           <div className="card-body pt-0">
               <p>{edit_h ? 
