@@ -11,6 +11,7 @@ import {useSelector} from 'react-redux'
 import Doctorscards from "./pages/Doctorspeacialiazation";
 import { useNavigate } from "react-router-dom";
 import Adminhospital from "./pages/HospitalAdmin/Adminhospital";
+import Adminclinic from "./pages/profiles/clinicadmin";
 import Login from './pages/Login & Sign Up/login_f'
 import Signup from "./pages/Login & Sign Up/signup";
 import Ph_admin from './pages/profiles/pharmacy_admin';
@@ -86,6 +87,7 @@ var alanBtnInstance = alanBtn({
         <Route path="/doctor"  element={ <Privatedoctor> <Clinicdoctor />  </Privatedoctor> }/> 
         <Route path="/pharmacyadmin"  element={ <Privatepharmacyadmin> <Ph_admin />  </Privatepharmacyadmin> }/> 
         <Route path="/hospitaladmin"  element={ <Privatehospitaladmin> <Adminhospital />  </Privatehospitaladmin> }/> 
+        <Route path="/clinicadmin"  element={ <Privateclinicadmin> <Adminclinic />  </Privateclinicadmin> }/> 
         <Route path="/clinicdoctor"  element={  <Clinicdoctor /> }/> 
         <Route path="/appadmin"  element={ <Privateroute> <Appadmin />  </Privateroute> }/>    
         <Route path="/user"  element={ <Privateuser> <Profile/>  </Privateuser> }/>       
