@@ -62,7 +62,7 @@
   cursor: pointer;
   margin: 1rem 0;
   margin-right: 33rem;
-
+  border: none;
   transition: all 300ms ease-in-out;
 }
 
@@ -81,6 +81,7 @@
   .edit-caption h1 {
     padding-top: 0rem;
     font-size: 1rem;
+    padding-bottom: 0rem;
   }
   .edit-caption p {
     padding-top: 0rem;
@@ -89,6 +90,7 @@
   .edit-caption h6 {
     padding-top: 0rem;
     font-size: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
   .slide1-btn {
