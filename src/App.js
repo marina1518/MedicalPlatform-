@@ -26,6 +26,7 @@ import Privatedoctor from "./components/PrivateRoutes/Privatedoctor";
 import ScrollToTop from "./components/ScrollToTop/Scrolltop";
 import HospitalsPage from './pages/HospitalsPage/HospitalsPage'
 import DoctorsHospitals from "./pages/DoctorsHospitals";
+import Chatbotui from "./components/ChatBotUI/Chatbotui";
 function App() {
 
   let navigate = useNavigate();
@@ -45,12 +46,12 @@ var alanBtnInstance = alanBtn({
       }
     }
   },
-  onCommand : ({command , chosen_department})=>{
+  onCommand : ({command , department})=>{
    switch(command){
      case "DepartmentDoctors" :
-        console.log(chosen_department);
-        setclicked_department(chosen_department)
-         navigate(`/Doctors/1`);
+        console.log(department);
+        setclicked_department(department)
+         navigate(`/Doctors/${department}`);
         //navigate('/Doctors/1')
      default :
         break   
@@ -85,10 +86,11 @@ var alanBtnInstance = alanBtn({
         <Route path="/doctor"  element={ <Privatedoctor> <Clinicdoctor />  </Privatedoctor> }/> 
         <Route path="/pharmacyadmin"  element={ <Privatepharmacyadmin> <Ph_admin />  </Privatepharmacyadmin> }/> 
         <Route path="/hospitaladmin"  element={ <Privatehospitaladmin> <Adminhospital />  </Privatehospitaladmin> }/> 
-        <Route path="/clinicdoctor"  element={ <Privateclinicadmin> <Clinicdoctor />  </Privateclinicadmin> }/> 
+        <Route path="/clinicdoctor"  element={  <Clinicdoctor /> }/> 
         <Route path="/appadmin"  element={ <Privateroute> <Appadmin />  </Privateroute> }/>    
         <Route path="/user"  element={ <Privateuser> <Profile/>  </Privateuser> }/>       
       </Routes>
+      <Chatbotui />
       <Footer />
       </div>
       </ScrollToTop>

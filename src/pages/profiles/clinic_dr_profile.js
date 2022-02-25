@@ -16,10 +16,14 @@ import { Icon123 } from "react-bootstrap-icons";
 import axios from 'axios';
 import { useSelector } from "react-redux";
 import {GiNotebook} from 'react-icons/gi';
+import { useLocation } from 'react-router-dom'
+
 
 const Clinicdoctor =()=>{
   
-
+  const location = useLocation();
+  const [Docid, setdoctorid] = useState(location.state ? location.state : "");
+  console.log(Docid);
 //   var user_data = {
 //     email:"",
 //     username:"",
@@ -332,11 +336,10 @@ let app2 = [];
           }
             
           
-            <h3>Dr {user_data.username}</h3>
+          { (token.usertype=== "doctor") ? <h3>Dr {user_data.username}</h3> : <h3>Dr</h3>}
           </div>
           <div className="card-body">
-            <p className="mb-0"><strong className="pr-1">Email: </strong>{user_data.email}</p>
-            
+            { (token.usertype=== "doctor") ?<p className="mb-0"><strong className="pr-1">Email: </strong>{user_data.email}</p> : <p className="mb-0"><strong className="pr-1">Email: </strong></p>}    
             
           </div>
           </div>
@@ -354,7 +357,7 @@ let app2 = [];
           <div className="card shadow-sm">
              
              <div className="card-header bg-transparent">
-             <p className="mb-0"><strong className="pr-1"> <AiOutlineComment/> Reviews: </strong></p>
+             <p className="mb-0"><strong className="pr-1"> <AiOutlineComment /> Reviews: </strong></p>
              <br/>
              {
                  reviews.map((r=>
@@ -383,7 +386,7 @@ let app2 = [];
       <div className="col-lg-8">
         <div className="card shadow-sm">
           <div className="card-header bg-transparent border-0">
-            <h3 className="mb-0"><BsInfoCircleFill/> Personal Information 
+            <h3 className="mb-0"><BsInfoCircleFill /> Personal Information 
             {
               token.usertype === "patient" ? "" : <EditIcon style={{ cursor: "pointer"}} onClick={(e)=>setEdit(true)}></EditIcon>
             }
@@ -493,7 +496,7 @@ let app2 = [];
                             <div className="card shadow-sm">
                               <div className="card-header bg-transparent border-0">
                                 
-                                <h3 className="mb-0"><AiFillClockCircle/> Appointments</h3>
+                                <h3 className="mb-0"><AiFillClockCircle /> Appointments</h3>
                               </div>
                               <div className="card-body pt-0">
 
@@ -557,7 +560,7 @@ let app2 = [];
        <div className="card shadow-sm">
          <div className="card-header bg-transparent border-0">
            
-           <h3 className="mb-0"><AiFillClockCircle/> Set Timetable  <button onClick={(e)=>setadd(1)}>  <MdAdd/></button>  </h3>
+           <h3 className="mb-0"><AiFillClockCircle /> Set Timetable  <button onClick={(e)=>setadd(1)}>  <MdAdd/></button>  </h3>
          </div>
          <div className="card-body pt-0">
          <div>

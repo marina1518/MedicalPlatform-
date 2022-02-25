@@ -8,9 +8,18 @@ function Doctorscards() {
     const [doctors,setdoctors] =  useState([]);
     const params = useParams();
     const Deptname = params.Deptname ; ///TO GET DOCTORS IN THIS DEPARTMENT 
+    console.log(Deptname);
+    const arr = Deptname.split(" ");
+    for (var i = 0; i < arr.length; i++) {
+    arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+    }
+
+    //Join all the elements of the array back into a string 
+    //using a blankspace as a separator 
+    const str2 = arr.join(" ");
 
 const Get_Doctors_Department =()=>{
-axios.get(`https://future-medical.herokuapp.com/department/${Deptname}`).then((res)=>{
+axios.get(`https://future-medical.herokuapp.com/department/${str2}`).then((res)=>{
 console.log(res.data);
 if(res.data !== "no doctors found in this department"){
 setdoctors(res.data)}
