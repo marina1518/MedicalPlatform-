@@ -7,7 +7,7 @@ import axios from 'axios';
 function DoctorsHospitals() {
     const [doctors,setdoctors] =  useState([]);
     const params = useParams();
-    const entityname = params.entityname; ///TO GET DOCTORS IN THIS DEPARTMENT 
+    const entityname = params.entityname; ///TO GET DOCTORS IN THIS Entity 
     console.log(entityname)
 
 const Get_Doctors_Entity =()=>{

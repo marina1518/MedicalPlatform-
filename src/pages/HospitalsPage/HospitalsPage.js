@@ -1,13 +1,14 @@
 import React,{useEffect,useState} from "react";
 import "./hospitals.css";
 import { hospitals } from "../../data";
-import { Link } from "react-router-dom";
+import { Link , useParams} from "react-router-dom";
 import axios from "axios";
 const HospitalsPage = () => {
 
+  let params = useParams();
+  const entity = params.entity ; //hospitals or clinics
   const [hospitalsdata,sethospitalsdata] =  useState([]);
-  const Get_Hospitals_Api = ()=>{
-      
+  const Get_Hospitals_Api = ()=>{      
       axios.get('https://future-medical.herokuapp.com/hospitals').then((res)=>{
 
             console.log(res.data)
@@ -16,14 +17,27 @@ const HospitalsPage = () => {
         console.log(err)        
       })     
     }
+
+    const Get_Clinics_Api = ()=>{      
+      axios.get('https://future-medical.herokuapp.com/clinics').then((res)=>{
+
+            console.log(res.data)
+            sethospitalsdata(res.data)  
+      }).catch((err)=>{
+        console.log(err)        
+      })     
+    }  
     useEffect(()=>{
-      Get_Hospitals_Api();
-    },[])
+      sethospitalsdata([]) 
+      if (entity === "hospitals"){Get_Hospitals_Api();}
+      else if (entity === "clinics") {Get_Clinics_Api();}
+    },[entity])
   return (
     <div>
       <section className="section-container">
         <div className="hosp-title-info">
-          <h1 className="hosp-title">HOSPITALS</h1>
+          {(entity === "hospitals") && <h1 className="hosp-title">HOSPITALS</h1>}
+          {(entity === "clinics") && <h1 className="hosp-title">CLINICS</h1>}
           <hr />
         </div>
         <div className="hosp-container">

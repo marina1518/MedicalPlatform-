@@ -63,6 +63,7 @@ const Header = () => {
       <div className="nav-center">
         <div className="nav-header">
           <Link to="/" className="link-custom">
+
             <div className="logo-left">
               <img
                 className="logo-image"
@@ -84,12 +85,12 @@ const Header = () => {
             <Link to="/" className="link-custom">
               <li>Specializations</li>
             </Link>
-            <Link to="/hospitals" className="link-custom">
-              <li>Hospitals</li>
-            </Link>
-            <Link to="/" className="link-custom">
-              <li>About Us</li>
-            </Link>
+          <Link to="/Entities/hospitals" className="link-custom">
+             <li>Hospitals</li>            
+          </Link>         
+          <Link to="/Entities/clinics" className="link-custom">
+            <li>Clinics</li>
+          </Link>
           </ul>
         </div>
         {!token.token ? (
