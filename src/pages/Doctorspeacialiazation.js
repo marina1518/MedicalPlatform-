@@ -19,7 +19,7 @@ function Doctorscards() {
     const str2 = arr.join(" ");
 
 const Get_Doctors_Department =()=>{
-axios.get(`https://future-medical.herokuapp.com/department/${str2}`).then((res)=>{
+axios.get(`https://future-medical.herokuapp.com/user/department/${str2}`).then((res)=>{
 console.log(res.data);
 if(res.data !== "no doctors found in this department"){
 setdoctors(res.data)}

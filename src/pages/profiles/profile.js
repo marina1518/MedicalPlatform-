@@ -45,8 +45,8 @@ const Profile =()=>{
   
   let user_data2 = {};
     const token = useSelector(state => state.auth);
-    console.log(token.token);
-    const Get_info_api=()=>{
+    console.log(token);
+    /*const Get_info_api=()=>{
       return new Promise ((resolve,reject)=> {
         axios.get("https://future-medical.herokuapp.com/profile",
         {
@@ -74,10 +74,10 @@ const Profile =()=>{
        });
       })
       
-    };
-    useEffect(()=>{
+    };*/
+    /*useEffect(()=>{
       Get_info_api().then((res)=>{console.log(res); setuser_data(res);})   
-     },[]) 
+     },[]) */
   
 
 
@@ -187,16 +187,11 @@ const Profile =()=>{
            {edit_photo ? <input type="file"></input>:""}
          
             
-          {token.usertype === "user" ?
-            <h3>{user_data.username}</h3>: <h3></h3> }
+          
+            <h3>{token.username}</h3>
           </div>
-          <div className="card-body">
-            {token.usertype === "user" ? 
-            <p className="mb-0"><strong className="pr-1">Email: </strong>{user_data.email}</p> : 
-            <p className="mb-0"><strong className="pr-1">Email: </strong></p> 
-            }
-            
-            
+          <div className="card-body">            
+            <p className="mb-0"><strong className="pr-1">Email: </strong>{token.email}</p>  
           </div>
         </div>
       </div>
@@ -232,7 +227,7 @@ const Profile =()=>{
                     <label for="gender1"> Male</label><br/>
                     <input style={{ cursor: "pointer"}} type="radio" id="gender2" name="gender" value="Female"  onChange={(e)=>setGender(e.target.value)}></input>
                     <label for="gender2"> Female</label>
-                </div>:edit_data.gender}</td>
+                </div>:token.gender}</td>
               </tr>
               
               <tr>
@@ -251,7 +246,7 @@ const Profile =()=>{
                         <option value="O-">O-</option>
                     </select>
                 </div>
-                :edit_data.blood}</td>
+                :token.blood}</td>
                </tr>
               <br/>
               

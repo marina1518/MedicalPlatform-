@@ -28,7 +28,7 @@ const Header = () => {
   const linksRef = useRef(null);
   const loginRef = useRef(null);
 
-  const handlerouting = (type) => {
+  /*const handlerouting = (type) => {
     if (type === "owner") {
       navigate("/appadmin");
     } else if (type === "user") {
@@ -42,7 +42,7 @@ const Header = () => {
     } else if (type === "doctor") {
       navigate("/doctor");
     }
-  };
+  };*/
 
   useEffect(() => {
     const linksHeight = linksRef.current.getBoundingClientRect().height;
@@ -108,7 +108,7 @@ const Header = () => {
               <li
                 className="profile-icon"
                 onClick={() => {
-                  handlerouting(token.usertype);
+                 navigate("/user")
                 }}
               >
                 <div className="icon-circle">

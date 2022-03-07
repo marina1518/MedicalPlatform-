@@ -5,7 +5,7 @@ function Onedoctor(props) {
 
 let navigate = useNavigate();
 const navigation =(docid)=>{
-navigate('/clinicdoctor', { state: { Doctor_id: docid}})
+navigate('/clinicdoctor', { state: { Doctor_id: docid}}) //Send doc email despite doc id 
 }
 
     const doctor = props.doctor;
@@ -17,7 +17,7 @@ navigate('/clinicdoctor', { state: { Doctor_id: docid}})
                 {/*<Link to={`/clinicdoctor/${doctor._id}`}>
                   <img src={doctor.image} alt={doctor.username} />
   </Link>*/}
-              <img src={doctor.image} alt={doctor.username} style={{cursor:'pointer'}} onClick={()=>{navigation(doctor._id)}}/>
+              <img src={doctor.profilePic} alt={doctor.username} style={{cursor:'pointer'}} onClick={()=>{navigation(doctor._id)}}/>
               </div>
               <div className="bottom-data">
                 {/*<Link to={`/clinicdoctor/${doctor._id}`}>

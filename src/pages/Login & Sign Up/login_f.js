@@ -15,14 +15,14 @@ import { useJwt } from "react-jwt";
 const Login=()=>{
   
     let navigate = useNavigate();
-    const routing_login =(type)=>{
+    /*const routing_login =(type)=>{
       if (type === "owner"){navigate ('/appadmin')}
       else if (type === "user"){navigate ('/')}
       else if (type === "c_admin"){navigate('/clinicdoctor')}
       else if (type === "p_admin"){navigate('/pharmacyadmin')}
       else if (type === "h_admin"){navigate('/hospitaladmin')}
       else if (type === "doctor"){navigate('/doctor')}
-    }
+    }*/
     const token = useSelector(state => state.auth) //state of token 
     //console.log(token)
     const { decodedToken, isExpired } = useJwt(token);
@@ -34,19 +34,14 @@ const Login=()=>{
          {
                     email : data.email ,
                     pass : data.password ,  
-                    type : data.type
-         }).then((res)=>{
-           console.log(res.data);
-           if (data.type === "admin"){
-           dispatch(signin(res.data.token,res.data.adminRole));
-           console.log(token)
-           routing_login(res.data.adminRole);}
-           else {
-            dispatch(signin(res.data.token,data.type));
-           console.log(token)
-           routing_login(data.type);
-           }
-           
+          }).then((res)=>{
+           console.log(res.data);  
+          
+           dispatch(signin(res.data));
+           console.log(token)     
+           navigate ('/')
+             
+                     
          }).catch(function (error) {
     if (error.response) {
       console.log(error.response.data);
@@ -114,7 +109,7 @@ const Login=()=>{
         {/* <h1 className="shadow-sm text-primary mt-5 p-3 text-center rounded">Login</h1> */}
         
       
-        <Row className="mt-5"  lg={4} md={6} sm={12} className="p-5 m-auto shadow-sm rounded-lg">
+        <Row className="mt-5 p-5 m-auto shadow-sm rounded-lg"  lg={4} md={6} sm={12} >
         <Col lg={4} md={6} sm={12} >
         {/* <Figure>
         <Figure.Image
@@ -182,18 +177,6 @@ const Login=()=>{
                         <h6 style={{color:"red"}}>{error_p}</h6>
                     </Form.Group>
                     <br/>
-                    <Form.Group >
-                    <MdMedicalServices style={{color:"#06a3da"}}/> <Form.Label>Type</Form.Label>
-                    <div>
-                    <input type="radio" id="gender1" name="gender" value="doctor" onChange={(e)=>setType(e.target.value)} />
-                    <label for="gender1">  Dr</label><br/>
-                    <input type="radio" id="gender2" name="gender" value="user"  onChange={(e)=>setType(e.target.value)}></input>
-                    <label for="gender2">  Patient</label><br/>
-                    <input type="radio" id="gender3" name="gender" value="admin"  onChange={(e)=>setType(e.target.value)}></input>
-                    <label for="gender3">  Admin</label>
-                </div>
-                </Form.Group>
-                    <br></br>
                     <div className="d-grid">
                     <Button variant="primary btn-block" type="submit" onSubmit={submit_value}>
                         Login

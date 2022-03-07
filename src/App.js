@@ -28,6 +28,9 @@ import ScrollToTop from "./components/ScrollToTop/Scrolltop";
 import HospitalsPage from './pages/HospitalsPage/HospitalsPage'
 import DoctorsHospitals from "./pages/DoctorsHospitals";
 import Chatbotui from "./components/ChatBotUI/Chatbotui";
+import Speech from "./components/SpeechRecoginition/Speech";
+import Voice from "./components/SpeechRecoginition/Voice"
+import Clinic_admin from "./pages/profiles/clinicadmin";
 function App() {
 
   let navigate = useNavigate();
@@ -36,7 +39,7 @@ function App() {
   var greetingWasSaid = false;
 //var alanBtnInstance = alanBtn({ });
 useEffect(()=>{
-var alanBtnInstance = alanBtn({
+/*var alanBtnInstance = alanBtn({
   key: alan_key , 
   onButtonState: async function(status) {
     if (status === 'ONLINE') {
@@ -58,7 +61,7 @@ var alanBtnInstance = alanBtn({
         break   
    }
   }
-})
+})*/
 },[])
 
 
@@ -72,7 +75,8 @@ var alanBtnInstance = alanBtn({
         <div className="body">
       <Routes>
         {/*<Route path="/appadmin" element={<Appadmin />}> </Route>*/}
-        <Route path="/" element={<Home />}></Route>
+        {<Route path="/" element={<Home />}></Route>}
+        {/*<Route path="/" element={<Voice/>}></Route>*/}
         <Route path="/Doctors/:Deptname" element={<Doctorscards />}></Route>
         {/*<Route path="/hospitaladmin" element={<Adminhospital />}> </Route>*/}
         {/*<Route path="/pharmacyadmin" element={<Ph_admin />}> </Route>*/}
@@ -90,9 +94,10 @@ var alanBtnInstance = alanBtn({
         <Route path="/clinicadmin"  element={ <Privateclinicadmin> <Adminclinic />  </Privateclinicadmin> }/> 
         <Route path="/clinicdoctor"  element={  <Clinicdoctor /> }/> 
         <Route path="/appadmin"  element={ <Privateroute> <Appadmin />  </Privateroute> }/>    
-        <Route path="/user"  element={ <Privateuser> <Profile/>  </Privateuser> }/>       
+        <Route path="/user"  element={ <Privateuser> <Profile/> </Privateuser>}/>       
       </Routes>
       <Chatbotui />
+      <Speech/>
       <Footer />
       </div>
       </ScrollToTop>

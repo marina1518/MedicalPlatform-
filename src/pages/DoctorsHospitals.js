@@ -11,7 +11,7 @@ function DoctorsHospitals() {
     console.log(entityname)
 
 const Get_Doctors_Entity =()=>{
-axios.get(`https://future-medical.herokuapp.com/doctors/${entityname}`).then((res)=>{
+axios.get(`https://future-medical.herokuapp.com/entity/${entityname}/doctors`).then((res)=>{
 console.log(res.data);
 if(res.data !== "this entity has no doctors right now"){
 setdoctors(res.data)}

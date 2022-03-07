@@ -63,7 +63,7 @@ return new Promise ((resolve,reject)=>{
 })
 .then((res) => {  
   console.log(res.data)
-  admin.username = res.data.admin.username;
+  admin.username = res.data.admin.username; 
   admin.number = res.data.entity.telephone[0];
   admin.email = res.data.admin.email;
   admin.hospitalname = res.data.entity.name;
@@ -140,7 +140,7 @@ useEffect(()=>{
   },
     {
     field: 'Email',
-    headerName: 'Admain Email',
+    headerName: 'Doctor Email',
     width: 230,
     editable: true,
   },

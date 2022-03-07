@@ -6,20 +6,14 @@ import "./custom.css";
 import axios from "axios";
 import Onedoctor from "./Onedoctor";
 
-const HighlyRated = () => {
-
-const [doctors,setdoctors] =useState([])  
-const Get_Doctors_Entity =()=>{
-axios.get(`https://future-medical.herokuapp.com/home`).then((res)=>{
-console.log(res.data);
-if(res.data !== "this entity has no doctors right now") //not rated 
-{
-setdoctors(res.data)}
-}).catch((err)=>{console.log(err)})
-}
-useEffect(()=>{
+const HighlyRated = ({Doctors}) => {
+  
+console.log(Doctors)
+//const [doctors,setdoctors] =useState( Doctors );  
+//console.log(doctors)
+/*useEffect(()=>{
 Get_Doctors_Entity();
-},[])
+},[])*/
 
 
 
@@ -31,7 +25,7 @@ Get_Doctors_Entity();
           <h1 className="title-h1">Top Rated Doctors</h1>
         </div>
         <div className="doctors-container">
-          {(doctors.length !==0 )&& doctors.map((doctor) => (
+          {(Doctors.length !==0 )&& Doctors.map((doctor) => (
             <Onedoctor doctor={doctor} key={doctor.id}/>
           ))}
         </div>
