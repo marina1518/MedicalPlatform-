@@ -17,13 +17,13 @@ navigate('/clinicdoctor', { state: { Doctor_id: docid}}) //Send doc email despit
                 {/*<Link to={`/clinicdoctor/${doctor._id}`}>
                   <img src={doctor.image} alt={doctor.username} />
   </Link>*/}
-              <img src={doctor.profilePic} alt={doctor.username} style={{cursor:'pointer'}} onClick={()=>{navigation(doctor._id)}}/>
+              <img src={doctor.profilePic} alt={doctor.username} style={{cursor:'pointer'}} onClick={()=>{navigation(doctor.email)}}/>
               </div>
               <div className="bottom-data">
                 {/*<Link to={`/clinicdoctor/${doctor._id}`}>
                   <p className="doctor-name">Dr. {doctor.username}</p>
 </Link>*/}
-                 <p className="doctor-name"style={{cursor:'pointer'}} onClick={()=>{navigation(doctor._id)}}>Dr. {doctor.username} </p>
+                 <p className="doctor-name"style={{cursor:'pointer'}} onClick={()=>{navigation(doctor.email)}}>Dr. {doctor.username} </p>
 
                 <p className="doctor-spec">{doctor.specialization}</p>
                 {/* <span className="rate-star"> */}

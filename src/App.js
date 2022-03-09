@@ -97,7 +97,7 @@ useEffect(()=>{
         <Route path="/user"  element={ <Privateuser> <Profile/> </Privateuser>}/>       
       </Routes>
       <Chatbotui />
-      <Speech/>
+      
       <Footer />
       </div>
       </ScrollToTop>

@@ -3,6 +3,8 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 import { useSpeechSynthesis } from 'react-speech-kit';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import './Voice.css'
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 import { useNavigate } from 'react-router-dom';
 
 const Speech = () => {
@@ -101,11 +103,10 @@ navigate('/Entities/hospitals');
      </div>
      <div>
      <span>{transcript}</span>*/}
-             <button className="voice-btn" onClick={listening?SpeechRecognition.stopListening:listenContinuously}>
+     <button className="voice-btn" onClick={listening?SpeechRecognition.stopListening:listenContinuously}>
         <KeyboardVoiceIcon htmlColor={listening?'green':'red'}/>
            </button>
-     </div>
-   
+   </div>
  );
 };
 

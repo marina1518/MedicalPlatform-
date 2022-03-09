@@ -24,6 +24,11 @@ const Clinicdoctor =()=>{
   const location = useLocation();
   const [Docid, setdoctorid] = useState(location.state ? location.state : "");
   console.log(Docid);
+
+
+
+
+
 //   var user_data = {
 //     email:"",
 //     username:"",
@@ -63,48 +68,23 @@ let user_data2 = {};
 let app3 = {};
 let app2 = [];
   const token = useSelector(state => state.auth);
-  console.log(token.token);
-  const Get_info_api=()=>{
-    return new Promise ((resolve,reject)=> {
-      axios.get("https://future-medical.herokuapp.com/profile",
-      {
-       headers: {
-        'Authorization': `Bearer ${token.token}`
-      }
+  let [doctor_data,setdoctor_data]=useState({})
+ console.log(doctor_data)
+const Get_info_api = async ()=>{
+ try {
+        const res = await axios.get(`https://future-medical.herokuapp.com/user/doctor/${Docid.Doctor_id}`)
+        const data = await res.data;
+        console.log(data)
+        setdoctor_data(data);  
+    } 
+    catch (err) {
+        console.error(err);
     }
-     ).then((res)=>{
-       console.log(res.data);
-      // setuser_data()
-       user_data2.email = res.data.email;
-       user_data2.username = res.data.username;
-       user_data2.spec = res.data.specialization;
-       user_data2.name_hospital = res.data.entity_name;
-      //  for(var i=0; i<res.data.meetings; i++)
-      //  {
-      //     app3.id = i;
-      //     app3.date = 
-      //  }
-      //  for(var i=0; i<res.data.timetable; i++)
-      //  {
-         
-      //  }
-      // user_data2.gender = res.data.admin.gender;
-      //  user_data2.clinic_name = res.data.entity.name;
-      //  user_data2.clinic_add = res.data.entity.address[0];
-      //  user_data2.clinic_phone = res.data.entity.telephone[0];
-       user_data2.pic = res.data.icon;
-
-       //setuser_data(user_data);
-       resolve(user_data2);
-     }).catch((err) =>{
-       console.log(err);
-       reject(err);
-     });
-    })
+}
     
-  };
+  
   useEffect(()=>{
-    Get_info_api().then((res)=>{console.log(res); setuser_data(res);})   
+    Get_info_api();   
    },[]) 
 
 
@@ -120,8 +100,8 @@ let app2 = [];
         {id:"4",date:"29/2/2022", time:"10:00", dr_name:"ll",state:""}
     ];
     const reviews=[
-      {id:"0", review:"gllllllllllllllll iiiiiiiiiiiiiiiiiiiiiiii bbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
-      {id:"1", review:"c"},
+      {id:"0", review:"Great Doctor"},
+      {id:"1", review:"Perfect Doctor"},
     ];
     const current = new Date();
     console.log(current.getFullYear());
@@ -309,7 +289,8 @@ let app2 = [];
            {edit_photo ? <input type="file"></input>:""}
            
            </div> */}
-           <Avatar style={{ cursor: "pointer"}} className="profile_img" src="/broken-image.jpg" onClick={(e)=>{
+           <Avatar style={{ cursor: "pointer"}} className="profile_img" src={doctor_data.profilePic}//doctor_data.profilePic} 
+           /*onClick={(e)=>{
              if (token.usertype === "user") 
              {
                setenlarge(true);
@@ -317,9 +298,9 @@ let app2 = [];
              else 
             { setEdit_photo(true);}
 
-            } } />
+            } }*/ />
            
-           {edit_photo ? <input type="file"></input>:""}
+           {/*edit_photo ? <input type="file"></input>:""*/}
            { enlarge ? 
            
                  <div id="myModal" class="modal">
@@ -336,10 +317,10 @@ let app2 = [];
           }
             
           
-          { (token.usertype=== "doctor") ? <h3>Dr {user_data.username}</h3> : <h3>Dr</h3>}
+          <h3>Dr {doctor_data.username}</h3> 
           </div>
           <div className="card-body">
-            { (token.usertype=== "doctor") ?<p className="mb-0"><strong className="pr-1">Email: </strong>{user_data.email}</p> : <p className="mb-0"><strong className="pr-1">Email: </strong></p>}    
+          <p className="mb-0"><strong className="pr-1">Email: </strong>{doctor_data.email}</p>    
             
           </div>
           </div>
@@ -386,12 +367,12 @@ let app2 = [];
       <div className="col-lg-8">
         <div className="card shadow-sm">
           <div className="card-header bg-transparent border-0">
-            <h3 className="mb-0"><BsInfoCircleFill /> Personal Information 
-            {
+            <h3 className="mb-0"><BsInfoCircleFill /> Personal Information </h3>
+            {/*
               token.usertype === "patient" ? "" : <EditIcon style={{ cursor: "pointer"}} onClick={(e)=>setEdit(true)}></EditIcon>
-            }
+            
             </h3>  
-            {/* <Button variant="outline-secondary">Secondary</Button> 
+             <Button variant="outline-secondary">Secondary</Button> 
             <svg data-testid="EditIcon"></svg>
             */}
             
@@ -401,19 +382,21 @@ let app2 = [];
               <tr>
                 <th width="30%">Specialization   </th>
                 <td width="2%">:</td>
-                <td>{edit ? <input type="text" placeholder={edit_data.edu} onChange={(e)=>setspec(e.target.value)}></input>:edit_data.edu}</td>
+                <td>{doctor_data.specialization}</td>
               </tr>
               <tr>
                 <th width="30%">University	</th>
                 <td width="2%">:</td>
-                <td>{edit ? <input placeholder={edit_data.university} type="text" onChange={(e)=>setuni(e.target.value)}></input>:edit_data.university}</td>
+                <td>{edit_data.university}</td>
               </tr>
               <tr>
-                <th width="30%">Hospital	</th>
+                {/*doctor_data.entity_id.flag === 'H' && <th width="30%">Hospital	Name</th>*/}
+                {/*doctor_data.entity_id.flag === 'C' && <th width="30%">Clinic	Name</th>*/}
+                <th width="30%">Hospital	Name</th>
                 <td width="2%">:</td>
-                <td>{edit ? <input placeholder={edit_data.name_hospital} type="text" onChange={(e)=>sethosp(e.target.value)}></input>:edit_data.name_hospital}</td>
+                <td> {/*doctor_data.entity_id.name  */}</td>
               </tr>
-              {
+              {/*
                 token.usertype === "doctor" ? 
                 
                 <tr>
@@ -422,10 +405,10 @@ let app2 = [];
                 <td>{edit ? <input placeholder={edit_data.clinic_name} type="text" onChange={(e)=>setclinic_name(e.target.value)}></input>:edit_data.clinic_name}</td>
               </tr>
 
-                :""
+                :""*/
               }
                {
-                token.usertype === "doctor" ? 
+                /*token.usertype === "doctor" ? 
                 
                 <tr>
                 <th width="30%">Clinic Address	</th>
@@ -433,11 +416,11 @@ let app2 = [];
                 <td>{edit ? <input placeholder={edit_data.clinic_add} type="text" onChange={(e)=>setclinic(e.target.value)}></input>:edit_data.clinic_add}</td>
               </tr>
 
-                :""
+                :""*/
               }
 
               {
-                token.usertype === "doctor" ? 
+                /*token.usertype === "doctor" ? 
                 
                 <tr>
                 <th width="30%">Clinic Phone Number	</th>
@@ -445,7 +428,7 @@ let app2 = [];
                 <td>{edit ? <input placeholder={edit_data.clinic_phone}  type="tel" name="telefono" pattern="\([0-9]{3}\) [0-9]{3}[ -][0-9]{4}" onChange={(e)=>setc_ph(e.target.value)}></input>:edit_data.clinic_phone}</td>
               </tr>
 
-                :""
+                :""*/
               }
 
 
@@ -453,34 +436,29 @@ let app2 = [];
                 <tr>
                 <th width="30%">Personal Phone Number	</th>
                 <td width="2%">:</td>
-                <td>{edit ? <input placeholder={edit_data.personal_phone} type="text" onChange={(e)=>setp_ph(e.target.value)}></input>:edit_data.personal_phone}</td>
+                <td>{/*doctor_data.telephone[0]*/}</td>
               </tr>
               <tr>
                 <th width="30%">Date of Birth	</th>
                 <td width="2%">:</td>
-                <td>{edit ? <input style={{ cursor: "pointer"}} placeholder={edit_data.date} type="date" onChange={(e)=>setDob(e.target.value)}></input>:edit_data.date}</td>
+                <td>{edit_data.date}</td>
               </tr>
-              <tr>
+              {/*<tr>
                 <th width="30%">Gender</th>
                 <td width="2%">:</td>
-                <td>{edit ? <div>
-                    <input style={{ cursor: "pointer"}} type="radio" id="gender1" name="gender" value="Male" onChange={(e)=>setGender(e.target.value)} />
-                    <label for="gender1"> Male</label><br/>
-                    <input style={{ cursor: "pointer"}} type="radio" id="gender2" name="gender" value="Female"  onChange={(e)=>setGender(e.target.value)}></input>
-                    <label for="gender2"> Female</label>
-                </div>:edit_data.gender}</td>
-              </tr>
+                <td>{edit_data.gender}</td>
+            </tr>*/}
               
               
               <br/>
               
             </table>
-            {edit ? 
+            {/*edit ? 
               <ButtonGroup>
               <Button variant="outline-success" className="col-md-12 text-right" onClick={setdata}>Submit</Button>
               <Button variant="outline-danger" className="col-md-12 text-right" onClick={(e)=>setEdit(false)}>Cancel</Button>
               </ButtonGroup>
-              :""} 
+          :""*/} 
               {/* {edit ? <Button variant="outline-danger" className="col-md-12 text-right" onClick={(e)=>setEdit(false)}>Cancel</Button>:""} */}
              
           </div>
