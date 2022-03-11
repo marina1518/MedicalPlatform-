@@ -69,13 +69,22 @@ let app3 = {};
 let app2 = [];
   const token = useSelector(state => state.auth);
   let [doctor_data,setdoctor_data]=useState({})
+  let Doctor_Api = {}
  console.log(doctor_data)
 const Get_info_api = async ()=>{
  try {
         const res = await axios.get(`https://future-medical.herokuapp.com/user/doctor/${Docid.Doctor_id}`)
         const data = await res.data;
         console.log(data)
-        setdoctor_data(data);  
+        Doctor_Api.username = data.username ; 
+        Doctor_Api.email = data.email ;
+        Doctor_Api.profilePic = data.profilePic ;
+        Doctor_Api.specialization = data.specialization;
+        Doctor_Api.telephone = data.telephone[0];
+        Doctor_Api.entityflag = data.entity_id.flag;
+        Doctor_Api.entityname = data.entity_id.name; 
+        setdoctor_data(Doctor_Api);
+        //setdoctor_data(data);  
     } 
     catch (err) {
         console.error(err);
@@ -390,11 +399,11 @@ const Get_info_api = async ()=>{
                 <td>{edit_data.university}</td>
               </tr>
               <tr>
-                {/*doctor_data.entity_id.flag === 'H' && <th width="30%">Hospital	Name</th>*/}
-                {/*doctor_data.entity_id.flag === 'C' && <th width="30%">Clinic	Name</th>*/}
-                <th width="30%">Hospital	Name</th>
+                {doctor_data.entityflag === 'H' && <th width="30%">Hospital	Name</th>}
+                {doctor_data.entityflag === 'C' && <th width="30%">Clinic	Name</th>}
+                {/*<th width="30%">Hospital	Name</th>*/}
                 <td width="2%">:</td>
-                <td> {/*doctor_data.entity_id.name  */}</td>
+                <td> {doctor_data.entityname }</td>
               </tr>
               {/*
                 token.usertype === "doctor" ? 
@@ -436,7 +445,7 @@ const Get_info_api = async ()=>{
                 <tr>
                 <th width="30%">Personal Phone Number	</th>
                 <td width="2%">:</td>
-                <td>{/*doctor_data.telephone[0]*/}</td>
+                <td>{doctor_data.telephone}</td>
               </tr>
               <tr>
                 <th width="30%">Date of Birth	</th>
@@ -464,7 +473,7 @@ const Get_info_api = async ()=>{
           </div>
         </div>
        {
-         token.usertype === "user" ? "" :
+         /*token.usertype === "user" ? "" :
          <div>
                               <br/>
                               
@@ -588,7 +597,7 @@ const Get_info_api = async ()=>{
     <thead>
     <tr>
          <th width="35%">Day</th>
-               {/* <th width="30%">Date</th> */}
+               {/* <th width="30%">Date</th> }
                <th width="33%">From</th>
                <th width="33%">To</th> </tr>
     </thead>
@@ -612,7 +621,7 @@ const Get_info_api = async ()=>{
                    <Alert variant="danger" >
                   Today
                  </Alert>
-                   :"Done"}</td> */}
+                   :"Done"}</td> }
                   
                  </tr>
                  )
@@ -625,13 +634,13 @@ const Get_info_api = async ()=>{
          </div>
        </div>
                             </div>
-                            }
+            */}
 
 
        
 
-   {
-     token.usertype === "user" ? 
+   { //LOGINED 
+     token.token ? 
      
 <div>
 
