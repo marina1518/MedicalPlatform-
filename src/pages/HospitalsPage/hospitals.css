@@ -99,3 +99,10 @@ hr {
   margin-bottom: 1rem;
   color: #064e68;
 }
+.OrderButton {
+  background-color: #064e68;
+  border-color: #064e68;
+  color: white;
+  margin-left: 3rem;
+  margin-top: 1rem;
+}

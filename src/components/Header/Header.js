@@ -82,8 +82,8 @@ const Header = () => {
             <Link to="/" className="link-custom">
               <li>Home</li>
             </Link>
-            <Link to="/" className="link-custom">
-              <li>Specializations</li>
+            <Link to="/Entities/pharmacies" className="link-custom">
+              <li>Pharmacies</li>
             </Link>
           <Link to="/Entities/hospitals" className="link-custom">
              <li>Hospitals</li>            

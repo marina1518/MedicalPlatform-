@@ -84,7 +84,7 @@ useEffect(()=>{
         <Route path="/signup" element={<Signup/>}> </Route>
         <Route path="/Entities/:entity" element={<HospitalsPage/>}> </Route>
         <Route path="/clinicdoctor/:doctorid" element={<Clinicdoctor/>}> </Route>
-        <Route path="/DoctorsEntity/:entityname"e element={<DoctorsHospitals/>}> </Route>
+        <Route path="/DoctorsEntity/:entityname" element={<DoctorsHospitals/>}> </Route>
         {/*<Route path="/user" element={<Profile/>} > </Route>*/}
         {/*<Route path="/doctor" element={<Dr_Profile/>}> </Route>*/}
         {/*<Route path="/clinicdoctor" element={<Clinicdoctor/>}> </Route>*/}

@@ -20,6 +20,7 @@
     "bootstrap-icons": "^1.7.2",
     "chart.js": "^3.7.0",
     "file-url": "^4.0.0",
+    "firebase": "^9.6.8",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.3",
     "react-bootstrap-icons": "^1.7.2",
