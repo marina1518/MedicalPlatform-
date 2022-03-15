@@ -24,17 +24,19 @@ const Signup=()=>{
 
 
     const register_api = ()=>{
-            axios.post('https://future-medical.herokuapp.com/registration/user',
+            axios.post('https://future-medical.herokuapp.com/register',
          {
                     username : data.username,
                     email : data.email ,
                     password : data.password ,  
-                    type : data.type
+                    //gender : 
          }).then((res)=>{
            console.log(res.data);
-           dispatch(signin(res.data.token,"user"));
-           console.log(token)
-           routing_login(data.type);
+           dispatch(signin(res.data)); //save the data
+           navigate('/'); //Go to Home
+           //dispatch(signin(res.data.token,"user"));
+           //console.log(token)
+           //routing_login(data.type);
            
          }).catch(function (error) {
     if (error.response) {
@@ -162,7 +164,7 @@ const Signup=()=>{
         {/* <h1 className="shadow-sm text-primary mt-5 p-3 text-center rounded">Login</h1> */}
         
       
-        <Row className="mt-5"  lg={4} md={6} sm={12} className="p-5 m-auto shadow-sm rounded-lg">
+        <Row className="mt-5 p-5 m-auto shadow-sm rounded-lg"  lg={4} md={6} sm={12} >
         <Col lg={4} md={6} sm={12} >
         {/* <Figure>
         <Figure.Image
