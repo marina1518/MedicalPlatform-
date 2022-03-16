@@ -8,7 +8,7 @@ const Options = (props) => {
       text: "hospitals",
       handler: props.actionProvider.handlehospitaloption,
       id: 1,
-      link: "/hospitals",
+      link: "/Entities/hospitals",
     },
     {
       text: "specializations",
