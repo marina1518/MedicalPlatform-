@@ -17,6 +17,7 @@
   box-shadow: inset 0px 0px 0px #2273c4;
   /* transition: all 0.5s; */
   cursor: pointer;
+  background-color: white;
 }
 
 .option-item:hover {
