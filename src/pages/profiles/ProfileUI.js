@@ -44,8 +44,8 @@ const ProfileUI = () => {
 
   let user_data2 = {};
   const token = useSelector((state) => state.auth);
-  console.log(token.token);
-  const Get_info_api = () => {
+  console.log(token);
+/*  const Get_info_api = () => {
     return new Promise((resolve, reject) => {
       axios
         .get("https://future-medical.herokuapp.com/profile", {
@@ -72,13 +72,13 @@ const ProfileUI = () => {
           reject(err);
         });
     });
-  };
+  };*/
 
   useEffect(() => {
-    Get_info_api().then((res) => {
+    /*Get_info_api().then((res) => {
       console.log(res);
       setuser_data(res);
-    });
+    });*/
   }, []);
 
   const app = [
@@ -213,11 +213,9 @@ const ProfileUI = () => {
               src="/broken-image.jpg"
               sx={{ width: 50, height: 50, bgcolor: blueGrey[400] }}
             />
-            {token.usertype === "user" ? (
-              <h3>{user_data.username}</h3>
-            ) : (
-              <h3></h3>
-            )}
+            
+              <h3>{token.username}</h3>
+            
           </div>
           {/* <div className="user-Email">
             {token.usertype === "user" ? (
@@ -257,14 +255,12 @@ const ProfileUI = () => {
               <div className="card-header bg-transparent">
                 <h3 className="mb-0">
                   <BsInfoCircleFill /> Personal Information
-                  {token.usertype === "user" ? (
+                   
                     <EditIcon
                       style={{ cursor: "pointer" }}
                       onClick={(e) => setEdit(true)}
                     ></EditIcon>
-                  ) : (
-                    ""
-                  )}
+                  
                 </h3>
                 {/* <Button variant="outline-secondary">Secondary</Button> 
             <svg data-testid="EditIcon"></svg>
@@ -283,19 +279,14 @@ const ProfileUI = () => {
                   ) : (
                     ""
                   )}
-
-                  {token.usertype === "user" ? (
-                    <h3>{user_data.username}</h3>
-                  ) : (
-                    <h3></h3>
-                  )}
+                    <h3 style={{textAlign:'center'}}>{token.username}</h3>
                 </div>
                 <div class="row mt-3">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Email</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
-                    {token.usertype === "user" ? user_data.email : ""}
+                  <div class="col-sm-9 text-secondary">                     
+                  {token.email} 
                   </div>
                 </div>
                 <hr id="profile-hr" />
@@ -361,7 +352,7 @@ const ProfileUI = () => {
                         <label for="gender2"> Female</label>
                       </div>
                     ) : (
-                      edit_data.gender
+                      token.gender
                     )}
                   </div>
                 </div>
@@ -388,7 +379,7 @@ const ProfileUI = () => {
                         </select>
                       </div>
                     ) : (
-                      edit_data.blood
+                      token.blood
                     )}
                   </div>
                 </div>
@@ -423,14 +414,12 @@ const ProfileUI = () => {
               <div className="card-header bg-transparent border-0">
                 <h3 className="mb-0">
                   <BiMessageDetail /> History
-                  {token.usertype === "user" ? (
+                  {  
                     <EditIcon
                       style={{ cursor: "pointer" }}
                       onClick={(e) => setEdit_h(true)}
                     />
-                  ) : (
-                    ""
-                  )}
+                   }
                 </h3>
               </div>
               <div className="card-body pt-0">

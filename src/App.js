@@ -146,7 +146,7 @@ function App() {
                 </Privateroute>
               }
             />
-            <Route
+            {/*<Route
               path="/user"
               element={
                 <Privateuser>
@@ -154,8 +154,8 @@ function App() {
                   <Profile />{" "}
                 </Privateuser>
               }
-            />
-            <Route path="/userui" element={<ProfileUI />} />
+            />*/}
+            <Route path="/user" element={<ProfileUI />} />
           </Routes>
           <Chatbotui />
 
