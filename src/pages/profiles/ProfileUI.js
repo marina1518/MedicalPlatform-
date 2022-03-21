@@ -3,7 +3,7 @@ import SideBarUI from "../../components/SideBarUI/SideBarUI";
 import "./profileui.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Alert, Button, ButtonGroup, Form, Table } from "react-bootstrap";
+import { Alert, Button, ButtonGroup, Form, Table,Card, Accordion, CustomToggle, useAccordionButton } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EditIcon from "@material-ui/icons/Edit";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -12,7 +12,9 @@ import { BsInfoCircleFill } from "react-icons/bs";
 import { blueGrey } from "@material-ui/core/colors";
 import { BiMessageDetail } from "react-icons/bi";
 import { AiFillClockCircle } from "react-icons/ai";
-
+import {GiMedicines} from 'react-icons/gi';
+import {MdOutlineDoneOutline,MdOutlineDone,MdCancel} from 'react-icons/md';
+import VaccinesIcon from '@mui/icons-material/Vaccines';
 const ProfileUI = () => {
   // const user_data = {
   //     email:"",
@@ -29,6 +31,7 @@ const ProfileUI = () => {
   const [showinfo, setShowinfo] = useState(false);
   const [showhistory, setShowHistory] = useState(false);
   const [showAppointment, setShowAppointment] = useState(false);
+  const [showorders, setshoworders] = useState(false);
 
   const [user_data, setuser_data] = useState({
     email: "",
@@ -168,19 +171,58 @@ const ProfileUI = () => {
     setnewapp(newp);
   };
 
+
+
+  
+  const orders = [
+    {id:"0", name:"el-3zby", price:"" , state:"" , date:"" , items:""},
+    {id:"1",name:"seif", price:"" , state:"" , date:"" , items:""}
+
+  ];
+
+
+  function CustomToggle({ children, eventKey }) {
+    const decoratedOnClick = useAccordionButton(eventKey, () =>
+      console.log('totally custom!'),
+    );
+  
+    return (
+      <Button type="button"
+    
+      onClick={decoratedOnClick}  variant="primary">{children}</Button>
+      // <button
+      //   type="button"
+      //   style={{ backgroundColor: 'pink' }}
+      //   onClick={decoratedOnClick}
+      // >
+      //   {children}
+      // </button>
+    );
+  }
+
+
   const sideBarhandler = (btn) => {
     if (btn === "info") {
       setShowinfo(true);
       setShowHistory(false);
       setShowAppointment(false);
+      setshoworders(false);
     } else if (btn === "history") {
       setShowinfo(false);
       setShowHistory(true);
       setShowAppointment(false);
+      setshoworders(false);
     } else if (btn === "appointment") {
       setShowinfo(false);
       setShowHistory(false);
       setShowAppointment(true);
+      setshoworders(false);
+    }
+    else if (btn === "orders") {
+      setShowinfo(false);
+      setShowHistory(false);
+      setShowAppointment(false);
+      setshoworders(true);
     }
   };
 
@@ -202,6 +244,7 @@ const ProfileUI = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
 
   return (
     <div className="main-container">
@@ -244,6 +287,12 @@ const ProfileUI = () => {
           <li onClick={() => sideBarhandler("appointment")}>
             <i class="bi bi-clock-fill"></i>
             {compact ? "" : <span> Appointments</span>}
+          </li>
+          <li onClick={() => sideBarhandler("orders")}>
+          <i class="bi bi-bandaid-fill"></i>
+          
+            {compact ? "" :  <span>    Orders</span>}
+            {/* <span> Orders</span> */}
           </li>
           {/* </ul> */}
         </div>
@@ -513,6 +562,72 @@ const ProfileUI = () => {
         ) : (
           ""
         )}
+
+
+
+{showorders ? 
+          <div className="card shadow-sm">
+            <div className="card-header bg-transparent border-0">
+              <h3 className="mb-0">
+                <GiMedicines /> Orders
+              </h3>
+            </div>
+            <div className="card-body pt-0">
+              <div>
+                <Table responsive="sm">
+                  <thead>
+                    <tr>
+                    <th >Pharmacy Name</th>
+                      <th >Date</th>
+                      <th >Price</th>
+                      <th >Order</th>
+                      
+
+                      <th >State</th>  
+                      <th ></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.map((item) => (
+                      <tr key={item.id}>
+                        <td >{item.name}</td>
+                        <td >{item.date}</td>
+                        <td >{item.price}</td>
+                        <td >
+                        <Accordion defaultActiveKey="0">
+     
+        
+     <CustomToggle eventKey={item.id}>Show order</CustomToggle>
+  
+   <Accordion.Collapse eventKey={item.id}>
+     <Card.Body>{item.items}</Card.Body>
+   </Accordion.Collapse>
+
+
+</Accordion>
+                  
+                        
+                        </td>
+                        <td >{item.state}</td>
+                        <td>
+                        <ButtonGroup>
+              <Button variant="outline-success" className="col-md-12 text-right" ><MdOutlineDone/></Button>
+              <Button variant="outline-danger" className="col-md-12 text-right" ><MdCancel/></Button>
+              </ButtonGroup>
+                        </td>
+                        
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            </div>
+          </div>
+         : 
+          ""
+        }
+
+
       </main>
     </div>
   );
