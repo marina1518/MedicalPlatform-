@@ -30,6 +30,7 @@
     "react-google-charts": "^3.0.15",
     "react-icons": "^4.3.1",
     "react-jwt": "^1.1.4",
+    "react-placeholder-loading": "^0.5.29",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.1.1",
     "react-scripts": "4.0.3",

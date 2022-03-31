@@ -5,19 +5,30 @@ import { Link , useParams} from "react-router-dom";
 import {Button} from 'react-bootstrap'
 import axios from "axios";
 import PharmacyOrder from '../../components/PharmacyOrder/PharmacyOrder'
-const HospitalsPage = () => {
 
+import { useSelector } from "react-redux";
+const HospitalsPage = () => {
+const token = useSelector(state => state.auth);
   let clicked_pharmacy = {} ;
-  const [pharmacy_details,setpharmacy_details] = useState({pharmacyname:"",pharmacyaddress:"",pharmacyphone:""})
-  const [modalShow, setModalShow] = useState(false); //for pharmacy card 
+  const [pharmacy_details,setpharmacy_details] = useState({pharmacyname:"",pharmacyaddress:"",pharmacyphone:"",pharmacyadmin:""})
+  const [modalShow, setModalShow] = useState(false); //for pharmacy card
+  const [loading,setloading]=useState(false);
+  //const [modalShowload, setModalShowload] = useState(false); //for pharmacy card  
 
   const handle_order = (pharmacy_details)=>{
+
+    //check of logined 
+    if (token.token){
     console.log(pharmacy_details)
     setModalShow(true)
     clicked_pharmacy.pharmacyname = pharmacy_details.name
     clicked_pharmacy.pharmacyaddress= pharmacy_details.address[0]
     clicked_pharmacy.pharmacyphone=pharmacy_details.telephone[0]
-    setpharmacy_details(clicked_pharmacy);
+    clicked_pharmacy.pharmacyadmin= pharmacy_details.admin.email
+    setpharmacy_details(clicked_pharmacy);}
+    else{
+      alert("you must be logined first to make order")
+    }
   }
 
   let params = useParams();
@@ -128,7 +139,12 @@ const HospitalsPage = () => {
                    pharmacyname = {pharmacy_details.pharmacyname}
                    pharmacyaddress = {pharmacy_details.pharmacyaddress}
                    pharmacyphone={pharmacy_details.pharmacyphone}
+                   pharmacyadmin = {pharmacy_details.pharmacyadmin}
                    show={modalShow}
+                   loading = {loading}
+                   setloading = {()=>{setloading(true)}}
+                   setfalseloading = {()=>{setloading(false)}}
+                   setshow={()=>{setModalShow(true)}}
                    onHide={() => setModalShow(false)}/>
                   </div>
             }

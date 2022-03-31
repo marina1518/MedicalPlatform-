@@ -291,7 +291,7 @@ const ProfileUI = () => {
           <li onClick={() => sideBarhandler("orders")}>
           <i class="bi bi-bandaid-fill"></i>
           
-            {compact ? "" :  <span>    Orders</span>}
+            {compact ? "" :  <span> Orders</span>}
             {/* <span> Orders</span> */}
           </li>
           {/* </ul> */}
