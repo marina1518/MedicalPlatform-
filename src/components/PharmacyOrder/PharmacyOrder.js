@@ -15,8 +15,8 @@ function PharmacyOrder(props) {
     const [FormValues, setFormvalues ] = useState({}); //FORM VALUES 
     console.log(props)
     const make_order_api = ()=>{
-        const day_date = d.getDay() +"/" + d.getMonth() + "/" + d.getFullYear();
-        //console.log(day_date)
+        const day_date = d.getDate() +"/" + (d.getMonth()+1) + "/" + d.getFullYear();
+        console.log(day_date)
             axios.post('https://future-medical.herokuapp.com/user/pharmacy/order',
            {
              adminEmail : props.pharmacyadmin ,
@@ -68,7 +68,7 @@ const upload = (file) => {
       //e.preventDefault()
     console.log('start of upload')
     // async magic goes here...    
-    const storageRef = ref(storage,`/files/${file.name}${d.getTime()}`);
+    const storageRef = ref(storage,`/files/prescription/${file.name}${d.getTime()}`);
     const uploadTask = uploadBytesResumable(storageRef,file);
     
     //initiates the firebase side uploading 
