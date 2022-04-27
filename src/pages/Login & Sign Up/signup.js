@@ -15,7 +15,7 @@ import {Link,useNavigate} from 'react-router-dom'
 
 const Signup=()=>{
      
-    const token = useSelector(state => state.auth) //state of token 
+    const token = JSON.parse(useSelector(state => state.auth)) //state of token 
     const dispatch = useDispatch();
       let navigate = useNavigate();
     const routing_login =(type)=>{

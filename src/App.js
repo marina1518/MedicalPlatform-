@@ -9,7 +9,7 @@ import alanBtn from "@alan-ai/alan-sdk-web";
 import { useSelector } from "react-redux";
 import Doctorscards from "./pages/Doctorspeacialiazation";
 import { useNavigate } from "react-router-dom";
-
+import Doctor from "./pages/profiles/Doctor_profile";
 import Login from "./pages/Login & Sign Up/login_f";
 import Signup from "./pages/Login & Sign Up/signup";
 import Privateroute from "./components/PrivateRoutes/Privateroute";
@@ -83,6 +83,9 @@ function App() {
               path="/DoctorsEntity/:entityname"
               element={<DoctorsHospitals />}
             >
+              {" "}
+            </Route>
+           <Route path="/clinicdoctor" element={<Doctor />}>
               {" "}
             </Route>
             {/*<Route

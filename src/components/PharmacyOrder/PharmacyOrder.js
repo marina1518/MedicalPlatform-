@@ -9,7 +9,7 @@ import './pharmacyorder.css'
 import PlaceholderLoading from 'react-placeholder-loading'
 
 function PharmacyOrder(props) {
-    const token = useSelector(state => state.auth);
+    const token = JSON.parse(useSelector(state => state.auth));
     console.log(token.token)
     //const [loading,setloading]=useState(false) //flag for getting downloaded link
     const d = new Date();

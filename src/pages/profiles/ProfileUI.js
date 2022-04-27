@@ -46,7 +46,7 @@ const ProfileUI = () => {
   });
 
   let user_data2 = {};
-  const token = useSelector((state) => state.auth);
+  const token = JSON.parse(useSelector((state) => state.auth));
   console.log(token);
 /*  const Get_info_api = () => {
     return new Promise((resolve, reject) => {
