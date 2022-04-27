@@ -3,7 +3,7 @@ import SideBarUI from "../../components/SideBarUI/SideBarUI";
 import "./profileui.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Alert, Button, ButtonGroup, Form, Table,Card, Accordion, CustomToggle, useAccordionButton } from "react-bootstrap";
+import {  Button, ButtonGroup, Form, Table,Card, Accordion,  useAccordionButton } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EditIcon from "@material-ui/icons/Edit";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -13,21 +13,9 @@ import { blueGrey } from "@material-ui/core/colors";
 import { BiMessageDetail } from "react-icons/bi";
 import { AiFillClockCircle } from "react-icons/ai";
 import {GiMedicines} from 'react-icons/gi';
-import {MdOutlineDoneOutline,MdOutlineDone,MdCancel} from 'react-icons/md';
-import VaccinesIcon from '@mui/icons-material/Vaccines';
-const ProfileUI = () => {
-  // const user_data = {
-  //     email:"",
-  //     username:"madonna",
-  //     history:"gg",
-  //     gender:"Female",
-  //     blood:"O",
-  //     date:"12/5/1999",
-  //     app:"",
-  //     pic:"https://source.unsplash.com/600x300/?student",
-  //     address:"42 london st"
-  // }
+import {MdOutlineDone,MdCancel} from 'react-icons/md';
 
+const ProfileUI = () => {
   const [showinfo, setShowinfo] = useState(false);
   const [showhistory, setShowHistory] = useState(false);
   const [showAppointment, setShowAppointment] = useState(false);
@@ -46,36 +34,31 @@ const ProfileUI = () => {
   });
 
   let user_data2 = {};
-  const token = JSON.parse(useSelector((state) => state.auth));
+  //const token = JSON.parse(useSelector((state) => state.auth));
+  const token = useSelector((state) => state.auth);
+
   console.log(token);
-/*  const Get_info_api = () => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get("https://future-medical.herokuapp.com/profile", {
-          headers: {
-            Authorization: `Bearer ${token.token}`,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          // setuser_data()
-          user_data2.email = res.data.email;
-          user_data2.username = res.data.username;
-          for (var i = 0; i < res.data.history.disease; i++) {
-            user_data2.history[i] = res.data.history[i];
-          }
 
-          user_data2.pic = res.data.icon;
+  const [orders,setorders] = useState([]);
+  const config = {headers: {
+    'Authorization': `Bearer ${token.token}`}};
+   
+  const get_ph_order = async ()=>{
+    try {
+           const res = await axios.get('https://future-medical.herokuapp.com/user/orders' ,
+           
+            config
+           )
 
-          //setuser_data(user_data);
-          resolve(user_data2);
-        })
-        .catch((err) => {
-          console.log(err);
-          reject(err);
-        });
-    });
-  };*/
+           console.log(res.data);
+           setorders(res.data);
+         
+       } 
+       catch (err) {
+           console.error(err);
+       }
+   }
+
 
   useEffect(() => {
     /*Get_info_api().then((res) => {
@@ -84,46 +67,6 @@ const ProfileUI = () => {
     });*/
   }, []);
 
-  const app = [
-    { id: "0", date: "10/12/2021", time: "10:00", dr_name: "kk", state: "" },
-    { id: "1", date: "15/12/2021", time: "10:00", dr_name: "mm", state: "" },
-    { id: "2", date: "20/12/2021", time: "10:00", dr_name: "ll", state: "" },
-    { id: "3", date: "25/12/2021", time: "10:00", dr_name: "ll", state: "" },
-    { id: "4", date: "29/12/2021", time: "10:00", dr_name: "ll", state: "" },
-  ];
-  const current = new Date();
-  const today_date = `${current.getDate()}/${
-    current.getMonth() + 1
-  }/${current.getFullYear()}`;
-  console.log(today_date);
-  // for (var i = 0; i < Object.keys(app).length; i++) {
-  //    if(app.date[i]>=today_date) app.state="pending";
-  //    else app.state="done";
-  //   }
-  //   console.log(app);
-  for (let a in app) {
-    console.log(`${app[a].date} `);
-    const day = app[a].date.split("/");
-    console.log(day[2]);
-
-    if (
-      parseInt(day[0]) === parseInt(current.getDate()) &&
-      parseInt(day[1]) === parseInt(current.getMonth() + 1) &&
-      parseInt(day[2]) === parseInt(current.getFullYear())
-    )
-      app[a].state = "today";
-    else if (
-      (parseInt(day[0]) < parseInt(current.getDate()) &&
-        parseInt(day[1]) <= parseInt(current.getMonth() + 1)) ||
-      parseInt(day[2]) < parseInt(current.getFullYear())
-    )
-      app[a].state = "done";
-    else app[a].state = "pending";
-    // if (app[a].date === today_date) app[a].state="today";
-    // else if(app[a].date < today_date) app[a].state="done";
-    // else app[a].state="pending";
-  }
-  console.log(app);
   const [add, setadd] = useState(null);
   const [blood, setblood] = useState(null);
   const [gender, setGender] = useState(null);
@@ -140,7 +83,7 @@ const ProfileUI = () => {
     seteditdata(edit_data);
     setEdit_h(false);
   };
-  //const hist = {...user_data.history};
+  
 
   const editted = { ...user_data };
 
@@ -163,42 +106,24 @@ const ProfileUI = () => {
     seteditdata(user_data); //edit in database
     setEdit(false);
   };
-  const [newapp, setnewapp] = useState(app);
+  // const [newapp, setnewapp] = useState(app);
 
-  console.log(newapp);
-  const remove = (e, id) => {
-    const newp = newapp.filter((item) => item.id !== id);
-    setnewapp(newp);
-  };
-
-
-
-  
-  const orders = [
-    {id:"0", name:"el-3zby", price:"" , state:"" , date:"" , items:""},
-    {id:"1",name:"seif", price:"" , state:"" , date:"" , items:""}
-
-  ];
+  // console.log(newapp);
+  // const remove = (e, id) => {
+  //   const newp = newapp.filter((item) => item.id !== id);
+  //   setnewapp(newp);
+  // };
 
 
   function CustomToggle({ children, eventKey }) {
     const decoratedOnClick = useAccordionButton(eventKey, () =>
-      console.log('totally custom!'),
+      console.log(' '),
     );
   
     return (
       <Button type="button"
     
-      onClick={decoratedOnClick}  variant="primary">{children}</Button>
-      // <button
-      //   type="button"
-      //   style={{ backgroundColor: 'pink' }}
-      //   onClick={decoratedOnClick}
-      // >
-      //   {children}
-      // </button>
-    );
-  }
+      onClick={decoratedOnClick}  variant="primary">{children}</Button>);}
 
 
   const sideBarhandler = (btn) => {
@@ -219,6 +144,7 @@ const ProfileUI = () => {
       setshoworders(false);
     }
     else if (btn === "orders") {
+      get_ph_order();
       setShowinfo(false);
       setShowHistory(false);
       setShowAppointment(false);
@@ -260,20 +186,7 @@ const ProfileUI = () => {
               <h3>{token.username}</h3>
             
           </div>
-          {/* <div className="user-Email">
-            {token.usertype === "user" ? (
-              <p className="mb-0">
-                <strong className="pr-1">Email: </strong>
-                {user_data.email}
-              </p>
-            ) : (
-              // <p className="mb-0">
-              //   <strong className="pr-1">Email: </strong>
-              // </p>
-              ""
-            )}
-          </div> */}
-        </div>
+          </div>
         <div className="sidebar-links">
           {/* <ul className="sidebar-links"> */}
           <li onClick={() => sideBarhandler("info")}>
@@ -292,9 +205,9 @@ const ProfileUI = () => {
           <i class="bi bi-bandaid-fill"></i>
           
             {compact ? "" :  <span> Orders</span>}
-            {/* <span> Orders</span> */}
+           
           </li>
-          {/* </ul> */}
+      
         </div>
       </SideBarUI>
       <main>
@@ -311,9 +224,7 @@ const ProfileUI = () => {
                     ></EditIcon>
                   
                 </h3>
-                {/* <Button variant="outline-secondary">Secondary</Button> 
-            <svg data-testid="EditIcon"></svg>
-            */}
+               
               </div>
               <div className="card-body pt-0">
                 <div className="row personnal-image">
@@ -533,26 +444,13 @@ const ProfileUI = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {newapp.map((item) => (
+                    {token.meetings.map((item) => (
                       <tr key={item.id}>
-                        <td width="33%">{item.date}</td>
-                        <td width="33%">{item.time}</td>
-                        <td width="33%">{item.dr_name}</td>
-                        <td width="33%">
-                          {item.state === "pending" ? (
-                            <Button
-                              variant="outline-danger"
-                              onClick={(e) => remove(e, item.id)}
-                            >
-                              <CancelIcon />
-                            </Button>
-                          ) : item.state === "today" ? (
-                            <Alert variant="danger">Today</Alert>
-                          ) : (
-                            "Done"
-                          )}
-                        </td>
-                      </tr>
+                        <td width="33%">{item.Date}</td>
+                        <td width="33%">{item.slot}</td>
+                        <td width="33%">{item.doctor}</td>
+                        <td width="33%">{item.status}</td>
+                        </tr>
                     ))}
                   </tbody>
                 </Table>
@@ -589,18 +487,20 @@ const ProfileUI = () => {
                   </thead>
                   <tbody>
                     {orders.map((item) => (
-                      <tr key={item.id}>
-                        <td >{item.name}</td>
-                        <td >{item.date}</td>
+                      <tr key={item.__v}>
+                        <td >{item.pharmacy.name}</td>
+                        <td >{item.order_data.Date}</td>
                         <td >{item.price}</td>
                         <td >
                         <Accordion defaultActiveKey="0">
      
         
-     <CustomToggle eventKey={item.id}>Show order</CustomToggle>
+     <CustomToggle eventKey={item.__v}>Show order</CustomToggle>
   
-   <Accordion.Collapse eventKey={item.id}>
-     <Card.Body>{item.items}</Card.Body>
+   <Accordion.Collapse eventKey={item.__v}>
+     <Card.Body>
+       <img src={item.order_data.form} width="300px" height="300px"/>
+     </Card.Body>
    </Accordion.Collapse>
 
 
@@ -608,13 +508,21 @@ const ProfileUI = () => {
                   
                         
                         </td>
-                        <td >{item.state}</td>
-                        <td>
-                        <ButtonGroup>
-              <Button variant="outline-success" className="col-md-12 text-right" ><MdOutlineDone/></Button>
-              <Button variant="outline-danger" className="col-md-12 text-right" ><MdCancel/></Button>
-              </ButtonGroup>
-                        </td>
+                        <td >
+                          {
+                            !item.pharmacyApproval ? "pending ..." :"Please approve"
+                          }
+                          </td>
+                       {
+                       item.pharmacyApproval ? 
+                        <td> <ButtonGroup>
+                       <Button variant="outline-success" className="col-md-12 text-right" ><MdOutlineDone/></Button>
+                       <Button variant="outline-danger" className="col-md-12 text-right" ><MdCancel/></Button>
+                       </ButtonGroup>
+                                 </td> : ""
+                        
+                        
+                       }
                         
                       </tr>
                     ))}
