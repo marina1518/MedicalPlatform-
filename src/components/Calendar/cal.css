@@ -1,0 +1,16 @@
+#calender-btn{
+    color: black;
+    border-color: #f8f9fa;
+    /* padding-right: 3rem; */
+    padding: 1.6rem;
+    border: none;
+}
+
+#calender-btn:hover{
+    background-color: #cecfcf;
+    border-color: #f8f9fa;
+}
+
+.scrolling{
+    overflow-x: scroll;
+}
