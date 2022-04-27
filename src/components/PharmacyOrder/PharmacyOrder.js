@@ -10,13 +10,17 @@ import PlaceholderLoading from 'react-placeholder-loading'
 
 function PharmacyOrder(props) {
     const token = useSelector(state => state.auth);
-    const [loading,setloading]=useState(false) //flag for getting downloaded link
+    console.log(token.token)
+    //const [loading,setloading]=useState(false) //flag for getting downloaded link
     const d = new Date();
     const [FormValues, setFormvalues ] = useState({}); //FORM VALUES 
     console.log(props)
+
     const make_order_api = ()=>{
-        const day_date = d.getDate() +"/" + (d.getMonth()+1) + "/" + d.getFullYear();
+        const day_date = (d.getMonth()+1) +"/" +d.getDate()  + "/" + d.getFullYear();
         console.log(day_date)
+        console.log(FormValues)
+        console.log( props.pharmacyadmin)
             axios.post('https://future-medical.herokuapp.com/user/pharmacy/order',
            {
              adminEmail : props.pharmacyadmin ,
@@ -29,22 +33,21 @@ function PharmacyOrder(props) {
           'Authorization': `Bearer ${token.token}`
           }
          }).then((res)=>{console.log(res)
-          setFormvalues({});
+          setFormvalues({}); // to make form empty 
           
           alert(" The order added successfully , you can see it from your profile")
-          props.setfalseloading();
-        }).catch((err)=>{console.log(err)})
-           
-         /*catch(err)
-         {
-           console.log(err)
-         }*/
+          props.setfalseloading(); //REQUEST DONE NOT LOADING
+        }).
+        catch((err)=>{console.log(err)})
     }
     useEffect(()=>{
       console.log("render")
       if(props.loading){
-      props.setshow();}
+      props.setshow();
+    }
     },[props.loading])
+
+
     const handlechange = (e)=>{
          const name = e.target.name ;
          const value = e.target.value ;
@@ -54,19 +57,13 @@ function PharmacyOrder(props) {
 const formHandler = (e) => {
     e.preventDefault();
     upload(e.target[0].files[0])
-    props.onHide();
+    props.onHide(); //hide this modal to show modal with loading iteam 
     props.setloading(); //make loading true
-    setloading(true)
+    //setloading(true)
   };
-/*const uploadFiles = (file) =>{
-   console.log(file)
-if (!file) return
-const storageRef = ref(storage,`/files/${file.name}`);
-const uploadTask = uploadBytesResumable(storageRef,file);
-}*/
+
 const upload = (file) => {
-      //e.preventDefault()
-    console.log('start of upload')
+     console.log('start of upload')
     // async magic goes here...    
     const storageRef = ref(storage,`/files/prescription/${file.name}${d.getTime()}`);
     const uploadTask = uploadBytesResumable(storageRef,file);
@@ -86,18 +83,12 @@ const upload = (file) => {
        .then(fireBaseUrl => {
          console.log(fireBaseUrl)
          FormValues.imageurl=fireBaseUrl;
-         props.onHide();//trial
+         props.onHide();// When uploaded hide the modal 
          make_order_api();
        })
     })
     }
-/*const downloadFiles = (file) =>{
-  console.log(file)
-if (!file) return
-//const storageRef = ref(storage,`/files/${file.name}`);
-getDownloadURL(ref(storage,`/files/${file.name}`)).then((url)=>{
-  console.log(url);
-}).catch((err)=>{console.log(err)})*/
+
 console.log(props.loading)
   return (
     <>
@@ -178,7 +169,7 @@ console.log(props.loading)
   
       </Modal.Header>
       <Modal.Body>
-         <PlaceholderLoading shape="circle" width={100} height={100} />
+         <PlaceholderLoading shape="circle" width={100} height={100} /> {/* While uploading pic to firebase */}
          </Modal.Body>
          </Modal> </>}
          </>

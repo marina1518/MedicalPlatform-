@@ -4,20 +4,14 @@ import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import Home from "./pages/Home";
 import "./App.css";
-import Appadmin from "./pages/Applicationadmin/Appadmin";
 import "bootstrap/dist/css/bootstrap.min.css";
 import alanBtn from "@alan-ai/alan-sdk-web";
 import { useSelector } from "react-redux";
 import Doctorscards from "./pages/Doctorspeacialiazation";
 import { useNavigate } from "react-router-dom";
-import Adminhospital from "./pages/HospitalAdmin/Adminhospital";
-import Adminclinic from "./pages/profiles/clinicadmin";
+
 import Login from "./pages/Login & Sign Up/login_f";
 import Signup from "./pages/Login & Sign Up/signup";
-import Ph_admin from "./pages/profiles/pharmacy_admin";
-import Profile from "./pages/profiles/profile";
-import Dr_Profile from "./pages/profiles/dr_profile";
-import Clinicdoctor from "./pages/profiles/clinic_dr_profile";
 import Privateroute from "./components/PrivateRoutes/Privateroute";
 import Privateuser from "./components/PrivateRoutes/Privateuser";
 import Privateclinicadmin from "./components/PrivateRoutes/Privateclinicadmin";
@@ -30,7 +24,6 @@ import DoctorsHospitals from "./pages/DoctorsHospitals";
 import Chatbotui from "./components/ChatBotUI/Chatbotui";
 import Speech from "./components/SpeechRecoginition/Speech";
 import Voice from "./components/SpeechRecoginition/Voice";
-import Clinic_admin from "./pages/profiles/clinicadmin";
 import ProfileUI from "./pages/profiles/ProfileUI";
 function App() {
   let navigate = useNavigate();
@@ -73,12 +66,10 @@ function App() {
       <ScrollToTop>
         <div className="body">
           <Routes>
-            {/*<Route path="/appadmin" element={<Appadmin />}> </Route>*/}
+            
             {<Route path="/" element={<Home />}></Route>}
             {/*<Route path="/" element={<Voice/>}></Route>*/}
             <Route path="/Doctors/:Deptname" element={<Doctorscards />}></Route>
-            {/*<Route path="/hospitaladmin" element={<Adminhospital />}> </Route>*/}
-            {/*<Route path="/pharmacyadmin" element={<Ph_admin />}> </Route>*/}
             <Route path="/login" element={<Login />}>
               {" "}
             </Route>
@@ -88,19 +79,13 @@ function App() {
             <Route path="/Entities/:entity" element={<HospitalsPage />}>
               {" "}
             </Route>
-            <Route path="/clinicdoctor/:doctorid" element={<Clinicdoctor />}>
-              {" "}
-            </Route>
             <Route
               path="/DoctorsEntity/:entityname"
               element={<DoctorsHospitals />}
             >
               {" "}
             </Route>
-            {/*<Route path="/user" element={<Profile/>} > </Route>*/}
-            {/*<Route path="/doctor" element={<Dr_Profile/>}> </Route>*/}
-            {/*<Route path="/clinicdoctor" element={<Clinicdoctor/>}> </Route>*/}
-            <Route
+            {/*<Route
               path="/doctor"
               element={
                 <Privatedoctor>
@@ -108,44 +93,9 @@ function App() {
                   <Clinicdoctor />{" "}
                 </Privatedoctor>
               }
-            />
-            <Route
-              path="/pharmacyadmin"
-              element={
-                <Privatepharmacyadmin>
-                  {" "}
-                  <Ph_admin />{" "}
-                </Privatepharmacyadmin>
-              }
-            />
-            <Route
-              path="/hospitaladmin"
-              element={
-                <Privatehospitaladmin>
-                  {" "}
-                  <Adminhospital />{" "}
-                </Privatehospitaladmin>
-              }
-            />
-            <Route
-              path="/clinicadmin"
-              element={
-                <Privateclinicadmin>
-                  {" "}
-                  <Adminclinic />{" "}
-                </Privateclinicadmin>
-              }
-            />
-            <Route path="/clinicdoctor" element={<Clinicdoctor />} />
-            <Route
-              path="/appadmin"
-              element={
-                <Privateroute>
-                  {" "}
-                  <Appadmin />{" "}
-                </Privateroute>
-              }
-            />
+            />*/}
+
+
             {/*<Route
               path="/user"
               element={
