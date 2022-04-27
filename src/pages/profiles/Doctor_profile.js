@@ -21,7 +21,7 @@ const Doctor =()=>{
   const [Docid, setdoctorid] = useState(location.state ? location.state : "");
   console.log(Docid);
   
-  const token = useSelector(state => state.auth);
+  const token = JSON.parse(useSelector((state) => state.auth));
   console.log(token.token)
   let [doctor_data,setdoctor_data]=useState({});
   let Doctor_Api = {};

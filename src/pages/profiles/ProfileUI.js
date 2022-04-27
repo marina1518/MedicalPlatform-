@@ -34,8 +34,8 @@ const ProfileUI = () => {
   });
 
   let user_data2 = {};
-  //const token = JSON.parse(useSelector((state) => state.auth));
-  const token = useSelector((state) => state.auth);
+  const token = JSON.parse(useSelector((state) => state.auth));
+  
 
   console.log(token);
 
