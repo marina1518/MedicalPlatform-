@@ -75,6 +75,8 @@ const Write=(e)=>{
   sets(false);
   //console.log(revf);
   write_review(r);
+  show_rev.push(rev);
+  
 }
 
 
