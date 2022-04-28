@@ -21,8 +21,9 @@ const Doctor =()=>{
   const [Docid, setdoctorid] = useState(location.state ? location.state : "");
   console.log(Docid);
   
+  //const token = useSelector(state => state.auth);
   const token = JSON.parse(useSelector((state) => state.auth));
-  console.log(token.token)
+  console.log(token)
   let [doctor_data,setdoctor_data]=useState({});
   let Doctor_Api = {};
   let rr=[];
@@ -63,21 +64,24 @@ const Get_info_api = async ()=>{
 }
 
 const [rev,setreview] = useState("");
-const [revf,setreviewf] = useState({review:""});
+//const [revf,setreviewf] = useState({review:""});
 const r={review:""};
 const Write=(e)=>{
   e.preventDefault();
+  console.log(rev)
  r.review=rev;
-  setreviewf(r);
+ //console.log(r)
+  //setreviewf(r);
   sets(false);
-  write_review();
+  //console.log(revf);
+  write_review(r);
 }
 
 
-const write_review = async ()=>{
+const write_review = async (r)=>{
   try {
          const res = await axios.patch(`https://future-medical.herokuapp.com/user/review/doctor/${Docid.Doctor_id}`,
-         revf
+         r
          )
         console.log(res.data);
      } 
