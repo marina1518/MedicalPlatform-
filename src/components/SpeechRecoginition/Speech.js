@@ -8,6 +8,9 @@ import 'reactjs-popup/dist/index.css';
 import { useNavigate } from 'react-router-dom';
 
 const Speech = () => {
+  const [transcript_index , setindex] = useState(0);
+//let transcript_index = 0 ; //index for transpect 
+let wanted_sentece = ""; //to send to model api   
 let navigate = useNavigate();
   const onEnd = () => {
     // You could do something here after speaking has finished
@@ -16,7 +19,7 @@ let navigate = useNavigate();
     onEnd,
   });
 
-  const voice = voices[7] || null; //voices [1] arabic eg 1/6/7
+const voice = voices[7] || null; //voices [1] arabic eg 1/6/7
 
 const departments = ['طب الاطفال','جراحة عامة'] ;
 const read_departments = ()=>{
@@ -55,7 +58,7 @@ navigate('/Entities/hospitals');
      callback: () => speak({ text: 'صباح النور' , voice : voice })     
    },
  ]
-let {
+const {
    transcript,
    interimTranscript,
    finalTranscript,
@@ -73,10 +76,21 @@ let {
  useEffect(() => {
      listenContinuously();
    if (finalTranscript !== '') {
+     //console.log("index",transcript_index)
+     for (let i = transcript_index ; i < finalTranscript.length; i++ )
+     {
+       wanted_sentece+=finalTranscript[i];
+       //console.log('sentece', wanted_sentece);
+     }
+     console.log('sentece', wanted_sentece); //GO TO THE MODEL 
+     wanted_sentece ='';
+     //transcript_index = finalTranscript.length ; 
+     setindex(finalTranscript.length); //Update the index 
+     //console.log("index",transcript_index)
      console.log('Got final result:', finalTranscript);
      //transcript='hi';
      //console.log('after',finalTranscript)
-     resetTranscript();
+     //resetTranscript();
    }
  }, [ finalTranscript]);
 
