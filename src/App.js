@@ -111,7 +111,7 @@ function App() {
             <Route path="/user" element={<ProfileUI />} />
           </Routes>
           <Chatbotui />
-
+          <Speech/>
           <Footer />
         </div>
       </ScrollToTop>

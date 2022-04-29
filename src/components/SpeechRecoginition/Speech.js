@@ -22,7 +22,7 @@ const departments = ['طب الاطفال','جراحة عامة'] ;
 const read_departments = ()=>{
 for (let i = 0 ; i < departments.length ; i++)
 {
-     speak({ text: departments[i] , voice : voice })
+     speak({ text: departments[i] , voice : voice }) //What to say 
 }
 }
 
@@ -55,7 +55,7 @@ navigate('/Entities/hospitals');
      callback: () => speak({ text: 'صباح النور' , voice : voice })     
    },
  ]
- const {
+let {
    transcript,
    interimTranscript,
    finalTranscript,
@@ -74,8 +74,12 @@ navigate('/Entities/hospitals');
      listenContinuously();
    if (finalTranscript !== '') {
      console.log('Got final result:', finalTranscript);
+     //transcript='hi';
+     //console.log('after',finalTranscript)
+     resetTranscript();
    }
- }, [interimTranscript, finalTranscript]);
+ }, [ finalTranscript]);
+
  if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
    return null;
  }
