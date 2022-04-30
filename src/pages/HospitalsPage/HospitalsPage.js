@@ -8,7 +8,7 @@ import PharmacyOrder from '../../components/PharmacyOrder/PharmacyOrder'
 
 import { useSelector } from "react-redux";
 const HospitalsPage = () => {
-const token = useSelector(state => state.auth);
+const token = JSON.parse(useSelector(state => state.auth));
   let clicked_pharmacy = {} ;
   const [pharmacy_details,setpharmacy_details] = useState({pharmacyname:"",pharmacyaddress:"",pharmacyphone:"",pharmacyadmin:""})
   const [modalShow, setModalShow] = useState(false); //for pharmacy card
