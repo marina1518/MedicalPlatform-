@@ -50,6 +50,7 @@ console.log(props.data.id)
         try {
                const res = await axios.post(`https://future-medical.herokuapp.com/user/reservation/meeting`, {doctorEmail:r.doctorEmail, date:r.date, day:r.day, slot:r.slot},config)
                const data = await res.data;
+               alert(data);
                console.log(data);
 
                
