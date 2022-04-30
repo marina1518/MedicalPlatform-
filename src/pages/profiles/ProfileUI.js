@@ -35,9 +35,9 @@ const ProfileUI = () => {
 
   let user_data2 = {};
   const token = JSON.parse(useSelector((state) => state.auth));
-  
+  //const token = useSelector((state) => state.auth);
 
-  console.log(token);
+  console.log(token.token);
 
   const [orders,setorders] = useState([]);
   const config = {headers: {
@@ -59,6 +59,23 @@ const ProfileUI = () => {
        }
    }
 
+   const cancel_order = async (id)=>{
+    try {
+           const res = await axios.delete('https://future-medical.herokuapp.com/user/order/cancel' ,
+           
+            {id:id } , config
+           )
+
+           console.log(res.data);
+           setorders(res.data);
+         
+       } 
+       catch (err) {
+           console.error(err);
+       }
+   }
+
+   
 
   useEffect(() => {
     /*Get_info_api().then((res) => {
@@ -113,17 +130,26 @@ const ProfileUI = () => {
   //   const newp = newapp.filter((item) => item.id !== id);
   //   setnewapp(newp);
   // };
+  var meetings=[];
+  const current = new Date();
+  let state;
+  for(var i=0;i<token.meetings.length;i++)
+  {
+    const day = (token.meetings[i].Date).split('-');
+    if(parseInt(day[2])<current.getFullYear()) state = 'Done'; //year check
+    else if (parseInt(day[2])>current.getFullYear()) state = 'Pending ...'; //next year
+    else if ((parseInt(day[1])<current.getMonth()+1) && (parseInt(day[0])<current.getDate()) ) state = 'Done'; //month check
+    else if ((parseInt(day[1])===current.getMonth()+1) && (parseInt(day[0])===current.getDate()) && (parseInt(day[2])===current.getFullYear())) state= 'Today'; 
+    else state = 'Pending ...';
+    meetings.push({id:i, dr_name:token.meetings[i].doctor.username, slot:token.meetings[i].slot, date:token.meetings[i].Date, state:state})
+ 
+  }
 
 
   function CustomToggle({ children, eventKey }) {
     const decoratedOnClick = useAccordionButton(eventKey, () =>
-      console.log(' '),
-    );
-  
-    return (
-      <Button type="button"
-    
-      onClick={decoratedOnClick}  variant="primary">{children}</Button>);}
+      console.log(' '), );
+    return (<Button type="button" onClick={decoratedOnClick}  variant="primary">{children}</Button>);}
 
 
   const sideBarhandler = (btn) => {
@@ -444,12 +470,12 @@ const ProfileUI = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {token.meetings.map((item) => (
+                    {meetings.map((item) => (
                       <tr key={item.id}>
-                        <td width="33%">{item.Date}</td>
+                        <td width="33%">{item.date}</td>
                         <td width="33%">{item.slot}</td>
-                        <td width="33%">{item.doctor}</td>
-                        <td width="33%">{item.status}</td>
+                        <td width="33%">{item.dr_name}</td>
+                        <td width="33%">{item.state}</td>
                         </tr>
                     ))}
                   </tbody>
@@ -510,14 +536,14 @@ const ProfileUI = () => {
                         </td>
                         <td >
                           {
-                            !item.pharmacyApproval ? "pending ..." :"Please approve"
+                            item.pharmacyRespond ? (item.pharmacyApproval ? "Please approve" : "Cancelled") :"Pending ..."
                           }
                           </td>
                        {
-                       item.pharmacyApproval ? 
+                       item.pharmacyApproval && item.pharmacyRespond ? 
                         <td> <ButtonGroup>
                        <Button variant="outline-success" className="col-md-12 text-right" ><MdOutlineDone/></Button>
-                       <Button variant="outline-danger" className="col-md-12 text-right" ><MdCancel/></Button>
+                       <Button variant="outline-danger" className="col-md-12 text-right" onClick={cancel_order(item.__v)} ><MdCancel/></Button>
                        </ButtonGroup>
                                  </td> : ""
                         
