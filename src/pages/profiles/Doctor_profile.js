@@ -229,7 +229,7 @@ const write_review = async (r)=>{
   </div>
   <div className="card-body pt-0">
   <div>
-<Calender data={{email:doctor_data.email,timetable: dr_timetable, id:Docid.Doctor_id, token:token.token} }/>
+<Calender data={{email:doctor_data.email,timetable: dr_timetable, id:Docid.Doctor_id, token:token.token , username:doctor_data.username} }/>
 
 </div>
 

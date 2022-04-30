@@ -59,15 +59,25 @@ const ProfileUI = () => {
        }
    }
 
-   const cancel_order = async (id)=>{
+   const cancel_order = async (e,id)=>{
     try {
            const res = await axios.delete('https://future-medical.herokuapp.com/user/order/cancel' ,
            
-            {id:id } , config
+             //config, {id:id }
+             {
+              headers: {
+                'Authorization': `Bearer ${token.token}`
+              },
+              data: {
+                id: id,
+              },
+            }
            )
 
            console.log(res.data);
-           setorders(res.data);
+           alert('Order cancelled successfully')
+           get_ph_order();
+           //setorders(res.data);
          
        } 
        catch (err) {
@@ -470,14 +480,20 @@ const ProfileUI = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {meetings.map((item) => (
-                      <tr key={item.id}>
-                        <td width="33%">{item.date}</td>
-                        <td width="33%">{item.slot}</td>
-                        <td width="33%">{item.dr_name}</td>
-                        <td width="33%">{item.state}</td>
-                        </tr>
-                    ))}
+                    {
+                      meetings.lenght === 0 ? "":
+                      <>
+                      {meetings.map((item) => (
+                        <tr key={item.id}>
+                          <td width="33%">{item.date}</td>
+                          <td width="33%">{item.slot}</td>
+                          <td width="33%">{item.dr_name}</td>
+                          <td width="33%">{item.state}</td>
+                          </tr>
+                      ))}
+                      </>
+                    }
+                    
                   </tbody>
                 </Table>
               </div>
@@ -503,6 +519,7 @@ const ProfileUI = () => {
                     <tr>
                     <th >Pharmacy Name</th>
                       <th >Date</th>
+                      <th >Time</th>
                       <th >Price</th>
                       <th >Order</th>
                       
@@ -512,18 +529,22 @@ const ProfileUI = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map((item) => (
-                      <tr key={item.__v}>
+                    {
+                      orders.length ===0 ? "": 
+                      <>
+                       {orders.map((item) => (
+                      <tr key={item._id}>
                         <td >{item.pharmacy.name}</td>
-                        <td >{item.order_data.Date}</td>
+                        <td >{item.order_data.Date.split('T')[0]}</td>
+                        <td >{item.order_data.Date.split('T')[1]}</td>
                         <td >{item.price}</td>
                         <td >
                         <Accordion defaultActiveKey="0">
      
         
-     <CustomToggle eventKey={item.__v}>Show order</CustomToggle>
+     <CustomToggle eventKey={item._id}>Show order</CustomToggle>
   
-   <Accordion.Collapse eventKey={item.__v}>
+   <Accordion.Collapse eventKey={item._id}>
      <Card.Body>
        <img src={item.order_data.form} width="300px" height="300px"/>
      </Card.Body>
@@ -543,7 +564,7 @@ const ProfileUI = () => {
                        item.pharmacyApproval && item.pharmacyRespond ? 
                         <td> <ButtonGroup>
                        <Button variant="outline-success" className="col-md-12 text-right" ><MdOutlineDone/></Button>
-                       <Button variant="outline-danger" className="col-md-12 text-right" onClick={cancel_order(item.__v)} ><MdCancel/></Button>
+                       <Button variant="outline-danger" className="col-md-12 text-right" onClick={(e)=>cancel_order(e,item._id)} ><MdCancel/></Button>
                        </ButtonGroup>
                                  </td> : ""
                         
@@ -552,6 +573,9 @@ const ProfileUI = () => {
                         
                       </tr>
                     ))}
+                      </>
+                    }
+                   
                   </tbody>
                 </Table>
               </div>

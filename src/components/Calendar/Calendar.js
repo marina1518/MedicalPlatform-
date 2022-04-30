@@ -1,22 +1,20 @@
 import { React,useRef, useState} from "react";
 import { ListGroup , Row, Col, Button} from "react-bootstrap";
 import {AiOutlineLeft, AiOutlineRight} from 'react-icons/ai';
+import { useSelector,useDispatch } from "react-redux";
 import moment from 'moment';
 import './cal.css';
 import mom from 'moment-timezone';
 import {BsFillSunFill, BsMoonStarsFill, BsClockFill} from 'react-icons/bs';
+import { signin } from "../../actions";
 import axios from "axios";
 const Calendar = (props) => {
+const dispatch = useDispatch();    
 console.log(props.data.id)
-    const config = {headers: {
-    
-        'Authorization': `Bearer ${props.data.token}`}};
-
-       
-
-        var reserved_slots = [];
-        //const [reserved, setreserved_slots] = useState([]);
-   
+const token = JSON.parse(useSelector((state) => state.auth));
+var token_copy = token;
+    const config = {headers: {'Authorization': `Bearer ${props.data.token}`}};
+        var reserved_slots = [];   
     const Get_timetable = async (date)=>{
         try {
                const res = await axios.get(`https://future-medical.herokuapp.com/user/timetable/${props.data.id}/${date}`)
@@ -30,17 +28,11 @@ console.log(props.data.id)
         
        }
        
-       return reserved_slots;
-    //    setreserved_slots(reserved_slots);
-    //    console.log(reserved);
-       
-                
+       return reserved_slots;          
            } 
            catch (err) {
                console.error(err);
-           }
-
-          
+           } 
   
        }
 
@@ -50,10 +42,8 @@ console.log(props.data.id)
         try {
                const res = await axios.post(`https://future-medical.herokuapp.com/user/reservation/meeting`, {doctorEmail:r.doctorEmail, date:r.date, day:r.day, slot:r.slot},config)
                const data = await res.data;
-               alert(data);
                console.log(data);
-
-               
+               alert(data);        
            } 
            catch (err) {
                console.error(err);
@@ -102,19 +92,10 @@ console.log(props.data.id)
     const get_slots=(e,item)=>{
         setdone_reserve(false);
         setdata(item); //to know the day and date clicked
-       
         var morning_shifts=[];
         var evening_shifts=[];
         const day = item.format("dddd");
         const date = `${item.format("DD-MM-YYYY")}`; //to api
-        //const dd={date: date};
-        console.log(date);
-        // setdate(dd);
-        // console.log(date2);
-        // var reserved =[] 
-        
-        // console.log(reserved)
-
         (async () => {
             var reserved = await Get_timetable(date);
             console.log(reserved)
@@ -189,35 +170,22 @@ console.log(props.data.id)
                         else{
                             evening_shifts.push({slot:`${c }:30 - ${d}:00`, state:false});
                             c+=1; d+=1;
-                        }
-                       
+                        }                       
                     }  
                 }
             }
-               
-               
+                          
             }
         }
        
         setmor(morning_shifts);
         seteve(evening_shifts);
-
-
-
-         })()
-         
-        //console.log(reserved);
-
-        
-
-    };
+         })()};
 
  
     const [can, setcan] = useState(false);
     const [slot_time, setslot] = useState("");
     let  r= {};
-    // const [reserve_details, setreserve_details]=useState("");
-    // const [reservations,setreservations] = useState([]);
     const reserve=(e,slot) =>{
         e.preventDefault();
         let y=`${data.format("DD-MM-YYYY")}`;
@@ -227,14 +195,10 @@ console.log(props.data.id)
         r.day = y;
         r.slot=slot;
        //Api
-       
+       token_copy.meetings.push({Date:r.date, day:r.day, slot:r.slot, doctor:{username:props.data.username}});
+       dispatch(signin(token_copy));  //update the state
         console.log(r);
-    //    setreserve_details(r);
-      // console.log(reserve_details);
        Get_Reserve(r);
-    //     reservations.push({date:`${data.format("DD/MM/YYYY")}`, day:`${data.format("dddd")}`, slot:`${slot}`});
-    //    setreservations(reservations);
-    //     console.log(reservations);
         setdone_reserve(true);
         setcan(false);
         setslot("");
