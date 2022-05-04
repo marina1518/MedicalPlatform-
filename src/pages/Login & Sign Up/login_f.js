@@ -8,21 +8,12 @@ import {useSelector,useDispatch} from 'react-redux'
 import axios from "axios";
 import { signin,logout } from "../../actions";
 import { useJwt } from "react-jwt";
-//import pass from "./../image/pass.png";
-//import './login.css'
+
 
 
 const Login=()=>{
   
     let navigate = useNavigate();
-    /*const routing_login =(type)=>{
-      if (type === "owner"){navigate ('/appadmin')}
-      else if (type === "user"){navigate ('/')}
-      else if (type === "c_admin"){navigate('/clinicdoctor')}
-      else if (type === "p_admin"){navigate('/pharmacyadmin')}
-      else if (type === "h_admin"){navigate('/hospitaladmin')}
-      else if (type === "doctor"){navigate('/doctor')}
-    }*/
     const token = JSON.parse(useSelector(state => state.auth)) //state of token 
     //console.log(token)
     const { decodedToken, isExpired } = useJwt(token);
@@ -111,15 +102,6 @@ const Login=()=>{
       
         <Row className="mt-5 p-5 m-auto shadow-sm rounded-lg"  lg={4} md={6} sm={12} >
         <Col lg={4} md={6} sm={12} >
-        {/* <Figure>
-        <Figure.Image
-        width={171}
-        height={180}
-        alt="171x180"
-        src={pass}
-        />
-       
-        </Figure> */}
 
 <Carousel>
   <Carousel.Item>
@@ -165,14 +147,14 @@ const Login=()=>{
                
                     <Form.Group controlId="formBasicEmail">
                     <FaUser style={{color:"#06a3da"}}/> <Form.Label>  Email address </Form.Label>
-                     <Form.Control type="email" placeholder="Enter email"  onChange={(e)=>{setEmail(e.target.value); seterror_e("");}}/> 
+                     <Form.Control type="email" placeholder="Enter email"  onChange={(e)=>{setEmail(e.target.value); sete_error("");}}/> 
                      <h6 style={{color:"red"}}>{error_email}</h6>
                      <h6 style={{color:"red"}}>{error_e}</h6>  
                     </Form.Group>
 <br/>
                     <Form.Group controlId="formBasicPassword">
                     <FaLock style={{color:"#06a3da"}}/> <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" onChange={(e)=>{setPassword(e.target.value); seterror_p("");}} />
+                        <Form.Control type="password" placeholder="Password" onChange={(e)=>{setPassword(e.target.value); setp_error("");}} />
                         <h6 style={{color:"red"}}>{error_pass}</h6> 
                         <h6 style={{color:"red"}}>{error_p}</h6>
                     </Form.Group>
