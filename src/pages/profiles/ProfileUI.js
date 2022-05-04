@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SideBarUI from "../../components/SideBarUI/SideBarUI";
 import "./profileui.css";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector , useDispatch} from "react-redux";
 import {  Button, ButtonGroup, Form, Table,Card, Accordion,  useAccordionButton } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EditIcon from "@material-ui/icons/Edit";
@@ -14,8 +14,11 @@ import { BiMessageDetail } from "react-icons/bi";
 import { AiFillClockCircle } from "react-icons/ai";
 import {GiMedicines} from 'react-icons/gi';
 import {MdOutlineDone,MdCancel} from 'react-icons/md';
+import { info, history , appointments ,myorders } from "../../actions";
 
 const ProfileUI = () => {
+  const dispatch = useDispatch();
+  const sidebar_profile = (useSelector((state) => state.profile_reducer)); //state of token
   const [showinfo, setShowinfo] = useState(false);
   const [showhistory, setShowHistory] = useState(false);
   const [showAppointment, setShowAppointment] = useState(false);
@@ -225,19 +228,19 @@ const ProfileUI = () => {
           </div>
         <div className="sidebar-links">
           {/* <ul className="sidebar-links"> */}
-          <li onClick={() => sideBarhandler("info")}>
+          <li onClick={() => dispatch(info())}>
             <i class="bi bi-info-circle-fill"></i>
             {compact ? "" : <span> Personnal Info</span>}
           </li>
-          <li onClick={() => sideBarhandler("history")}>
+          <li onClick={() => dispatch(history())}>
             <i class="bi bi-chat-left-text-fill"></i>
             {compact ? "" : <span> History</span>}
           </li>
-          <li onClick={() => sideBarhandler("appointment")}>
+          <li onClick={() => dispatch(appointments())}>
             <i class="bi bi-clock-fill"></i>
             {compact ? "" : <span> Appointments</span>}
           </li>
-          <li onClick={() => sideBarhandler("orders")}>
+          <li onClick={() => dispatch(myorders())}>
           <i class="bi bi-bandaid-fill"></i>
           
             {compact ? "" :  <span> Orders</span>}
@@ -248,7 +251,7 @@ const ProfileUI = () => {
       </SideBarUI>
       <main>
         <div className="profile-container">
-          {showinfo ? (
+          {(sidebar_profile === "info") ? (
             <div className="card">
               <div className="card-header bg-transparent">
                 <h3 className="mb-0">
@@ -405,7 +408,7 @@ const ProfileUI = () => {
           ) : (
             ""
           )}
-          {showhistory ? (
+          {(sidebar_profile === "history") ? (
             <div className="card">
               <div className="card-header bg-transparent border-0">
                 <h3 className="mb-0">
@@ -460,7 +463,7 @@ const ProfileUI = () => {
             ""
           )}
         </div>
-        {showAppointment ? (
+        {(sidebar_profile === "appointments") ? (
           <div className="card">
             <div className="card-header bg-transparent border-0">
               <h3 className="mb-0">
@@ -505,7 +508,7 @@ const ProfileUI = () => {
 
 
 
-{showorders ? 
+{(sidebar_profile === "myorders") ? 
           <div className="card shadow-sm">
             <div className="card-header bg-transparent border-0">
               <h3 className="mb-0">

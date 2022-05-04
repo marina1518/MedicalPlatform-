@@ -25,6 +25,7 @@ import Chatbotui from "./components/ChatBotUI/Chatbotui";
 import Speech from "./components/SpeechRecoginition/Speech";
 import Voice from "./components/SpeechRecoginition/Voice";
 import ProfileUI from "./pages/profiles/ProfileUI";
+import Keyboard from "./components/KeboardMego/Keyboard";
 function App() {
   let navigate = useNavigate();
   const [clicked_department, setclicked_department] = useState("");
@@ -69,6 +70,7 @@ function App() {
             
             {<Route path="/" element={<Home />}></Route>}
             {/*<Route path="/" element={<Voice/>}></Route>*/}
+            {/*<Route path="/" element={<Keyboard />}></Route>*/}
             <Route path="/Doctors/:Deptname" element={<Doctorscards />}></Route>
             <Route path="/login" element={<Login />}>
               {" "}

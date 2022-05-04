@@ -8,7 +8,7 @@ function Doctorscards() {
     const [doctors,setdoctors] =  useState([]);
     const params = useParams();
     const Deptname = params.Deptname ; ///TO GET DOCTORS IN THIS DEPARTMENT 
-    console.log(Deptname);
+    console.log("Doctors Dep page",Deptname);
     const arr = Deptname.split(" ");
     for (var i = 0; i < arr.length; i++) {
     arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
@@ -27,7 +27,7 @@ setdoctors(res.data)}
 }
 useEffect(()=>{
 Get_Doctors_Department();
-},[])
+},[Deptname])
 
 
   return (

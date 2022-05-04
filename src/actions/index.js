@@ -27,3 +27,20 @@ export const signin = (state)=>{
 export const logout = ()=>{
     return {type : "logout"} 
 }
+
+/************ profile actions */
+export const info = ()=>{
+    return {type : "info"} 
+}
+
+export const history = ()=>{
+    return {type : "history"} 
+}
+
+export const appointments = ()=>{
+    return {type : "appointments"} 
+}
+
+export const myorders = ()=>{
+    return {type : "myorders"} 
+}
