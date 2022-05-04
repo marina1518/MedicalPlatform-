@@ -34,16 +34,10 @@ const Signup=()=>{
            console.log(res.data);
            dispatch(signin(res.data)); //save the data
            navigate('/'); //Go to Home
-           //dispatch(signin(res.data.token,"user"));
-           //console.log(token)
-           //routing_login(data.type);
-           
          }).catch(function (error) {
     if (error.response) {
       console.log(error.response.data);
       console.log(error.response.status);
-      ///Handle data => [email already exist]
-      //console.log(error.response.headers);
     }
 })
     }  
@@ -58,7 +52,6 @@ const Signup=()=>{
     const [history,seth]=useState("");
     const [msg,setmsg]=useState("");
     const [username,setusername]=useState("");
-    //const [data, submit] = useState([{"email":null, "password":null}]);
 
     const data = [
         {email: "", password : "" , dob:"", add:"", phone:"", history:"", blood:"" , username:""}
@@ -72,7 +65,6 @@ const Signup=()=>{
     const [e_e,sete_e] = useState("");
     const [e_c,sete_c] = useState("");
     const [e_ph,sete_ph] = useState("");
-   // const [flag,setflag] = useState("false");
 
     const submit_value =(e) => {
         e.preventDefault();
@@ -104,7 +96,7 @@ const Signup=()=>{
           //setflag("true");
           console.log(flag);
         }
-        if (phone.length < 8 && phone != "")
+        if ((phone.length !== 11 ) && phone != "")
         {
           flag=1;
           sete_ph("!! required 11 numbers");
