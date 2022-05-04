@@ -7,7 +7,9 @@ case "history" :
 case "appointments" :
     return "appointments" ;  
 case "myorders" :
-    return "myorders"   ;     
+    return "myorders"   ;    
+case "prescription" :
+    return "prescription"   ;     
 default :
      return state ;
 }

@@ -44,3 +44,7 @@ export const appointments = ()=>{
 export const myorders = ()=>{
     return {type : "myorders"} 
 }
+
+export const prescription = ()=>{
+    return {type : "prescription"} 
+}
