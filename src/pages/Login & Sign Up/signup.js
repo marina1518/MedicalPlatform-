@@ -275,17 +275,7 @@ const Signup=()=>{
                     </select>
                 </div>
                     </Form.Group>
-                    <br/>
-                    <Form.Group>
-                    <BiMessageRoundedDetail style={{color:"#06a3da"}}/> <Form.Label>History</Form.Label>
-                    <Form.Control
-               as="textarea"
-               placeholder="History"
-               onChange={(e)=>seth(e.target.value)}
-               style={{ height: '100px' }}
-               />
-
-</Form.Group>
+                   
                     <br></br>
                     <div className="d-grid">
                     <Button variant="primary btn-block" type="submit" onSubmit={submit_value}>
