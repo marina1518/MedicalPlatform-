@@ -1,23 +1,26 @@
 import React , {useState, useEffect} from "react";
-import './profile.css';
+import SideBarUI from "../../components/SideBarUI/SideBarUI";
+import "./profileui.css";
 import {ListGroup,  Form, Row, Col} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Avatar from '@material-ui/core/Avatar';
 import {BsInfoCircleFill} from 'react-icons/bs';
 import {AiOutlineComment} from 'react-icons/ai';
 import axios from 'axios';
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import {GiNotebook} from 'react-icons/gi';
 import { useLocation } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Calender from './../../components/Calendar/Calendar';
+import {info, reservations,reviews} from '../../actions'
+import { blueGrey } from "@material-ui/core/colors";
 
-
-const Doctor =()=>{
-  
+const Doctor = () => {
   
   const location = useLocation();
+  const dispatch = useDispatch();
+  const sidebar_profile = (useSelector((state) => state.profile_reducer));
   const [Docid, setdoctorid] = useState(location.state ? location.state : "");
   console.log(Docid);
   
@@ -99,129 +102,212 @@ const write_review = async (r)=>{
 
    
  const [s,sets] = useState(false);
-    return(
+  
 
-        <div className="student-profile py-4">
-  <div className="container">
-    <div className="row">
-      <div className="col-lg-4">
-        <div className="card shadow-sm">
-             
-          <div className="card-header bg-transparent text-center">
+  
 
-           <Avatar style={{ cursor: "pointer"}} className="profile_img" src={doctor_data.profilePic}//doctor_data.profilePic} 
-          />
-         
-          <h3>Dr {doctor_data.username}</h3> 
-          </div>
-          <div className="card-body">
-          <p className="mb-0"><strong className="pr-1">Email: </strong>{doctor_data.email}</p>     
-          </div>
-          </div>
-          <br/>
-          <div styled="height: 26px"></div>
-          <div className="card shadow-sm">
-             
-             <div className="card-header bg-transparent">
-               <Row>
-               <Col>
-               <p className="mb-0"><strong className="pr-1"> <AiOutlineComment /> Reviews: </strong> </p> 
-                 </Col>
-                 <Col>
-                 <button style={{cursor:"pointer", borderRadius:"50%", background:"white", border:"None"}} onClick={()=>sets(true)}><AddCircleIcon/></button>
-                 </Col>
-               </Row>
+  const [compact, setCompact] = useState(false);
+
+  const compacthandler = () => {
+    setCompact(!compact);
+  };
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1065) {
+        setCompact(true);
+      } else if (window.innerWidth > 1065) {
+        setCompact(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return (
+    <div className="main-container">
+      <SideBarUI compact={compact} oncompact={compacthandler}>
+        <div>
+          <div className="image-container">
+            <Avatar
+              className="profile_img"
+              src={doctor_data.profilePic}
+              sx={{ width: 50, height: 50, bgcolor: blueGrey[400] }}
+            />
             
-             <br/>
-           
-             {s ? <div>
-               <Row>
-                 <Col>
-                 <Form.Control
-                      as="textarea"
-                      placeholder="Write your Review here ..."
-                      onChange={(e) => setreview(e.target.value)}
-                      style={{ height: "40px" }}
-                    />
-                 </Col>
-                 <Col>
-                 <button style={{cursor:"pointer",  borderRadius:"50%",background:"white", border:"None"}} type="button" onClick={Write}><SendIcon/></button> 
-                 </Col>
-               </Row>
-                      <br/></div>
-                   : ""}
-       
-             {
-                 show_rev.map((r=>
-                    <ListGroup variant="flush">
-                        <div>
-                        <ListGroup.Item> {r}</ListGroup.Item>
-                        </div>
-                        <br/>
-                  </ListGroup>
-                    ))
-             }
-</div>
+              <h3>{doctor_data.username}</h3>
+        
+          </div>
+          </div>
+        <div className="sidebar-links">
+          {/* <ul className="sidebar-links"> */}
+          <li onClick={() => dispatch(info())}>
+            <i class="bi bi-info-circle-fill"></i>
+            {compact ? "" : <span> Personnal Info</span>}
+          </li>
+          <li onClick={() => dispatch(reviews())}>
+            <i class="bi bi-chat-left-text-fill"></i>
+            {compact ? "" : <span> Reviews</span>}
+          </li>
+          <li onClick={() => dispatch(reservations())}>
+            <i class="bi bi-clock-fill"></i>
+            {compact ? "" : <span> Reseve meeting</span>}
+          </li>
+          
         </div>
-      </div>
-     
+      </SideBarUI>
+      <main>
+        <div className="profile-container">
+          {(sidebar_profile === "info")  ? (
+            <div className="card">
+              <div className="card-header bg-transparent">
+                <h3 className="mb-0">
+                  <BsInfoCircleFill /> Personal Information
+                </h3>
+               
+              </div>
+              <div className="card-body pt-0">
+                <div className="row personnal-image">
+                  <Avatar
+                    className="profile_img"
+                    src={token.profilePic}
+                    sx={{ width: 56, height: 56, bgcolor: blueGrey[400] }}
+                  />
+                 
+                <h3 style={{textAlign:'center'}}>{doctor_data.username}</h3>
 
-      <br/>
-      <div className="col-lg-8">
-        <div className="card shadow-sm">
-          <div className="card-header bg-transparent border-0">
-            <h3 className="mb-0"><BsInfoCircleFill /> Personal Information </h3>
-           
-          </div>
-          <div className="card-body pt-0">
-            <table className="table table-bordered">
-              <tr>
-                <th width="30%">Specialization   </th>
-                <td width="2%">:</td>
-                <td>{doctor_data.specialization}</td>
-              </tr>
-              <tr>
-                <th width="30%">University	</th>
-                <td width="2%">:</td>
-                <td>{doctor_data.university}</td>
-              </tr>
-              <tr>
-                {doctor_data.entityflag === 'H' && <th width="30%">Hospital	Name</th>}
-                {doctor_data.entityflag === 'C' && <th width="30%">Clinic	Name</th>}
-                {/*<th width="30%">Hospital	Name</th>*/}
-                <td width="2%">:</td>
-                <td> {doctor_data.entityname }</td>
-              </tr>
-             
-                <tr>
-                <th width="30%">Personal Phone Number	</th>
-                <td width="2%">:</td>
-                <td>{doctor_data.telephone}</td>
-              </tr>
-              <tr>
-                <th width="30%">Date of Birth	</th>
-                <td width="2%">:</td>
-                <td>{doctor_data.date}</td>
-              </tr>
-            
-              <br/>
+                   
+                </div>
+                <div class="row mt-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Email</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">                     
+                {doctor_data.email}
+                  </div>
+                </div>
+
+                <hr id="profile-hr" />
+                <div class="row mt-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Spectialization</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {doctor_data.specialization}
+                  </div>
+                </div>
+
+                <hr id="profile-hr" />
+                <div class="row mt-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">University</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {doctor_data.university}
+                  </div>
+                </div>
+               
+                <hr id="profile-hr" />
+                <div class="row mt-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">{doctor_data.entityflag === 'H' && "Hospital"}</h6>
+                    <h6 class="mb-0">{doctor_data.entityflag === 'C' && "Clinic"}</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {doctor_data.entityname}
+                  </div>
+                </div>
+
+                
+                <hr id="profile-hr" />
+                <div class="row mt-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Phone Number</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {doctor_data.telephone}
+                  </div>
+                </div>
+
+                
+                <hr id="profile-hr" />
+                <div class="row mt-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Date of Birth</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {doctor_data.date}
+                  </div>
+                </div>
+                
+
+                <hr id="profile-hr" />
+                <div class="row mt-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Gender</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {doctor_data.gender}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+          {(sidebar_profile === "reviews")  ? (
+          
+           <div className="card shadow-sm">
               
-            </table>
-           
-          </div>
-        </div>
+              <div className="card-header bg-transparent">
+                <Row>
+                <Col>
+                <p className="mb-0"><strong className="pr-1"> <AiOutlineComment /> Reviews: </strong> </p> 
+                  </Col>
+                  <Col>
+                  <button style={{cursor:"pointer", borderRadius:"50%", background:"white", border:"None"}} onClick={()=>sets(true)}><AddCircleIcon/></button>
+                  </Col>
+                </Row>
+             
+              <br/>
+            
+              {s ? <div>
+                <Row>
+                  <Col>
+                  <Form.Control
+                       as="textarea"
+                       placeholder="Write your Review here ..."
+                       onChange={(e) => setreview(e.target.value)}
+                       style={{ height: "40px" }}
+                     />
+                  </Col>
+                  <Col>
+                  <button style={{cursor:"pointer",  borderRadius:"50%",background:"white", border:"None"}} type="button" onClick={Write}><SendIcon/></button> 
+                  </Col>
+                </Row>
+                       <br/></div>
+                    : ""}
+        
+              {
+                  show_rev.map((r=>
+                     <ListGroup variant="flush">
+                         <div>
+                         <ListGroup.Item> {r}</ListGroup.Item>
+                         </div>
+                         <br/>
+                   </ListGroup>
+                     ))
+              }
+ </div>
+         </div>
       
-
-   { //LOGINED 
-     token.token ? 
-     
-<div>
-
-<br/>
-  
- 
-  <div styled="height: 26px"></div>
-  
+          ) : (
+            ""
+          )}
+        </div>
+        {(sidebar_profile === "reservations") ? (
+            
 <div className="card shadow-sm">
   <div className="card-header bg-transparent border-0">
     
@@ -235,14 +321,15 @@ const write_review = async (r)=>{
 
   </div>
 </div>
-</div> :""
-   }
 
-      </div>
+        ) : (
+          ""
+        )}
+
+
+      </main>
     </div>
-  </div>
-</div>
+  );
+};
 
-    )
-}
 export default Doctor;

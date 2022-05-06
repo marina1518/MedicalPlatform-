@@ -48,3 +48,19 @@ export const myorders = ()=>{
 export const prescription = ()=>{
     return {type : "prescription"} 
 }
+
+export const reservations = ()=>{
+    return {type : "reservations"} 
+}
+
+export const reviews = ()=>{
+    return {type : "reviews"} 
+}
+
+export const channel = (state)=>{
+    return {type : "channel", state : state} 
+}
+export const release = ()=>{
+    return {type : "release"} 
+}
+

@@ -9,7 +9,11 @@ case "appointments" :
 case "myorders" :
     return "myorders"   ;    
 case "prescription" :
-    return "prescription"   ;     
+    return "prescription"   ;   
+case "reviews" :
+    return "reviews"   ;   
+case "reservations" :
+    return "reservations"   ;   
 default :
      return state ;
 }
