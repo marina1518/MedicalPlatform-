@@ -57,3 +57,15 @@ export const reviews = ()=>{
     return {type : "reviews"} 
 }
 
+//order status
+export const order_status = (state)=>{
+    return {type : "order_status", state:state} 
+}
+
+// export const channel = (state)=>{
+//     return {type : "channel", state : state} 
+// }
+// export const release = ()=>{
+//     return {type : "release"} 
+// }
+

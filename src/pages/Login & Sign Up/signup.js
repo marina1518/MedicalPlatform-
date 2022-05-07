@@ -110,24 +110,24 @@ const Signup=()=>{
           //setflag("true");
           console.log(flag);
         }
-        if (dob === "")
-        {
-          flag=1;
-          sete_b("!! required Date of Birth");
-          //setflag("true");
-        }
-        if (add === "")
-        {
-          flag=1;
-          sete_a("!! required Address");
-          //setflag("true");
-        }
-        if (phone === "")
-        {
-          flag=1;
-          sete_ph("!! required Phone Number");
-          //setflag("true");
-        }
+        // if (dob === "")
+        // {
+        //   flag=1;
+        //   sete_b("!! required Date of Birth");
+        //   //setflag("true");
+        // }
+        // if (add === "")
+        // {
+        //   flag=1;
+        //   sete_a("!! required Address");
+        //   //setflag("true");
+        // }
+        // if (phone === "")
+        // {
+        //   flag=1;
+        //   sete_ph("!! required Phone Number");
+        //   //setflag("true");
+        // }
         console.log(flag);
         if (password === cpass && flag === 0)
         {
@@ -275,8 +275,8 @@ const Signup=()=>{
                     </select>
                 </div>
                     </Form.Group>
-                   
-                    <br></br>
+                    <br/>
+                  
                     <div className="d-grid">
                     <Button variant="primary btn-block" type="submit" onSubmit={submit_value}>
                         Register
