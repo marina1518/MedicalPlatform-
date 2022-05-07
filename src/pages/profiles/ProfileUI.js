@@ -144,18 +144,6 @@ const ProfileUI = () => {
        }
    }
 
-   const Edit_history = async (history)=>{
-    try {
-           const res = await axios.patch('https://future-medical.herokuapp.com/user/edit/history' ,{history:history},config)
-            alert(res.data);
-           console.log(res.data);
-         
-       } 
-       catch (err) {
-           console.error(err);
-       }
-   }
-
  
 
 //edit personal info
@@ -197,15 +185,7 @@ const ProfileUI = () => {
     })
     }
 
-//edit history
-  const [edit_h, setEdit_h] = useState(false);
-  const [newh, setnewh] = useState(token.history);
-  const setedit_history = () => {
-    Edit_history(newh);
-    token_copy.history=newh;
-    dispatch(signin(token_copy));
-    setEdit_h(false);
-  };
+
   
   var Edit_data={};
   const editted = {};
