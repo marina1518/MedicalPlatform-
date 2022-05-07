@@ -54,7 +54,7 @@ const History = () => {
   // Floating Buttons Code
   const labels = [
     "Surgeries",
-    "Diseases allegories",
+    "Diseases - allergies",
     "Family history",
     "Medications",
   ];
