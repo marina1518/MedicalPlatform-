@@ -14,16 +14,19 @@ function PharmacyOrder(props) {
     //const [loading,setloading]=useState(false) //flag for getting downloaded link
     const d = new Date();
     const [FormValues, setFormvalues ] = useState({}); //FORM VALUES 
+    const [Formerrors, setFormerrors ] = useState({});
+    const [issubmit, setissubmit ] = useState(false);
     console.log(props)
 
     const make_order_api = ()=>{
-        const day_date = (d.getMonth()+1) +"/" +d.getDate()  + "/" + d.getFullYear();
+        const day_date = (d.getMonth()+1) +"-" +d.getDate()  + "-" + d.getFullYear();
         console.log(day_date)
         console.log(FormValues)
         console.log( props.pharmacyadmin)
             axios.post('https://future-medical.herokuapp.com/user/pharmacy/order',
            {
              adminEmail : props.pharmacyadmin ,
+             flag : "image",
              form :  FormValues.imageurl ,//image
              date:day_date,
              address:FormValues.address,
@@ -47,18 +50,62 @@ function PharmacyOrder(props) {
     }
     },[props.loading])
 
+    useEffect(()=>{
+      console.log("render")
+      if(props.show == false){ // lw at2flt n init values 
+      setFormerrors({});
+      setFormvalues({});
+    }
+    },[props.show])
 
     const handlechange = (e)=>{
          const name = e.target.name ;
          const value = e.target.value ;
          //console.log(e)
          setFormvalues({...FormValues, [name] : value});
+         
+         if (issubmit)
+         {
+            setFormerrors(validate({...FormValues, [name] : value}))
+         }
+    }
+
+        function validate (values)
+    {
+        const errors = {};
+        const regx = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+
+        if (!values.number)
+            {
+                errors.number="Number is required!";  
+            }
+        else if (values.number.length !== 11)
+        {
+          errors.number="Not valid phone number";  
+        }    
+        if (!values.address)
+            {
+                errors.address="Address is required!";  
+            }
+        if (!values.image)
+            {
+                errors.image="prescription image is required!";  
+            }    
+                
+        return errors ;
     }
 const formHandler = (e) => {
-    e.preventDefault();
-    upload(e.target[0].files[0])
-    props.onHide(); //hide this modal to show modal with loading iteam 
-    props.setloading(); //make loading true
+       e.preventDefault();
+        setFormerrors(validate(FormValues))
+        setissubmit(true);
+        if(Object.keys(validate(FormValues)).length === 0)
+        {
+          upload(e.target[0].files[0])
+          props.onHide(); //hide this modal to show modal with loading iteam 
+          props.setloading(); //make loading true
+        }
+    
+    
     //setloading(true)
   };
 
@@ -120,19 +167,22 @@ console.log(props.loading)
         <Form onSubmit={formHandler}>
          {<Form.Group  className="mb-3" >
     <Form.Label>Upload your prescription</Form.Label>
-    <Form.Control onChange={(e)=>handlechange(e)}  name="Image" type="file" placeholder="Enter prescription image " />
+    <Form.Control onChange={(e)=>handlechange(e)}  name="image" type="file" placeholder="Enter prescription image " />
+     <p style={{padding:'0',color:'red',marginTop:'6px'}} >{Formerrors.image}</p>
 </Form.Group>}
      <Row>
      <Col>
      <Form.Group  className="mb-3" controlId="formGridaddress">
     <Form.Label>Address</Form.Label>
     <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.address} name="address" type="text" placeholder="Enter your address " />
+     <p style={{padding:'0',color:'red',marginTop:'6px'}} >{Formerrors.address}</p>
   </Form.Group>
      </Col>
       <Col>
   <Form.Group  className="mb-3" controlId="formGridnumber">
     <Form.Label>Phone number</Form.Label>
     <Form.Control onChange={(e)=>handlechange(e)} value={FormValues.number} name="number" type="text" placeholder="Enter your phone number " />
+     <p style={{padding:'0',color:'red',marginTop:'6px'}} >{Formerrors.number}</p>
   </Form.Group>
      </Col>
    </Row>
