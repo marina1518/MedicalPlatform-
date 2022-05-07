@@ -3,7 +3,18 @@ import SideBarUI from "../../components/SideBarUI/SideBarUI";
 import "./profileui.css";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import {  Button, ButtonGroup, Form, Table,Card, Accordion,  useAccordionButton, Row, Col,Alert } from "react-bootstrap";
+import {
+  Button,
+  ButtonGroup,
+  Form,
+  Table,
+  Card,
+  Accordion,
+  useAccordionButton,
+  Row,
+  Col,
+  Alert,
+} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EditIcon from "@material-ui/icons/Edit";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -17,18 +28,25 @@ import {MdOutlineDone,MdCancel} from 'react-icons/md';
 import { signin } from "../../actions";
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from '../../firebase';
-import { info, history , appointments ,myorders , prescription} from "../../actions";
+import { info, history , appointments ,myorders , prescription, order_status} from "../../actions";
+import History from "../../components/User_History/History";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 //import VideoChat from '../../components/Meeting_room/Video_chat/VideoChat'
 
 const ProfileUI = () => {
+  let navigate = useNavigate();
+  const navigation =(docid)=>{
+    navigate('/clinicdoctor', { state: { Doctor_id: docid}}) }
+ 
   const dispatch = useDispatch();  
   const sidebar_profile = (useSelector((state) => state.profile_reducer)); //state of token
-  
+  const get_orders_store = JSON.parse((useSelector((state) => state.order_reducer)));
+  console.log(get_orders_store);
   const token = JSON.parse(useSelector((state) => state.auth));
-  console.log(token.token);
+  console.log(token);
   var token_copy = token;
   const [orders,setorders] = useState([]);
-
+  
   const config = {headers: {
     'Authorization': `Bearer ${token.token}`}};
    
@@ -41,7 +59,7 @@ const ProfileUI = () => {
            console.log(res.data);
            if (res.data==="you have no orders yet") return
            setorders(res.data);
-         
+           dispatch(order_status(res.data));
        } 
        catch (err) {
            console.error(err);
@@ -54,14 +72,19 @@ const ProfileUI = () => {
            {id:id }, config
            )
            console.log(res.data);
-           alert('Order cancelled successfully')
-           get_ph_order();
-           //setorders(res.data);
+           alert('Order cancelled successfully');
+           var o=[];
+           for(var i=0; i<get_orders_store.length;i++)
+           {
+             if(get_orders_store[i]._id !== id) o.push(get_orders_store[i]);
+           }
+           dispatch(order_status(o));
        } 
        catch (err) {
            console.error(err);
        }
    }
+   
 
    const approve_order = async (id)=>{
     try {
@@ -70,13 +93,20 @@ const ProfileUI = () => {
            )
            console.log(res.data);
            alert('Order approved')
-           get_ph_order();
-           //setorders(res.data);
+           var o=[];
+           for(var i=0; i<get_orders_store.length;i++)
+           {
+             if(get_orders_store[i]._id === id) {o.push(get_orders_store[i]); o[i]["status"]="preparing";}
+             else o.push(get_orders_store[i]);
+           }
+           console.log(o)
+           dispatch(order_status(o));
        } 
        catch (err) {
            console.error(err);
        }
    }
+
 
    const[pres, setpres]=useState([]);
 
@@ -190,31 +220,27 @@ const ProfileUI = () => {
 
     if (editted.address !== null) 
     {
-      Edit_data.address=editted.address; //user_data.address = editted.address;
-      //token
+      Edit_data.address=editted.address; 
+      token_copy.address = editted.address;
     }
     if (editted.user_name !== null) {
-      Edit_data.username=editted.user_name; //user_data.blood = editted.blood;
+      Edit_data.username=editted.user_name; 
       token_copy.username = editted.user_name;
-      //dispatch(signin(token_copy));
     }
     if (editted.email !== null) {
-      Edit_data.email=editted.email; //user_data.blood = editted.blood;
+      Edit_data.email=editted.email; 
       token_copy.email = editted.email;
-      //dispatch(signin(token_copy));
     }
     if (editted.blood !== null) {
-      Edit_data.blood=editted.blood; //user_data.blood = editted.blood;
+      Edit_data.blood=editted.blood;
       token_copy.blood = editted.blood;
-      //dispatch(signin(token_copy));
     }
     if (editted.date !== null)  
-    {Edit_data.dateOfBirth=editted.date; //user_data.date = editted.date;
+    {Edit_data.dateOfBirth=editted.date; 
     token_copy.dateOfBirth=editted.date;
-    //dispatch(signin(token_copy));
   }
     if (editted.gender !== null)
-    { Edit_data.gender=editted.gender; //user_data.gender = editted.gender;
+    { Edit_data.gender=editted.gender; 
     token_copy.gender=editted.gender;
     
     }
@@ -234,7 +260,7 @@ const ProfileUI = () => {
              )
   
              console.log(res.data);
-             //if (res.data==="you have no orders yet") return
+             if (res.data==="you have no meetings yet") return
              setmeetings(res.data);
            
          } 
@@ -246,6 +272,7 @@ const ProfileUI = () => {
   var meetings=[];
   const current = new Date();
   let state;
+  
   for(var i=0;i<meetings_api.length;i++)
   {
     const day = (meetings_api[i].Date).split('-');
@@ -256,13 +283,18 @@ const ProfileUI = () => {
     else if ((parseInt(day[1])===current.getMonth()+1) && (parseInt(day[0])<current.getDate()) ) state = 'Done'; //month check
     else state = 'Pending';
     meetings.push({id:i, dr_name:meetings_api[i].doctor.username, slot:meetings_api[i].slot, date:meetings_api[i].Date, state:state, email:meetings_api[i].doctor.email})
- 
+  
   }
-  meetings.sort((a,b) =>
+  
+  
+  //sorting 
+  if (meetings.length !== 0)
+  {meetings.sort((a,b) =>
   {const c=new Date(a.date.split('-').reverse().join('-'));
   const d=new Date(b.date.split('-').reverse().join('-'));
    return c-d;}
-  );
+  );}
+
  
 
   function CustomToggle({ children, eventKey }) {
@@ -407,7 +439,7 @@ const [open, setOpen]=useState(false);
                 }
                   </div>
                 </div>
-                {/* <hr id="profile-hr" />
+                <hr id="profile-hr" />
                 <div class="row mt-3">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Address</h6>
@@ -422,25 +454,25 @@ const [open, setOpen]=useState(false);
                       token.address
                     )}
                   </div>
-                </div> */}
-                {/* <hr id="profile-hr" />
+                </div>
+                <hr id="profile-hr" />
                 <div class="row mt-3">
                   <div class="col-sm-3">
-                    <h6 class="mb-0">Data of Birth</h6>
+                    <h6 class="mb-0">Date of Birth</h6>
                   </div>
                   <div class="col-sm-9 text-secondary">
                     {edit ? (
                       <input
                         style={{ cursor: "pointer" }}
-                        placeholder={token.date}
+                        placeholder={token.dateOfBirth}
                         type="date"
                         onChange={(e) => setDob(e.target.value)}
                       ></input>
                     ) : (
-                      edit_data.date
+                      token.dateOfBirth
                     )}
                   </div>
-                </div> */}
+                </div>
                 <hr id="profile-hr" />
                 <div class="row mt-3">
                   <div class="col-sm-3">
@@ -528,61 +560,9 @@ const [open, setOpen]=useState(false);
           ) : (
             ""
           )}
-          {(sidebar_profile === "history")  ? (
-            <div className="card">
-              <div className="card-header bg-transparent border-0">
-                <h3 className="mb-0">
-                  <BiMessageDetail /> History
-                  {  
-                    <EditIcon
-                      style={{ cursor: "pointer" }}
-                      onClick={(e) => setEdit_h(true)}
-                    />
-                   }
-                </h3>
-              </div>
-              <div className="card-body pt-0">
-                <p>
-                  {edit_h ? (
-                    <Form.Control
-                      as="textarea"
-                      placeholder="Update History"
-                      value={newh}
-                      onChange={(e) => setnewh(e.target.value)}
-                      style={{ height: "100px" }}
-                    />
-                  ) : (
-                    //   <input onChange={(e)=>setnewh(e.target.value)}></input>
-                    token.history
-                  )}
-                </p>
 
-                {edit_h ? (
-                  //   <Button variant="outline-success" className="col-md-12 text-right" onClick={setedit_history}>Submit</Button>
-                  <ButtonGroup>
-                    <Button
-                      variant="outline-success"
-                      className="col-md-12 text-right"
-                      onClick={setedit_history}
-                    >
-                      Submit
-                    </Button>
-                    <Button
-                      variant="outline-danger"
-                      className="col-md-12 text-right"
-                      onClick={(e) => setEdit_h(false)}
-                    >
-                      Cancel
-                    </Button>
-                  </ButtonGroup>
-                ) : (
-                  ""
-                )}
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
+          {(sidebar_profile === "history")  ? (
+            <History/>) : ("")}
         </div>
         {(sidebar_profile === "appointments") ? (
           <div className="card">
@@ -613,7 +593,7 @@ const [open, setOpen]=useState(false);
                           <td width="20%">{item.date}</td>
                           <td width="20%">{item.slot}</td>
                           
-                          <td style={{cursor:"pointer"}} width="20%">{item.dr_name}</td>
+                          <td style={{cursor:"pointer"}} width="20%" onClick={()=>{navigation(item.email)}}><Link to={`/clinicdoctor/`}>{item.dr_name}</Link></td>
                           {/* <td width="20%">{item.state ==="Today" ? <VideoChat dr_email={item.email}/>:""}</td> */}
                           <td width="20%">{item.state}</td>
                           </tr>
@@ -655,9 +635,9 @@ const [open, setOpen]=useState(false);
                   </thead>
                   <tbody>
                     {
-                      orders.length ===0 ? "": 
+                      get_orders_store.length ===0 ? "": 
                       <>
-                       {orders.map((item) => (
+                       {get_orders_store.map((item) => (
                       <tr key={item._id}>
                         <td >{item.pharmacy.name}</td>
                         <td >{item.order_data.Date.split('T')[0]}</td>
