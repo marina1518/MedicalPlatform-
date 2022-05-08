@@ -1,13 +1,11 @@
 import React from "react";
 import "./departments.css";
 import { Specialization } from "../../data";
-import { Link , useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Departmets = (props) => {
-  
- 
   //props.clicked_department
-  return (    
+  return (
     <div>
       <section className="section-container">
         <div className="spec-title-info">
@@ -17,13 +15,16 @@ const Departmets = (props) => {
           {Specialization.map((item) => (
             <div className="specs-item" key={item.id}>
               <div className="specs-image-container">
-                <Link to={`/Doctors/${item.name}`}> {/*Go to doctors page for this department//*/}
+                <Link to={`/Doctors/${item.name}`}>
+                  {" "}
+                  {/*Go to doctors page for this department//*/}
                   <img src={item.image} alt={item.name} />
                 </Link>
               </div>
               <div className="specs-data">
-                 <Link to={`/Doctors/${item.name}`}>
+                <Link to={`/Doctors/${item.name}`}>
                   <p className="specs-name">{item.name}</p>
+                  <p className="specs-name">{item.Arabic_name}</p>
                 </Link>
               </div>
             </div>
