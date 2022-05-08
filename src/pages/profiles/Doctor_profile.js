@@ -171,7 +171,7 @@ const write_review = async (r)=>{
                 <div className="row personnal-image">
                   <Avatar
                     className="profile_img"
-                    src={token.profilePic}
+                    src={doctor_data.profilePic}
                     sx={{ width: 56, height: 56, bgcolor: blueGrey[400] }}
                   />
                  
