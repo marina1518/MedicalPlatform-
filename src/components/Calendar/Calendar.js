@@ -14,10 +14,10 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Reserve_Date from "./Reserve_Date";
 
 const Calendar = (props) => {
-  const dispatch = useDispatch();
+  
   console.log(props.data.id);
-  const token = JSON.parse(useSelector((state) => state.auth));
-  var token_copy = token;
+  
+ 
   const config = { headers: { Authorization: `Bearer ${props.data.token}` } };
   var reserved_slots = [];
   const Get_timetable = async (date) => {
@@ -56,11 +56,7 @@ const Calendar = (props) => {
     }
   };
 
-  const ref = useRef(null);
-  //   const scroll = (scrollOffset) => {
-  //     ref.current.scrollLeft += scrollOffset;
-  //   };
-
+ 
   let momentObject = moment();
   mom.tz.setDefault("Egypt/Cairo");
 
@@ -197,13 +193,13 @@ const Calendar = (props) => {
     r.day = y;
     r.slot = slot;
     //Api
-    token_copy.meetings.push({
-      Date: r.date,
-      day: r.day,
-      slot: r.slot,
-      doctor: { username: props.data.username },
-    });
-    dispatch(signin(token_copy)); //update the state
+    // token_copy.meetings.push({
+    //   Date: r.date,
+    //   day: r.day,
+    //   slot: r.slot,
+    //   doctor: { username: props.data.username },
+    // });
+    //dispatch(signin(token_copy)); //update the state
     console.log(r);
     Get_Reserve(r);
     setdone_reserve(true);
@@ -267,8 +263,9 @@ const Calendar = (props) => {
                       >
                         <Reserve_Date
                           day={item.format("DD")}
-                          month={momentObject.format("MMM")}
-                          year={momentObject.format("YYYY")}
+                          month={item.format("MMM")}
+                          date={item.format("dddd")}
+                          year={item.format("YYYY")}
                         />
                         {/* {item.format("dddd")} <br /> {item.format("DD")} */}
                       </button>
