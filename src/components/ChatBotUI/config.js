@@ -2,24 +2,55 @@ import { createChatBotMessage } from "react-chatbot-kit";
 import Options from "./Options/Options";
 import FMBotAvatar from "./FMBotAvatar";
 
+const botName = "Future Medical Bot";
+
 const config = {
+  botName: botName,
   initialMessages: [
-    createChatBotMessage(`Hello, what you want to do ?`, {
-      widget: "options",
-    }),
+    createChatBotMessage(
+      `Hi I'm ${botName}, How can i help you?  اقدر اسعادك ازاى`,
+      {
+        widget: "options",
+      }
+    ),
   ],
-  botName: "Future Medical Bot",
   customComponents: { botAvatar: (props) => <FMBotAvatar {...props} /> },
   widgets: [
     {
       widgetName: "options",
       widgetFunc: (props) => <Options {...props} />,
-      // mapStateToProps: ["gist"],
+      props: {
+        id: 0,
+      },
     },
-    // {
-    //   widgetName: "options",
-    //   widgetFunc: (props) => <Options {...props} />,
-    // },
+    {
+      widgetName: "hospital_option",
+      widgetFunc: (props) => <Options {...props} />,
+      props: {
+        id: 1,
+      },
+    },
+    {
+      widgetName: "specialization_option",
+      widgetFunc: (props) => <Options {...props} />,
+      props: {
+        id: 2,
+      },
+    },
+    {
+      widgetName: "clinics_option",
+      widgetFunc: (props) => <Options {...props} />,
+      props: {
+        id: 3,
+      },
+    },
+    {
+      widgetName: "pharmacy_option",
+      widgetFunc: (props) => <Options {...props} />,
+      props: {
+        id: 4,
+      },
+    },
   ],
 };
 

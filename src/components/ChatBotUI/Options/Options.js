@@ -5,22 +5,30 @@ import { Link } from "react-router-dom";
 const Options = (props) => {
   const options = [
     {
-      text: "hospitals",
-      handler: props.actionProvider.handlehospitaloption,
+      text: "Hospitals",
+      handler: () => {},
       id: 1,
       link: "/Entities/hospitals",
     },
     {
-      text: "specializations",
-      handler: () => {},
+      text: "Specializations",
+      handler: () => {
+        window.scrollTo(0, 1100);
+      },
       id: 2,
       link: "/",
     },
     {
-      text: "home",
+      text: "Clinics",
       handler: () => {},
-      id: 1,
-      link: "/",
+      id: 3,
+      link: "/Entities/clinics",
+    },
+    {
+      text: "Pharmacies",
+      handler: () => {},
+      id: 4,
+      link: "/Entities/pharmacies",
     },
   ];
 
@@ -31,21 +39,50 @@ const Options = (props) => {
       </button>
     </Link>
   ));
+
+  let right = {};
+
+  const oneoption = () => {
+    // options.map((option) => {
+    for (let option of options) {
+      // console.log("true", option);
+      if (props.id === option.id) {
+        right = {
+          text: option.text,
+          handler: option.handler,
+          id: option.id,
+          link: option.link,
+        };
+        break;
+      }
+    }
+  };
+
+  const rendercondition = () => {
+    if (props.id === 0) {
+      return true;
+    } else {
+      oneoption();
+      return false;
+    }
+  };
+
   return (
     <div className="options">
       <div className="options-container">
-        {/* {options.map((option) => {
-          return (
-            <div
+        {rendercondition() ? (
+          ButtonMarkUp
+        ) : (
+          <Link to={right.link}>
+            <button
               className="option-item"
-              onClick={option.handler}
-              key={option.id}
+              onClick={right.handler}
+              key={right.id}
             >
-              {option.name}
-            </div>
-          );
-        })} */}
-        {ButtonMarkUp}
+              {right.text}
+            </button>
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -40,6 +40,7 @@
 
 .showchatbot-container {
   /* border: 2px groove; */
+  z-index: 99;
   border-radius: 12px;
   height: 32rem;
   overflow: hidden;
