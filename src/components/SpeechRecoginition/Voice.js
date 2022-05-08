@@ -11,7 +11,7 @@ const Voice = () => {
   });
   const [value, setValue] = useState('');
 
-  const voice = voices[7] || null; //voices [7] arabic eg 1/6/7
+  const voice = voices[1] || null; //voices [7] arabic eg 1/6/7
 
   const styleFlexRow = { display: 'flex', flexDirection: 'row' };
   const styleContainerRatePitch = {
