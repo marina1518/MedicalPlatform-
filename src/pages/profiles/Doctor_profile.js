@@ -265,9 +265,12 @@ const write_review = async (r)=>{
                 <Col>
                 <p className="mb-0"><strong className="pr-1"> <AiOutlineComment /> Reviews: </strong> </p> 
                   </Col>
+                  {
+                    token.token &&
+                  
                   <Col>
                   <button style={{cursor:"pointer", borderRadius:"50%", background:"white", border:"None"}} onClick={()=>sets(true)}><AddCircleIcon/></button>
-                  </Col>
+                  </Col>}
                 </Row>
              
               <br/>

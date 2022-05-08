@@ -14,10 +14,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Reserve_Date from "./Reserve_Date";
 
 const Calendar = (props) => {
-  
+
   console.log(props.data.id);
-  
- 
   const config = { headers: { Authorization: `Bearer ${props.data.token}` } };
   var reserved_slots = [];
   const Get_timetable = async (date) => {
@@ -81,7 +79,6 @@ const Calendar = (props) => {
   const [mor, setmor] = useState([]);
   const [eve, seteve] = useState([]);
   const [data, setdata] = useState("");
-  const [date2, setdate] = useState("");
 
   const get_slots = (e, item) => {
     setdone_reserve(false);
@@ -192,14 +189,6 @@ const Calendar = (props) => {
     y = `${data.format("dddd")}`;
     r.day = y;
     r.slot = slot;
-    //Api
-    // token_copy.meetings.push({
-    //   Date: r.date,
-    //   day: r.day,
-    //   slot: r.slot,
-    //   doctor: { username: props.data.username },
-    // });
-    //dispatch(signin(token_copy)); //update the state
     console.log(r);
     Get_Reserve(r);
     setdone_reserve(true);
@@ -214,23 +203,8 @@ const Calendar = (props) => {
       <div>
         <ListGroup.Item>
           <Row>
-            {/* <h6>{momentObject.format("MMM YYYY")}</h6> */}
             <Col>
-              {/* <button
-                type="button"
-                style={{ color: "black" }}
-                class="btn btn-outline-light"
-                className="scrolling"
-                onClick={() => scroll(-20)}
-              >
-                <AiOutlineLeft />
-              </button> */}
-              {/* <Col>
-                <button onClick={() => scroll(-20)}>LEFT</button>
-                <button onClick={() => scroll(20)}>RIGHT</button>
-              </Col> */}
               <div className="Calender_buttons">
-                {/* <Slider {...settings} className="slider_container_UI"> */}
                 <Carousel
                   cols={7}
                   rows={1}
@@ -267,23 +241,11 @@ const Calendar = (props) => {
                           date={item.format("dddd")}
                           year={item.format("YYYY")}
                         />
-                        {/* {item.format("dddd")} <br /> {item.format("DD")} */}
                       </button>
                     </Carousel.Item>
                   ))}
                 </Carousel>
-                {/* </Slider> */}
               </div>
-
-              {/* <button
-                type="button"
-                class="btn btn-outline-light"
-                className="scrolling"
-                style={{ color: "black" }}
-                // onClick={() => scroll(20)}
-              >
-                <AiOutlineRight />
-              </button> */}
             </Col>
           </Row>
           <br />
@@ -347,7 +309,7 @@ const Calendar = (props) => {
             </Col>
           </Row>
           <br />
-          {can && !done_reserve ? (
+          {can && !done_reserve && props.data.token ? (
             <>
               <Row>
                 <Col>
