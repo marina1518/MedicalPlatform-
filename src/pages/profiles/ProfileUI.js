@@ -71,7 +71,7 @@ const ProfileUI = () => {
       );
 
       console.log(res.data);
-      if (res.data === "you have no orders yet") return;
+      if (res.data === "you have no orders yet") {dispatch(order_status([])); return;}
       setorders(res.data);
       dispatch(order_status(res.data));
     } catch (err) {
