@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import Doctor from "./pages/profiles/Doctor_profile";
 import Login from "./pages/Login & Sign Up/login_f";
 import Signup from "./pages/Login & Sign Up/signup";
+import { useLocation } from "react-router-dom";
 import Privateroute from "./components/PrivateRoutes/Privateroute";
 import Privateuser from "./components/PrivateRoutes/Privateuser";
 import Privateclinicadmin from "./components/PrivateRoutes/Privateclinicadmin";
@@ -25,9 +26,12 @@ import Chatbotui from "./components/ChatBotUI/Chatbotui";
 import Speech from "./components/SpeechRecoginition/Speech";
 import Voice from "./components/SpeechRecoginition/Voice";
 import ProfileUI from "./pages/profiles/ProfileUI";
-import Keyboard from "./components/KeboardMego/Keyboard";
+import VideoCall from "./components/Meeting_room/Video_chat/VideoCall";
+// import Keyboard from "./components/KeboardMego/Keyboard";
 function App() {
   let navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
   const [clicked_department, setclicked_department] = useState("");
   const alan_key =
     "b94fcad9e16e84e2cfb67521c2729b4b2e956eca572e1d8b807a3e2338fdd0dc/stage";
@@ -63,11 +67,16 @@ function App() {
   console.log(chosencomp);
   return (
     <>
-      <Header />
+      {location.pathname !== "/user/meetingroom" && <Header />}
       <ScrollToTop>
-        <div className="body">
+        <div
+          className={
+            location.pathname === "/user/meetingroom"
+              ? "body-without-top"
+              : "body"
+          }
+        >
           <Routes>
-            
             {<Route path="/" element={<Home />}></Route>}
             {/*<Route path="/" element={<Voice/>}></Route>*/}
             {/*<Route path="/" element={<Keyboard />}></Route>*/}
@@ -87,7 +96,7 @@ function App() {
             >
               {" "}
             </Route>
-           <Route path="/clinicdoctor" element={<Doctor />}>
+            <Route path="/clinicdoctor" element={<Doctor />}>
               {" "}
             </Route>
             {/*<Route
@@ -100,7 +109,6 @@ function App() {
               }
             />*/}
 
-
             {/*<Route
               path="/user"
               element={
@@ -111,10 +119,15 @@ function App() {
               }
             />*/}
             <Route path="/user" element={<ProfileUI />} />
+            <Route path="/user/meetingroom" element={<VideoCall />}></Route>
           </Routes>
-          <Chatbotui />
-          <Speech/>
-          <Footer />
+          {location.pathname !== "/user/meetingroom" && (
+            <>
+              <Chatbotui />
+              <Speech />
+              <Footer />
+            </>
+          )}
         </div>
       </ScrollToTop>
     </>
