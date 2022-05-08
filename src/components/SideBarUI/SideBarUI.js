@@ -43,7 +43,7 @@ const SideBarUI = (props) => {
         onClick={() => props.oncompact()}
         ref={arrowRef}
       >
-        <i ref={arrowiconRef} ></i>
+        <i ref={arrowiconRef} className="fas fa-chevron-left"></i>
       </button>
     </div>
   );
