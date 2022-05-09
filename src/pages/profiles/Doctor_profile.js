@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Avatar from "@material-ui/core/Avatar";
 import { BsInfoCircleFill } from "react-icons/bs";
 import { AiOutlineComment } from "react-icons/ai";
+import {MdOutlineStarRate} from 'react-icons/md';
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { GiNotebook } from "react-icons/gi";
@@ -16,12 +17,14 @@ import Calender from "./../../components/Calendar/Calendar";
 import { info, reservations, reviews } from "../../actions";
 import { blueGrey } from "@material-ui/core/colors";
 import Tooltip from "@mui/material/Tooltip";
+import Star from './../../components/rating_stars/stars';
 
 const Doctor = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const sidebar_profile = useSelector((state) => state.profile_reducer);
   const [Docid, setdoctorid] = useState(location.state ? location.state : "");
+  const[rating,setrating]=useState(0);
   console.log(Docid);
 
   //const token = useSelector(state => state.auth);
@@ -32,6 +35,7 @@ const Doctor = () => {
   let rr = [];
   let [show_rev, setshoe_rev] = useState([]);
   let [dr_timetable, setdr_timetable] = useState([]);
+  const[rate,setrate]=useState(0);
   console.log(doctor_data);
   const Get_info_api = async () => {
     try {
@@ -47,7 +51,7 @@ const Doctor = () => {
       Doctor_Api.telephone = data.telephone[0];
       Doctor_Api.entityflag = data.entity_id.flag;
       Doctor_Api.entityname = data.entity_id.name;
-      Doctor_Api.rate = data.rate;
+      Doctor_Api.rate_count = data.rate_count;
 
       // Doctor_Api.reviews = data.reviews;
 
@@ -61,6 +65,7 @@ const Doctor = () => {
       }
       setdr_timetable(rr);
       setdoctor_data(Doctor_Api);
+      setrate(data.rate);
       //setdoctor_data(data);
     } catch (err) {
       console.error(err);
@@ -152,20 +157,21 @@ const Doctor = () => {
                 compact ? "rate_star_container_compact" : "rate_star_container"
               }
             >
-              {[...Array(doctor_data.rate)].map((star) => {
+              {[...Array(rate)].map((star) => {
                 return (
                   <span className="rate-star">
                     <i class="bi bi-star-fill"></i>
                   </span>
                 );
               })}
-              {[...Array(5 - doctor_data.rate)].map((star) => {
+              {[...Array(5 - rate)].map((star) => {
                 return (
                   <span className="rate-star">
                     <i class="bi bi-star"></i>
                   </span>
                 );
               })}
+              {/* <small className="text-muted"> ({doctor_data.rate_count} verified ratings)</small> */}
             </div>
           </div>
         </div>
@@ -302,6 +308,15 @@ const Doctor = () => {
             ""
           )}
           {sidebar_profile === "reviews" ? (
+            <>
+            <div className="card shadow-sm">
+          <div className="card-header bg-transparent">
+          <p className="mb-0"><strong className="pr-1"> <MdOutlineStarRate /> Ratings: </strong>  <small className="text-muted"> ({doctor_data.rate_count} verified ratings)</small></p> 
+              <Star setrating={setrating} dr_id={Docid.Doctor_id}/>
+            </div>
+          </div>
+          <br/>
+            
             <div className="card shadow-sm">
               <div className="card-header bg-transparent">
                 <Row>
@@ -360,6 +375,7 @@ const Doctor = () => {
                     </Row>
                     <br />
                   </div>
+                 
                 ) : (
                   ""
                 )}
@@ -374,6 +390,7 @@ const Doctor = () => {
                 ))}
               </div>
             </div>
+            </>
           ) : (
             ""
           )}
