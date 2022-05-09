@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { HighlyRatedDr } from "../../data";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import Carousel from "react-bootstrap/Carousel";
@@ -6,17 +6,13 @@ import "./custom.css";
 import axios from "axios";
 import Onedoctor from "./Onedoctor";
 
-const HighlyRated = ({Doctors}) => {
-  
-console.log(Doctors)
-//const [doctors,setdoctors] =useState( Doctors );  
-//console.log(doctors)
-/*useEffect(()=>{
+const HighlyRated = ({ Doctors }) => {
+  console.log(Doctors);
+  //const [doctors,setdoctors] =useState( Doctors );
+  //console.log(doctors)
+  /*useEffect(()=>{
 Get_Doctors_Entity();
 },[])*/
-
-
-
 
   return (
     <div>
@@ -25,9 +21,13 @@ Get_Doctors_Entity();
           <h1 className="title-h1">Top Rated Doctors</h1>
         </div>
         <div className="doctors-container">
-          {(Doctors.length !==0 )&& Doctors.map((doctor) => (
-            <Onedoctor doctor={doctor} key={doctor.id}/>
-          ))}
+          {Doctors.length !== 0 &&
+            Doctors.map(
+              (doctor) =>
+                doctor.rate >= 3 && (
+                  <Onedoctor doctor={doctor} key={doctor.id} />
+                )
+            )}
         </div>
       </section>
     </div>

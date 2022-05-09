@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./departments.css";
 import { Specialization } from "../../data";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Departmets = (props) => {
   //props.clicked_department
   return (
-    <div>
+    <div ref={props.refProp}>
       <section className="section-container">
         <div className="spec-title-info">
           <h1 className="spec-title">Specializations</h1>

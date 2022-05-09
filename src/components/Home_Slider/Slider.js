@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./slider.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Carousel from "react-bootstrap/Carousel";
 import { Link } from "react-router-dom";
 
-const Slider = () => {
+const Slider = (props) => {
+  const executeScroll = () => props.refProp.current.scrollIntoView();
+
   return (
     <Carousel>
       <Carousel.Item className="edit-item">
@@ -22,9 +24,11 @@ const Slider = () => {
             <br />
             you can meet Doctors and Healthcare Professionals in real time video
           </p>
-          <Link to="/">
-            <button className="slide1-btn">Make an appointment</button>
-          </Link>
+          {/* <Link to="/"> */}
+          <button className="slide1-btn" onClick={executeScroll}>
+            Make an appointment
+          </button>
+          {/* </Link> */}
         </div>
         <img
           className="d-block w-100"
@@ -48,7 +52,7 @@ const Slider = () => {
             <br />
             you don't need to go to pharmacy to buy medicine
           </p>
-          <Link to="/">
+          <Link to="/Entities/pharmacies">
             <button className="slide1-btn">Make an order</button>
           </Link>
         </div>

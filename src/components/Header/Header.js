@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signin, logout } from "../../actions";
 import { chart } from "../../actions";
+import Tooltip from "@mui/material/Tooltip";
 // import { Button, Badge } from "react-bootstrap";
 
 const Header = () => {
@@ -63,7 +64,6 @@ const Header = () => {
       <div className="nav-center">
         <div className="nav-header">
           <Link to="/" className="link-custom">
-
             <div className="logo-left">
               <img
                 className="logo-image"
@@ -85,12 +85,12 @@ const Header = () => {
             <Link to="/Entities/pharmacies" className="link-custom">
               <li>Pharmacies</li>
             </Link>
-          <Link to="/Entities/hospitals" className="link-custom">
-             <li>Hospitals</li>            
-          </Link>         
-          <Link to="/Entities/clinics" className="link-custom">
-            <li>Clinics</li>
-          </Link>
+            <Link to="/Entities/hospitals" className="link-custom">
+              <li>Hospitals</li>
+            </Link>
+            <Link to="/Entities/clinics" className="link-custom">
+              <li>Clinics</li>
+            </Link>
           </ul>
         </div>
         {!token.token ? (
@@ -108,13 +108,16 @@ const Header = () => {
               <li
                 className="profile-icon"
                 onClick={() => {
-                 navigate("/user")
+                  navigate("/user");
                 }}
               >
                 <div className="icon-circle">
-                  <Badge color="primary" badgeContent={2} showZero>
+                  {/* <Badge color="primary" badgeContent={2} showZero> */}
+                  <Tooltip title="Profile" placement="bottom">
                     <AccountCircleIcon />
-                  </Badge>
+                  </Tooltip>
+
+                  {/* </Badge> */}
                 </div>
               </li>
               {/* </ul> */}

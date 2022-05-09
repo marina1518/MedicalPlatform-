@@ -157,6 +157,7 @@ a {
 .doctor-spec {
   text-transform: uppercase;
   color: #828282;
+  margin-bottom: 0;
 }
 .rate-star {
   padding-left: 0.1rem;
