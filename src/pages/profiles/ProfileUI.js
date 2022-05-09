@@ -39,6 +39,7 @@ import {
 import History from "../../components/User_History/History";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import VideoChat from "../../components/Meeting_room/Video_chat/VideoChat";
+import Tooltip from "@mui/material/Tooltip";
 
 const ProfileUI = () => {
   let navigate = useNavigate();
@@ -71,7 +72,10 @@ const ProfileUI = () => {
       );
 
       console.log(res.data);
-      if (res.data === "you have no orders yet") {dispatch(order_status([])); return;}
+      if (res.data === "you have no orders yet") {
+        dispatch(order_status([]));
+        return;
+      }
       setorders(res.data);
       dispatch(order_status(res.data));
     } catch (err) {
@@ -334,6 +338,22 @@ const ProfileUI = () => {
     };
   }, []);
 
+  // Code of CompactName
+  let compactName = "";
+  const CompactNameHandler = () => {
+    const spaceCondition = token.username.includes(" ");
+    if (!spaceCondition) {
+      compactName = token.username[0].toUpperCase();
+    } else {
+      const spaceIndex = token.username.indexOf(" ");
+      console.log(spaceIndex);
+      compactName = (
+        token.username[0] + token.username[spaceIndex + 1]
+      ).toUpperCase();
+    }
+    return <h3>{compactName}</h3>;
+  };
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -346,32 +366,71 @@ const ProfileUI = () => {
               src={token.profilePic}
               sx={{ width: 50, height: 50, bgcolor: blueGrey[400] }}
             />
-
-            <h3>{token.username}</h3>
+            {compact ? CompactNameHandler() : <h3>{token.username}</h3>}
           </div>
         </div>
         <div className="sidebar-links">
           {/* <ul className="sidebar-links"> */}
-          <li onClick={() => dispatch(info())}>
-            <i class="bi bi-info-circle-fill"></i>
-            {compact ? "" : <span> Personnal Info</span>}
-          </li>
-          <li onClick={() => dispatch(history())}>
-            <i class="bi bi-chat-left-text-fill"></i>
-            {compact ? "" : <span> History</span>}
-          </li>
-          <li onClick={() => dispatch(appointments())}>
-            <i class="bi bi-clock-fill"></i>
-            {compact ? "" : <span> Appointments</span>}
-          </li>
-          <li onClick={() => dispatch(myorders())}>
-            <i class="bi bi-bandaid-fill"></i>
-            {compact ? "" : <span> Orders</span>}
-          </li>
-          <li onClick={() => dispatch(prescription())}>
-            <i class="bi bi-file-medical-fill"></i>
-            {compact ? "" : <span> Prescriptions</span>}
-          </li>
+          {compact ? (
+            <Tooltip title="Personnal Info" placement="right">
+              <li onClick={() => dispatch(info())}>
+                <i class="bi bi-info-circle-fill"></i>
+              </li>
+            </Tooltip>
+          ) : (
+            <li onClick={() => dispatch(info())}>
+              <i class="bi bi-info-circle-fill"></i>
+              <span> Personnal Info</span>
+            </li>
+          )}
+          {compact ? (
+            <Tooltip title="History" placement="right">
+              <li onClick={() => dispatch(history())}>
+                <i class="bi bi-chat-left-text-fill"></i>
+              </li>
+            </Tooltip>
+          ) : (
+            <li onClick={() => dispatch(history())}>
+              <i class="bi bi-chat-left-text-fill"></i>
+              <span> History</span>
+            </li>
+          )}
+          {compact ? (
+            <Tooltip title="Appointments" placement="right">
+              <li onClick={() => dispatch(appointments())}>
+                <i class="bi bi-clock-fill"></i>
+              </li>
+            </Tooltip>
+          ) : (
+            <li onClick={() => dispatch(appointments())}>
+              <i class="bi bi-clock-fill"></i>
+              <span> Appointments</span>
+            </li>
+          )}
+          {compact ? (
+            <Tooltip title="Orders" placement="right">
+              <li onClick={() => dispatch(myorders())}>
+                <i class="bi bi-bandaid-fill"></i>
+              </li>
+            </Tooltip>
+          ) : (
+            <li onClick={() => dispatch(myorders())}>
+              <i class="bi bi-bandaid-fill"></i>
+              <span> Orders</span>
+            </li>
+          )}
+          {compact ? (
+            <Tooltip title="Prescriptions" placement="right">
+              <li onClick={() => dispatch(prescription())}>
+                <i class="bi bi-file-medical-fill"></i>
+              </li>
+            </Tooltip>
+          ) : (
+            <li onClick={() => dispatch(prescription())}>
+              <i class="bi bi-file-medical-fill"></i>
+              <span> Prescriptions</span>
+            </li>
+          )}
         </div>
       </SideBarUI>
       <main>
@@ -437,7 +496,14 @@ const ProfileUI = () => {
                       onChange={(e) => setuser_name(e.target.value)}
                     ></input>
                   ) : (
-                    <h3 style={{ textAlign: "center" }}>{token.username}</h3>
+                    <h3
+                      style={{
+                        textAlign: "center",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {token.username}
+                    </h3>
                   )}
                 </div>
                 <div class="row mt-3">

@@ -39,13 +39,9 @@ function Onedoctor(props) {
             Dr. {doctor.username}{" "}
           </p>
 
-          <p className="doctor-spec">
-            {doctor.specialization}/{doctor.arabic_specialization}
-          </p>
+          <p className="doctor-spec">{doctor.arabic_specialization}</p>
           {/* <span className="rate-star"> */}
-          <p className="doctor-spec">
-            {doctor.entity_id.name}/{doctor.entity_id.arabic_name}
-          </p>
+          <p className="doctor-spec">{doctor.entity_id.arabic_name}</p>
           {[...Array(doctor.rate)].map((star) => {
             return (
               <span className="rate-star">
