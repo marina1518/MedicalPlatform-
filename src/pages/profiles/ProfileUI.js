@@ -559,7 +559,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                         onChange={(e) => setDob(e.target.value)}
                       ></input>
                     ) : (
-                      token.dateOfBirth
+                      token.dateOfBirth.split('T')[0].split('-').reverse().join('-')
                     )}
                   </div>
                 </div>
