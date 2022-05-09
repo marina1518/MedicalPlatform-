@@ -854,9 +854,9 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
             </>
           ) : (
             // <CardGroup>
-            <Row xs={1} md={2} className="g-4">
-              <Col>
+            <Row xs={1} md={3} className="g-4">
                 {pres.map((p) => (
+                  <Col>
                   <Card>
                     <Card.Body>
                       <Card.Title>Prescriptions</Card.Title>
@@ -876,8 +876,8 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                       </Card.Text>
                     </Card.Body>
                   </Card>
+                  </Col>
                 ))}
-              </Col>
             </Row>
           )
         ) : (
