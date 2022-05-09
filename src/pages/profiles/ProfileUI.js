@@ -364,7 +364,8 @@ const ProfileUI = () => {
             <Avatar
               className="profile_img"
               src={token.profilePic}
-              sx={{ width: 50, height: 50, bgcolor: blueGrey[400] }}
+              style={{height:'70px',width:'70px'}}
+              sx={{  bgcolor: blueGrey[400] }}
             />
             {compact ? CompactNameHandler() : <h3>{token.username}</h3>}
           </div>
@@ -452,7 +453,8 @@ const ProfileUI = () => {
                     className="profile_img"
                     src={token.profilePic}
                     onClick={(e) => setEdit_photo(!edit_photo)}
-                    sx={{ width: 56, height: 56, bgcolor: blueGrey[400] }}
+                    style={{height:'150px',width:'150px'}}
+                    sx={{  bgcolor: blueGrey[400] }}
                   />
                   {edit_photo ? (
                     <>

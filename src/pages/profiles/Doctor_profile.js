@@ -149,7 +149,8 @@ const Doctor = () => {
             <Avatar
               className="profile_img"
               src={doctor_data.profilePic}
-              sx={{ width: 50, height: 50, bgcolor: blueGrey[400] }}
+              style={{height:'70px',width:'70px'}}
+              sx={{  bgcolor: blueGrey[400] }}
             />
             {compact ? CompactNameHandler() : <h3>{doctor_data.username}</h3>}
             <div
@@ -224,7 +225,8 @@ const Doctor = () => {
                   <Avatar
                     className="profile_img"
                     src={doctor_data.profilePic}
-                    sx={{ width: 56, height: 56, bgcolor: blueGrey[400] }}
+                    style={{height:'150px',width:'150px'}}
+                    sx={{ bgcolor: blueGrey[400] }}
                   />
 
                   <h3
