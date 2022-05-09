@@ -9,9 +9,12 @@ import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { channel_name } from "./../../../actions";
 
 const Controls = (props) => {
   let navigate = useNavigate();
+  const dispatch = useDispatch();
   const client = useClient();
   // const { tracks, setStart, setInCall } = props;
   const { tracks, setStart } = props;
@@ -38,7 +41,8 @@ const Controls = (props) => {
     tracks[0].close();
     tracks[1].close();
     setStart(false);
-    localStorage.removeItem("Dr_email");
+    //localStorage.removeItem("Dr_email");
+    dispatch(channelName(""));
     navigate("/user");
     // setInCall(false);
   };
