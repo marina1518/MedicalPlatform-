@@ -3,6 +3,7 @@ import "./navheader.css";
 // import "./header.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import Avatar from '@material-ui/core/Avatar';
 import Badge from "@mui/material/Badge";
 //import { Container, Navbar, Nav } from "react-bootstrap";
 import { useState, useRef, useEffect } from "react";
@@ -112,12 +113,10 @@ const Header = () => {
                 }}
               >
                 <div className="icon-circle">
-                  {/* <Badge color="primary" badgeContent={2} showZero> */}
-                  <Tooltip title="Profile" placement="bottom">
-                    <AccountCircleIcon />
-                  </Tooltip>
+                  { <Badge color="primary" badgeContent={2} > 
+                <Avatar  style={{height:'40px',width:'40px'}} src={token.profilePic}  />
 
-                  {/* </Badge> */}
+                  </Badge> }
                 </div>
               </li>
               {/* </ul> */}
