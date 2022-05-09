@@ -15,6 +15,7 @@ const ChatUI = () => {
   const [open, setopen] = useState(false);
   const [img, setimg] = useState("");
   const token = JSON.parse(useSelector((state) => state.auth));
+  const email = JSON.parse(useSelector(state => state.meeting_reducer));
   console.log("from chat ", token);
   const name = "P";
   // const [state, setState] = useState({ message: "", name: "" });
@@ -31,10 +32,12 @@ const ChatUI = () => {
     socketRef.current.on(
       "message",
       ({ name: name, msg: message, type: type, room: room }) => {
-        setChat([
-          ...chat,
-          { name: "Dr", msg: message, type: type, room: room },
-        ]);
+        if(room === email) {
+          setChat([
+            ...chat,
+            { name: "Dr", msg: message, type: type, room: room },
+          ]);
+        }
       }
     );
     return () => socketRef.current.disconnect();
@@ -45,12 +48,12 @@ const ChatUI = () => {
   const onMessageSubmit = (e) => {
     //const { name, text } = state
     if (text !== "") {
-      setChat([...chat, { name: name, msg: text, type: "text" }]);
+      setChat([...chat, { name: name, msg: text, type: "text", room: email }]);
       socketRef.current.emit("message", {
         name: name,
         msg: text,
         type: "text",
-        room: "",
+        room: email,
       });
       window.scrollTo({ bottom: 0, behavior: "smooth" });
       settext("");
@@ -69,11 +72,12 @@ const ChatUI = () => {
       getDownloadURL(uploadTask.snapshot.ref)
         .then((url) => {
           console.log(url);
-          setChat([...chat, { name: name, msg: url, type: "img" }]);
+          setChat([...chat, { name: name, msg: url, type: "img", room: email }]);
           socketRef.current.emit("message", {
             name: name,
             msg: url,
             type: "img",
+            room: email
           });
           setopen(false);
           window.scrollTo({ bottom: 0, behavior: "smooth" });

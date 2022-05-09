@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import "./videochat.css";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
-
+import { useDispatch } from "react-redux";
+import { channel_name } from "../../../actions";
 const VideoChat = (props) => {
   const dr_email = props.dr_email;
   console.log("email from videochat", props.dr_email);
-
+  const dispatch =useDispatch();
   const handleJoinMeeting = () => {
-    localStorage.setItem("Dr_email", dr_email);
+    //localStorage.setItem("Dr_email", dr_email);
+    dispatch(channel_name(props.dr_email));
   };
 
   return (
