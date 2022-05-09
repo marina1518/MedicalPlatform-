@@ -42,7 +42,7 @@ const Controls = (props) => {
     tracks[1].close();
     setStart(false);
     //localStorage.removeItem("Dr_email");
-    dispatch(channel_name(""));
+    // dispatch(channel_name(""));
     navigate("/user");
     // setInCall(false);
   };

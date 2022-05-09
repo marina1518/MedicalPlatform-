@@ -40,6 +40,7 @@ import History from "../../components/User_History/History";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import VideoChat from "../../components/Meeting_room/Video_chat/VideoChat";
 import Tooltip from "@mui/material/Tooltip";
+import { channel_name } from "./../../actions";
 
 const ProfileUI = () => {
   let navigate = useNavigate();
@@ -48,7 +49,7 @@ const ProfileUI = () => {
   };
 
   const dispatch = useDispatch();
-
+  dispatch(channel_name(""));
 const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
   console.log(action_state)
 
