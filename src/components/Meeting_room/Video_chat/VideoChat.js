@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./videochat.css";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector } from "react-redux";
 import { channel_name } from "../../../actions";
 const VideoChat = (props) => {
   const dr_email = props.dr_email;
@@ -13,6 +13,8 @@ const VideoChat = (props) => {
     dispatch(channel_name(props.dr_email));
   };
 
+  const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
+  console.log(action_state)
   return (
     <div>
       {props.button_state ? (

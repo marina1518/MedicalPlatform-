@@ -63,7 +63,7 @@ export const order_status = (state)=>{
 }
 
 export const channel_name = (state)=>{
-    return {type : "channel_name", state : state} 
+    return {type : "channel_name", state:state} 
 }
 // export const release = ()=>{
 //     return {type : "release"} 

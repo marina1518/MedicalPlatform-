@@ -6,6 +6,7 @@ import {combineReducers} from 'redux'
 import profile_reducer from "./Profilesidebar";
 
 import order_reducer from "./order";
+
 const allreducers = combineReducers ({
    sidebarcomp:sidebarstate_reducer,
    auth:auth_reducer,

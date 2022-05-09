@@ -48,6 +48,10 @@ const ProfileUI = () => {
   };
 
   const dispatch = useDispatch();
+
+const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
+  console.log(action_state)
+
   const sidebar_profile = useSelector((state) => state.profile_reducer); //state of token
   const get_orders_store = JSON.parse(
     useSelector((state) => state.order_reducer)
