@@ -7,6 +7,8 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 
 
 import axios from 'axios';
@@ -634,7 +636,7 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
 
     //console.log("first Done",handle_first_render)
     //if(handle_first_render){listenContinuously();}
-    console.log("malkkkkkkkkk")
+    //console.log("malkkkkkkkkk")
      listenContinuously();
    if (finalTranscript !== '') {
      console.log("my odrer",flag_ask_my_order);
@@ -726,9 +728,12 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
      </div>
      <div>
      <span>{transcript}</span>*/}
+      <Tooltip title="To turn the mic on/off (press space) , 
+      To stop the voice (press Esc)" placement="left">
      <button className="voice-btn" onClick={listening?SpeechRecognition.stopListening:listenContinuously}>
         <KeyboardVoiceIcon htmlColor={listening?'green':'red'}/>
            </button>
+      </Tooltip>
    </div>
  );
 };

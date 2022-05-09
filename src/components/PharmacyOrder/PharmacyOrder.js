@@ -7,6 +7,7 @@ import {Row,Col} from 'react-bootstrap'
 import { useSelector } from 'react-redux';
 import './pharmacyorder.css'
 import PlaceholderLoading from 'react-placeholder-loading'
+import CircularProgress from '@mui/material/CircularProgress';
 
 function PharmacyOrder(props) {
     const token = JSON.parse(useSelector(state => state.auth));
@@ -219,7 +220,8 @@ console.log(props.loading)
   
       </Modal.Header>
       <Modal.Body>
-         <PlaceholderLoading shape="circle" width={100} height={100} /> {/* While uploading pic to firebase */}
+        {/* <PlaceholderLoading shape="circle" width={100} height={100} /> {/* While uploading pic to firebase */}
+        <CircularProgress/>
          </Modal.Body>
          </Modal> </>}
          </>
