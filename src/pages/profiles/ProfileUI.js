@@ -47,7 +47,6 @@ const ProfileUI = () => {
   const navigation = (docid) => {
     navigate("/clinicdoctor", { state: { Doctor_id: docid } });
   };
-
   const dispatch = useDispatch();
   dispatch(channel_name(""));
 const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
@@ -560,7 +559,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                         onChange={(e) => setDob(e.target.value)}
                       ></input>
                     ) : (
-                      token.dateOfBirth.split('T')[0].split('-').reverse().join('-')
+                      token.dateOfBirth ? token.dateOfBirth.split('T')[0].split('-').reverse().join('-') :token.dateOfBirth
                     )}
                   </div>
                 </div>
