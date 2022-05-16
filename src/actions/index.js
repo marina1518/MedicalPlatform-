@@ -69,3 +69,19 @@ export const channel_name = (state)=>{
 //     return {type : "release"} 
 // }
 
+/*********** DOCTOR PROFILE  */
+export const info_doc = ()=>{
+    return {type : "info_doc"} 
+}
+
+export const meetings = ()=>{
+    return {type : "meetings"} 
+}
+
+export const reviews_doc = ()=>{
+    return {type : "reviews_doc"} 
+}
+export const selected_slot = (state)=>{
+    return {type : "selected_slot" , state:state} 
+}
+

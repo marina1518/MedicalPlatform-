@@ -10,7 +10,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signin, logout } from "../../actions";
-import { chart } from "../../actions";
+import { chart , info , info_doc} from "../../actions";
 import Tooltip from "@mui/material/Tooltip";
 // import { Button, Badge } from "react-bootstrap";
 
@@ -22,6 +22,8 @@ const Header = () => {
     ////GO BACK ALL STATES TO INIT STATES
     dispatch(logout());
     dispatch(chart());
+    dispatch(info())
+    dispatch(info_doc())
     navigate("/");
   };
   const [showNav, setShowNav] = useState(false);

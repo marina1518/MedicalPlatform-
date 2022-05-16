@@ -14,15 +14,15 @@ import { useLocation } from "react-router-dom";
 import SendIcon from "@mui/icons-material/Send";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Calender from "./../../components/Calendar/Calendar";
-import { info, reservations, reviews } from "../../actions";
+import { info_doc, meetings , reviews_doc } from "../../actions";
 import { blueGrey } from "@material-ui/core/colors";
 import Tooltip from "@mui/material/Tooltip";
 import Star from './../../components/rating_stars/stars';
-
+//import {info , reviews , meetings} from "../../actions" ; 
 const Doctor = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const sidebar_profile = useSelector((state) => state.profile_reducer);
+  const sidebar_profile = useSelector((state) => state.Doctor_reducer);
   const [Docid, setdoctorid] = useState(location.state ? location.state : "");
   const[rating,setrating]=useState(0);
   console.log(Docid);
@@ -179,32 +179,32 @@ const Doctor = () => {
         {compact ? (
           <div className="sidebar-links">
             <Tooltip title="Personnal Info" placement="right">
-              <li onClick={() => dispatch(info())}>
+              <li onClick={() => dispatch(info_doc())}>
                 <i class="bi bi-info-circle-fill"></i>
               </li>
             </Tooltip>
             <Tooltip title="Reviews" placement="right">
-              <li onClick={() => dispatch(reviews())}>
+              <li onClick={() => dispatch(reviews_doc())}>
                 <i class="bi bi-chat-left-text-fill"></i>
               </li>
             </Tooltip>
             <Tooltip title="Reseve meeting" placement="right">
-              <li onClick={() => dispatch(reservations())}>
+              <li onClick={() => dispatch(meetings())}>
                 <i class="bi bi-clock-fill"></i>
               </li>
             </Tooltip>
           </div>
         ) : (
           <div className="sidebar-links">
-            <li onClick={() => dispatch(info())}>
+            <li onClick={() => dispatch(info_doc())}>
               <i class="bi bi-info-circle-fill"></i>
               <span> Personnal Info</span>
             </li>
-            <li onClick={() => dispatch(reviews())}>
+            <li onClick={() => dispatch(reviews_doc())}>
               <i class="bi bi-chat-left-text-fill"></i>
               <span> Reviews</span>
             </li>
-            <li onClick={() => dispatch(reservations())}>
+            <li onClick={() => dispatch(meetings())}>
               <i class="bi bi-clock-fill"></i>
               <span> Reseve meeting</span>
             </li>
@@ -213,7 +213,7 @@ const Doctor = () => {
       </SideBarUI>
       <main>
         <div className="profile-container">
-          {sidebar_profile === "info" ? (
+          {sidebar_profile === "info_doc" ? (
             <div className="card">
               <div className="card-header bg-transparent">
                 <h3 className="mb-0">
@@ -309,7 +309,7 @@ const Doctor = () => {
           ) : (
             ""
           )}
-          {sidebar_profile === "reviews" ? (
+          {sidebar_profile === "reviews_doc" ? (
             <>
             <div className="card shadow-sm">
           <div className="card-header bg-transparent">
@@ -397,7 +397,7 @@ const Doctor = () => {
             ""
           )}
         </div>
-        {sidebar_profile === "reservations" ? (
+        {sidebar_profile === "meetings" ? (
           <div className="card shadow-sm">
             <div className="card-header bg-transparent border-0">
               <h3 className="mb-0">

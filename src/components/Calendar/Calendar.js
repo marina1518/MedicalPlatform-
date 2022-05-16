@@ -1,4 +1,4 @@
-import { React, useRef, useState } from "react";
+import { React, useRef, useEffect ,useState } from "react";
 import { ListGroup, Row, Col, Button } from "react-bootstrap";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,7 +6,7 @@ import moment from "moment";
 import "./cal.css";
 import mom from "moment-timezone";
 import { BsFillSunFill, BsMoonStarsFill, BsClockFill } from "react-icons/bs";
-import { signin } from "../../actions";
+import { selected_slot, signin } from "../../actions";
 import axios from "axios";
 import Carousel from "react-grid-carousel";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -14,7 +14,12 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Reserve_Date from "./Reserve_Date";
 
 const Calendar = (props) => {
-
+  useEffect(()=>{
+    dispatch(selected_slot({})); //EMPTY
+  },[])
+  const dispatch = useDispatch();
+   const slot_state = JSON.parse(useSelector((state) => state.reserving_reducer));
+   console.log("slot_state",slot_state)
   console.log(props.data.id);
   const config = { headers: { Authorization: `Bearer ${props.data.token}` } };
   var reserved_slots = [];
@@ -49,6 +54,7 @@ const Calendar = (props) => {
       const data = await res.data;
       console.log(data);
       alert(data);
+      dispatch(selected_slot({})); //EMPTY 
     } catch (err) {
       console.error(err);
     }
@@ -83,10 +89,12 @@ const Calendar = (props) => {
   const get_slots = (e, item) => {
     setdone_reserve(false);
     setdata(item); //to know the day and date clicked
+   
     var morning_shifts = [];
     var evening_shifts = [];
     const day = item.format("dddd");
     const date = `${item.format("DD-MM-YYYY")}`; //to api
+     dispatch(selected_slot({"slot":slot_time , "date" : date })); //WHEN CHANGE THE DAY
     (async () => {
       var reserved = await Get_timetable(date);
       console.log(reserved);
@@ -234,6 +242,7 @@ const Calendar = (props) => {
                         id="calender-btn"
                         class="btn"
                         onClick={(e) => get_slots(e, item)}
+                        
                       >
                         <Reserve_Date
                           day={item.format("DD")}
@@ -265,6 +274,7 @@ const Calendar = (props) => {
                   : mor.map((item) => (
                       <Button
                         onClick={() => {
+                          dispatch(selected_slot({"slot":item.slot , "date" : `${data.format("DD-MM-YYYY")}`}));
                           setslot(item.slot);
                           setcan(true);
                         }}
@@ -309,11 +319,12 @@ const Calendar = (props) => {
             </Col>
           </Row>
           <br />
-          {can && !done_reserve && props.data.token ? (
+          {(slot_state.slot != "" && slot_state.date != "" && slot_state.slot && slot_state.date ) && !done_reserve && props.data.token ? (
             <>
               <Row>
                 <Col>
-                  <BsClockFill /> <label>{slot_time}</label>
+                  <BsClockFill /> {/*<label>{`${data.format("DD-MM-YYYY")}`} {slot_time}</label>*/}
+                  {<label>{slot_state.date} {slot_state.slot}</label>}
                 </Col>
                 <Col>
                   <Button onClick={(e) => reserve(e, slot_time)}>

@@ -9,10 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
+import moment from "moment";
 
 
 import axios from 'axios';
-import { info ,myorders , order_status ,appointments} from '../../actions';
+import { info ,myorders , order_status ,appointments , meetings , selected_slot} from '../../actions';
+import { CountertopsOutlined } from '@mui/icons-material';
+
 const Speech = () => {
 
  const dispatch = useDispatch();
@@ -24,18 +27,25 @@ var flag_order = false ; // if wants to make order
 
 var counter_var = 0 ;
 //var approved_count = 0 ; 
-const [approved_count,set_approved_count] =useState(0)
-const [counter_state,set_counter_state]=useState(0)
+const [approved_count,set_approved_count] =useState(0) //THE COUNT OF APPROVED ORDERS
+const [counter_state,set_counter_state]=useState(0) //COUNTER OF READING THE APPROVED ORDERS
 //////// USER ORDER PROFILE
 const [approved_array_orders,set_approved_array_orders] = useState([]); //Array of approved array of use
 const [current_order_id,set_current_id]=useState("");
 const [flag_approve_my_order ,set_approve_my_order] =useState(false); // if wants to make action to order 
 
+const [flag_reserve_meeting,set_flag_reserve_meeting] = useState(false) ; //if wants to ask to reserve
+
+const [flag_meeting_time,set_flag_meeting_time] = useState(false) ; //if wants to reply 1 - am / 2 = pm 
+const [wanted_slot,set_wanted_slot]=useState(""); //AM OR PM 
+const [wanted_dep,set_wanted_dep]=useState(""); //wanted department for reservation 
+const [flag_sure_reserve,set_sure_reserve] = useState(false); // TO MAKE RESERVATION ACTION
+
 const [flag_ask_my_order ,set_my_order] =useState(false); // if wants to ask about his orders
 const [wanted_sentence,set_wanted]=useState("")
 
 let wanted_sentece = ""; //to send to model api   
-
+const [meeting_data,set_meeting_data] = useState({});
 //TO DETECED KEY PRESS
 var press_var = false ; // Key press handle 
 const [press_state,set_press_state]=useState(false)
@@ -130,6 +140,9 @@ const voice = voices[1] || null; //voices [1] arabic eg 1/6/7
     break;  
     case 'my meetings' :
       my_meetings();
+    break; 
+    case 'reserve meeting' :
+      reserve_meeting();
     break; 
         
 
@@ -536,7 +549,344 @@ const my_meetings = ()=>{
   }
 }
 
+const reserve_meeting = ()=>{
+     SpeechRecognition.stopListening(); 
+     set_wanted_slot(""); // initial when start
+     set_wanted_dep("");
+   if (token.token)
+   {
+             handle_speak = "الأقسام الموجودة هى" ;  
+             for (let i = 0 ; i < departments.length ; i++)
+             {
+               //await sleepNow (2500)
+                handle_speak+=departments[i]+ "  . ";
+             }
+           handle_speak += "عاوز تحجز دكتور فى قسم ايه"
+           speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+          set_flag_reserve_meeting(true); // TO WAIT DEPT TO RESERVE 
+   }
+   else { //not logined 
+    
+  handle_speak = "لازم تكون فاتح الأكونت بتاعك الأول"
+  speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+  }
+}
 
+  var dr_app = [];
+
+const GET_DATES_DOCTORS = (timetable) =>{
+  //let momentObject = moment();
+  //mom.tz.setDefault("Egypt/Cairo");
+
+  for (var i = 0; i < timetable.length; i++) {
+    const f = timetable[i].from.split(":");
+    const t = timetable[i].to.split(":");
+    dr_app.push({ day:timetable[i].day, from: f[0], to: t[0] });
+  }
+  var days = [];
+
+  for (var i = 0; i < 90; i++) {
+    const day = moment().add(i, "day");
+    for (var j = 0; j < dr_app.length; j++) {
+      if (day.format("dddd") === dr_app[j].day) {
+        days.push(day);
+        break;
+      }
+    }
+  }
+  /*var dates = []
+  var date = "";
+  for (var i = 0 ; i < days.length ; i++)
+  {
+     //date = days[i].format("DD") +"/"+days[i].format("MMM")+"/"+days[i].format("YYYY");
+     date = days[i].format("DD-MM-YYYY")
+     dates.push(date);      
+  }*/
+  return days ; 
+}
+
+//const Get_Date_Slots = (date,dr_name) =>{
+  
+  const Get_Slots = async (item,dr_name,slot) => {
+    var reserved_slots = [];
+    const day = item.format("dddd");
+    const date = `${item.format("DD-MM-YYYY")}`;
+    var reserved = [];
+    var morning_shifts = [] ;
+    var evening_shifts = [];
+    try {
+      const res = await axios.get(
+        `https://future-medical.herokuapp.com/user/timetable/${dr_name}/${date}`
+      );
+      const data = await res.data;
+      console.log(data);
+      if (data == "no reservations in this date") {
+        reserved = [];
+      }
+      else 
+      {for (var i = 0; i < data.length; i++) {
+        reserved_slots.push(data[i].slot);
+      }
+
+     reserved = reserved_slots; }
+
+     console.log(reserved);
+
+      for (var i = 0; i < dr_app.length; i++) {
+        if (dr_app[i].day === day) {
+          //check day
+          if (dr_app[i].from <= 12) {
+            const num_slots =
+              parseInt(parseInt(dr_app[i].to) - parseInt(dr_app[i].from)) * 2;
+            console.log(num_slots);
+            var c = parseInt(dr_app[i].from);
+            var d = parseInt(dr_app[i].from) + 1;
+
+            for (var k = 0; k < num_slots; k++) {
+              //check for slot state
+              if (k % 2 === 0) 
+              {
+                if (!(reserved.includes(`${c}:00 - ${c}:30`)))
+              {  morning_shifts.push(`${c}:00 - ${c}:30`);}
+              }
+              else 
+                {
+                  if (!(reserved.includes(`${c}:30 - ${d}:00`)))
+                  {morning_shifts.push(`${c}:30 - ${d}:00`);}
+                  c += 1;
+                  d += 1;
+              }
+              }
+            
+          } else if (dr_app[i].from > 12) {
+            const num_slots =
+              parseInt(parseInt(dr_app[i].to) - parseInt(dr_app[i].from)) * 2;
+            console.log(num_slots);
+            var c = parseInt(dr_app[i].from);
+            var d = parseInt(dr_app[i].from) + 1;
+            for (var k = 0; k < num_slots; k++) {
+              if (k % 2 === 0) {
+                if (!(reserved.includes(`${c}:00 - ${c}:30`)))
+               { evening_shifts.push(`${c}:00 - ${c}:30`);}
+              } else {
+                if (!(reserved.includes(`${c}:30 - ${d}:00`)))
+                {evening_shifts.push(`${c}:30 - ${d}:00`);}
+                  c += 1;
+                  d += 1;
+                }
+              }
+            }
+          }
+        }
+       console.log(morning_shifts)
+      if(slot == "AM")
+      {return morning_shifts ;}
+      if(slot == "PM")
+      {return evening_shifts ;}
+
+      }
+     
+     catch (err) {
+      console.error(err);
+    }
+  };
+
+  /*const Get_Date_Slots = (date,dr_name)=>{
+      var reserved = Get_reserved_Slots(date,dr_name);
+
+  }*/
+
+//returns array for morning slots, another array for evening slots
+  /*const [mor, setmor] = useState([]);
+  const [eve, seteve] = useState([]);
+  const [data, setdata] = useState("");
+
+   const get_slots = (item,dr_name,slot) => {
+    //setdone_reserve(false);
+    setdata(item); //to know the day and date clicked
+    var morning_shifts = [];
+    var evening_shifts = [];
+    const day = item.format("dddd");
+    const date = `${item.format("DD-MM-YYYY")}`; //to api
+    (async () => {
+      var reserved = await Get_reserved_Slots(date,dr_name);
+      console.log(reserved);
+
+      for (var i = 0; i < dr_app.length; i++) {
+        if (dr_app[i].day === day) {
+          //check day
+          if (dr_app[i].from <= 12) {
+            const num_slots =
+              parseInt(parseInt(dr_app[i].to) - parseInt(dr_app[i].from)) * 2;
+            console.log(num_slots);
+            var c = parseInt(dr_app[i].from);
+            var d = parseInt(dr_app[i].from) + 1;
+
+            for (var k = 0; k < num_slots; k++) {
+              //check for slot state
+              if (k % 2 === 0) 
+              {
+                if (!(reserved.includes(`${c}:00 - ${c}:30`)))
+              {  morning_shifts.push(`${c}:00 - ${c}:30`);}
+              }
+              else 
+                {
+                  if (!(reserved.includes(`${c}:30 - ${d}:00`)))
+                  {morning_shifts.push(`${c}:30 - ${d}:00`);}
+                  c += 1;
+                  d += 1;
+              }
+              }
+            
+          } else if (dr_app[i].from > 12) {
+            const num_slots =
+              parseInt(parseInt(dr_app[i].to) - parseInt(dr_app[i].from)) * 2;
+            console.log(num_slots);
+            var c = parseInt(dr_app[i].from);
+            var d = parseInt(dr_app[i].from) + 1;
+            for (var k = 0; k < num_slots; k++) {
+              if (k % 2 === 0) {
+                if (!(reserved.includes(`${c}:00 - ${c}:30`)))
+               { evening_shifts.push(`${c}:00 - ${c}:30`);}
+              } else {
+                if (!(reserved.includes(`${c}:30 - ${d}:00`)))
+                {evening_shifts.push(`${c}:30 - ${d}:00`);}
+                  c += 1;
+                  d += 1;
+                }
+              }
+            }
+          }
+        }
+      })();
+      console.log(morning_shifts)
+      if(slot == "AM")
+      {return morning_shifts ;}
+      if(slot == "PM")
+      {return evening_shifts ;}
+  };*/
+
+const handle_reserve_meeting = (dept_name)=>{
+ var flag_exist = false ;
+  for (let i = 0 ; i < departments.length ; i++)
+{
+    //await sleepNow (2500)
+  var n = dept_name.includes(departments[i]);
+  if (n == true)
+  {console.log("department is :" ,departments[i] ) ;
+    set_wanted_dep(departments[i])
+    navigate(`/Doctors/${departments[i] }`)
+    SpeechRecognition.stopListening();
+  handle_speak +="لو عاوز ميعاد صباحا اوول واحد لو عاوز معاد مساء اوول اتنين"
+  speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+  set_flag_meeting_time(true)
+    flag_exist = true ;
+   break;}
+ 
+  var y = dept_name.includes(departments_format[i]);
+  //console.log(y)
+  if (y == true)
+  {console.log("department is :" ,departments_format[i] ) ;
+  SpeechRecognition.stopListening();
+  set_wanted_dep(departments[i])
+  handle_speak +="لو عاوز ميعاد صباحا اوول واحد لو عاوز معاد مساء اوول اتنين"  
+  speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+  set_flag_meeting_time(true)
+     flag_exist = true ;
+    navigate(`/Doctors/${departments[i] }`)
+   break;}
+}
+if (flag_exist == false)
+{
+  SpeechRecognition.stopListening();
+  handle_speak +="لا يوجد هذا القسم"
+  speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+}
+
+}
+const config = { headers: { Authorization: `Bearer ${token.token}` } };
+
+  const Get_Reserve = async (meeting_data) => {
+    try {
+      SpeechRecognition.stopListening();
+      const res = await axios.post(
+        `https://future-medical.herokuapp.com/user/reservation/meeting`,
+        { doctorEmail: meeting_data.doctorEmail, date: meeting_data.date, day: meeting_data.day, slot: meeting_data.slot },
+        config
+      );
+      const data = await res.data;
+      console.log(data);
+      handle_speak ="تم الحجز بنجاح"
+      //alert(data);
+      speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+      dispatch(selected_slot({})); //EMPTY 
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+const reserve_doctor = async (dep,slot) =>{
+
+console.log(dep);
+console.log("wanted",slot)
+try{
+ var res =  await axios.get(`https://future-medical.herokuapp.com/user/department/${dep}`);
+ var data = await res.data ;
+console.log(data);
+if(data !== "no doctors found in this department"){
+  SpeechRecognition.stopListening();
+     // const day = item.format("dddd");
+    //const date = `${item.format("DD-MM-YYYY")}`;
+  //const items = ['a', 'b', 'c'];
+  
+  (async () => {
+  for (var j = 0 ; j < data.length ; j++) {
+     var items = GET_DATES_DOCTORS(data[j].timetable)  ;  //ALL DATES FOR DOCTORS
+    //const uppercaseItem = await asyncUppercase(items[i]);
+     
+    await (async () => {
+     for (var i = 0 ; i < items.length ; i++ )
+     {
+       var required_slots = [] ; 
+        required_slots = await Get_Slots( items[i],data[j].email ,slot )
+            if (required_slots!= []) //GET SLOTS FOR EACH DATE
+                 {
+                   var time_slot =  required_slots[0].split("-");
+                     console.log(required_slots[0]) ;                     
+                     navigate("/clinicdoctor", { state: { Doctor_id: data[j].email } });
+                     dispatch(meetings());
+                     handle_speak = "اول معاد متاح مع احسن الدكاترة يوم" + `${items[i].format("dddd")}` + " " + `${items[i].format("DD/MM/YYYY")}` +" "+ "مع دكتور" + `${data[j].arabic_username}` ;
+                     handle_speak +=  " من الساعة " + time_slot[0] + " الى "+ time_slot[1] ; 
+                     handle_speak += " لو عاوز تحجز المعاد ده اوول واحد "
+                     console.log(handle_speak)
+                     
+                     //dispatch(selected_slot({"slot":required_slots[0] , "date" : `${items[i].format("DD/MM/YYYY")}` }))
+                     set_meeting_data({"doctorEmail":data[j].email , "date" : items[i].format("DD-MM-YYYY") , "day" : items[i].format("dddd") ,"slot" : required_slots[0]})
+                      speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+                       dispatch(selected_slot({"slot":required_slots[0], "date" : `${items[i].format("DD-MM-YYYY")}` }));
+                      set_sure_reserve(true);
+                     break;
+                 } 
+     }
+     })()
+    }       
+})()
+}
+       
+            
+else {
+  SpeechRecognition.stopListening();
+   handle_speak = ` مفيش دكاترة متاحة فى القسم ده الأن ` ;  
+  speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+
+}
+}
+catch(err){
+console.log(err)
+}
+//.catch((err)=>{})
+
+}
  const [message, setMessage] = useState('');
  /*const commands = [
    {
@@ -608,6 +958,9 @@ const {
    {
      set_approved_count(0)
      set_counter_state(0)
+     set_flag_reserve_meeting(false)
+     set_flag_meeting_time(false)
+     set_sure_reserve(false);
      cancel(); //Stop speaking
    }
  },[press_state])
@@ -639,7 +992,7 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
     //console.log("malkkkkkkkkk")
      listenContinuously();
    if (finalTranscript !== '') {
-     console.log("my odrer",flag_ask_my_order);
+    // console.log("my odrer",flag_ask_my_order);
     
      set_wanted('');
      wanted_sentece ='';
@@ -650,7 +1003,58 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
        //console.log('sentece', wanted_sentece);
      }
      console.log('sentece', wanted_sentece); //GO TO THE MODEL 
-      if(flag_approve_my_order)
+     set_wanted(wanted_sentece)
+    if (flag_sure_reserve){
+      //wait one to make reservation 
+      set_sure_reserve(false)
+      if(replies_my_order.includes(wanted_sentece)){
+          var index_reply = replies_my_order.indexOf(wanted_sentece);
+          if (index_reply == 0 || index_reply == 3)
+           { //AM 
+            //sMAKE RESERVATION
+            console.log(meeting_data)
+              Get_Reserve(meeting_data);
+            }
+              }
+              else
+              {
+                // CALL THE MODEL 
+                Get_Voice_model(wanted_sentece); //voice moedl 
+                setindex(finalTranscript.length); //Update the index 
+              }
+    }
+    else if (flag_meeting_time)
+          { 
+            // waiting 1 for am .. & 2 for pm 
+            set_flag_meeting_time(false)
+              if(replies_my_order.includes(wanted_sentece)){
+
+                    var index_reply = replies_my_order.indexOf(wanted_sentece);
+                     if (index_reply == 0 || index_reply == 3)
+                     { //AM 
+                      //set_wanted_slot("AM")
+                      reserve_doctor(wanted_dep,"AM")
+                     }
+                     else{
+                      //set_wanted_slot("PM")
+                      reserve_doctor(wanted_dep,"PM")
+                       //PM
+                     }
+              }
+              else
+              {
+                // CALL THE MODEL 
+                Get_Voice_model(wanted_sentece); //voice moedl 
+                setindex(finalTranscript.length); //Update the index 
+              }
+          } 
+    else if (flag_reserve_meeting)
+     {
+          //waiting department name 
+          handle_reserve_meeting(wanted_sentece);
+          set_flag_reserve_meeting(false)
+     }
+    else if(flag_approve_my_order)
      {
        set_approve_my_order(false) 
        if(replies_my_order.includes(wanted_sentece))
@@ -728,6 +1132,9 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
      </div>
      <div>
      <span>{transcript}</span>*/}
+       {/* wanted_sentence && <textarea className="text"
+        value={wanted_sentence}        
+    />*/}
       <Tooltip title="To turn the mic on/off (press space) , 
       To stop the voice (press Esc)" placement="left">
      <button className="voice-btn" onClick={listening?SpeechRecognition.stopListening:listenContinuously}>
