@@ -27,6 +27,7 @@ import Speech from "./components/SpeechRecoginition/Speech";
 import Voice from "./components/SpeechRecoginition/Voice";
 import ProfileUI from "./pages/profiles/ProfileUI";
 import VideoCall from "./components/Meeting_room/Video_chat/VideoCall";
+import Payment from "./components/Coupon/Coupon";
 // import Keyboard from "./components/KeboardMego/Keyboard";
 function App() {
   let navigate = useNavigate();
@@ -79,7 +80,7 @@ function App() {
           <Routes>
             {<Route path="/" element={<Home />}></Route>}
             {/*<Route path="/" element={<Voice/>}></Route>*/}
-            {/*<Route path="/" element={<Keyboard />}></Route>*/}
+            {/*<Route path="/" element={<Payment />}></Route>*/}
             <Route path="/Doctors/:Deptname" element={<Doctorscards />}></Route>
             <Route path="/login" element={<Login />}>
               {" "}
