@@ -80,6 +80,7 @@ function App() {
           <Routes>
             {<Route path="/" element={<Home />}></Route>}
             {/*<Route path="/" element={<Voice/>}></Route>*/}
+
             {/*<Route path="/" element={<Payment />}></Route>*/}
             <Route path="/Doctors/:Deptname" element={<Doctorscards />}></Route>
             <Route path="/login" element={<Login />}>
@@ -119,7 +120,7 @@ function App() {
                 </Privateuser>
               }
             />*/}
-            <Route path="/user" element={<ProfileUI />} />
+            <Route path="/user" element={<Privateuser><ProfileUI /></Privateuser>} />
             <Route path="/user/meetingroom" element={<VideoCall />}></Route>
           </Routes>
           {location.pathname !== "/user/meetingroom" && (
