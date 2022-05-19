@@ -52,6 +52,7 @@ const Doctor = () => {
       Doctor_Api.entityflag = data.entity_id.flag;
       Doctor_Api.entityname = data.entity_id.name;
       Doctor_Api.rate_count = data.rate_count;
+      Doctor_Api.meeting_price = data.meeting_price;
 
       // Doctor_Api.reviews = data.reviews;
 
@@ -78,13 +79,14 @@ const Doctor = () => {
   const Write = (e) => {
     e.preventDefault();
     console.log(rev);
-    r.review = rev;
+    if(rev !== "")
+    {r.review = rev;
     //console.log(r)
     //setreviewf(r);
     sets(false);
     //console.log(revf);
     write_review(r);
-    show_rev.push(rev);
+    show_rev.push(rev);}
   };
 
   const write_review = async (r) => {
@@ -276,7 +278,15 @@ const Doctor = () => {
                     {doctor_data.entityname}
                   </div>
                 </div>
-
+                <hr id="profile-hr" />
+                <div class="row mt-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Meeting Fees</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {doctor_data.meeting_price}
+                  </div>
+                </div>
                 <hr id="profile-hr" />
                 <div class="row mt-3">
                   <div class="col-sm-3">
@@ -311,13 +321,18 @@ const Doctor = () => {
           )}
           {sidebar_profile === "reviews_doc" ? (
             <>
-            <div className="card shadow-sm">
-          <div className="card-header bg-transparent">
-          <p className="mb-0"><strong className="pr-1"> <MdOutlineStarRate /> Ratings: </strong>  <small className="text-muted"> ({doctor_data.rate_count} verified ratings)</small></p> 
-              <Star setrating={setrating} dr_id={Docid.Doctor_id}/>
-            </div>
-          </div>
-          <br/>
+           {
+             token.token && 
+             <>
+             <div className="card shadow-sm">
+             <div className="card-header bg-transparent">
+             <p className="mb-0"><strong className="pr-1"> <MdOutlineStarRate /> Ratings: </strong>  <small className="text-muted"> ({doctor_data.rate_count} verified ratings)</small></p> 
+                 <Star setrating={setrating} dr_id={Docid.Doctor_id}/>
+               </div>
+             </div>
+             <br/>
+             </>
+           }
             
             <div className="card shadow-sm">
               <div className="card-header bg-transparent">

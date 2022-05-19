@@ -17,6 +17,7 @@ const Calendar = (props) => {
   useEffect(()=>{
     dispatch(selected_slot({})); //EMPTY
   },[])
+  console.log(props.data.timetable)
   const dispatch = useDispatch();
    const slot_state = JSON.parse(useSelector((state) => state.reserving_reducer));
    console.log("slot_state",slot_state)
@@ -72,7 +73,7 @@ const Calendar = (props) => {
   }
   var days = [];
 
-  for (var i = 0; i < 90; i++) {
+  for (var i = 0; i < 7; i++) {
     const day = moment().add(i, "day");
     for (var j = 0; j < dr_app.length; j++) {
       if (day.format("dddd") === dr_app[j].day) {
