@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import './pharmacyorder.css'
 import PlaceholderLoading from 'react-placeholder-loading'
 import CircularProgress from '@mui/material/CircularProgress';
+import Choose_pres from '../prescription/choose_pres';
 
 function PharmacyOrder(props) {
     const token = JSON.parse(useSelector(state => state.auth));
@@ -18,23 +19,51 @@ function PharmacyOrder(props) {
     const [Formerrors, setFormerrors ] = useState({});
     const [issubmit, setissubmit ] = useState(false);
     console.log(props)
+
+    //buttons
+    const[cancel1, setcancel] = useState(false);
+    const [cancel2, setcancel2] = useState(false);
+    
+    //set_order from pres
+    const[show_pres_order, setshow_pres]=useState(false);
+    const [order, set_order] = useState([]);
+    console.log(show_pres_order, order);
+    var order_details={};
+
         //const day_date = (d.getMonth()+1) +"-" +d.getDate()  + "-" + d.getFullYear();
         //console.log(day_date)
+
 
     const make_order_api = ()=>{
       const day_date = d.getDate() +"-" + (d.getMonth()+1) + "-" + d.getFullYear();
         console.log(day_date)
         console.log(FormValues)
         console.log( props.pharmacyadmin)
-            axios.post('https://future-medical.herokuapp.com/user/pharmacy/order',
+        if(cancel1 === true)
            {
-             adminEmail : props.pharmacyadmin ,
-             flag : "image",
-             form :  FormValues.imageurl ,//image
-             date:day_date,
-             address:FormValues.address,
-             phone:FormValues.number,
-           },{
+            order_details = {
+              adminEmail : props.pharmacyadmin ,
+              flag : "text",
+              form :  JSON.stringify(order),
+              date:day_date,
+              address:FormValues.address,
+              phone:FormValues.number,
+            }
+           }
+           else if(cancel2 === true)
+           {
+             order_details = {
+              adminEmail : props.pharmacyadmin,
+              flag : "image",
+              form :  FormValues.imageurl ,//image
+              date:day_date,
+              address:FormValues.address,
+              phone:FormValues.number,
+            }
+           }
+            axios.post('https://future-medical.herokuapp.com/user/pharmacy/order',
+            order_details
+            ,{
             headers: {
           'Authorization': `Bearer ${token.token}`
           }
@@ -90,11 +119,11 @@ function PharmacyOrder(props) {
             {
                 errors.address="Address is required!";  
             }
-        if (!values.image)
-            {
-                errors.image="prescription image is required!";  
-            }    
-                
+        if((!values.image && order.length === 0))
+        {
+          errors.image="prescription image is required!";  
+        }  
+        
         return errors ;
     }
 const formHandler = (e) => {
@@ -103,12 +132,12 @@ const formHandler = (e) => {
         setissubmit(true);
         if(Object.keys(validate(FormValues)).length === 0)
         {
-          upload(e.target[0].files[0])
+          if(cancel2 === true) {upload(e.target[0].files[0]);  props.setloading();} //make loading true
+          else if(cancel1 === true) { make_order_api();}
           props.onHide(); //hide this modal to show modal with loading iteam 
-          props.setloading(); //make loading true
+          // setcancel(false);
+          // setcancel2(false);
         }
-    
-    
     //setloading(true)
   };
 
@@ -139,6 +168,7 @@ const upload = (file) => {
     })
     }
 
+
 console.log(props.loading)
   return (
     <>
@@ -152,7 +182,7 @@ console.log(props.loading)
       centered
     >
 
-      <Modal.Header closeButton >
+      <Modal.Header closeButton  >
         
             <div style={{'color':'#064e68'}}>
             <Modal.Title id="contained-modal-title-vcenter"   >
@@ -170,8 +200,18 @@ console.log(props.loading)
         <Form onSubmit={formHandler}>
          {<Form.Group  className="mb-3" >
     <Form.Label>Upload your prescription</Form.Label>
-    <Form.Control onChange={(e)=>handlechange(e)}  name="image" type="file" placeholder="Enter prescription image " />
+    <Row>
+      <Col>
+      <Form.Control onChange={(e)=>{handlechange(e); setcancel2(true);}}  name="image" type="file" disabled={cancel1} placeholder="Enter prescription image " />
      <p style={{padding:'0',color:'red',marginTop:'6px'}} >{Formerrors.image}</p>
+      </Col>
+      <Col>
+      <Button style={{'backgroundColor':'#064e68','borderColor':'#064e68'}} disabled={cancel2} onClick={(e)=>{setcancel(true); setshow_pres(true);}}>Choose from your Prescriptions</Button>
+      {show_pres_order && <Choose_pres show={show_pres_order} set_order={set_order} setshow={setshow_pres} cancel= {setcancel} />}
+      
+      </Col>
+    </Row>
+   
 </Form.Group>}
      <Row>
      <Col>
@@ -190,6 +230,7 @@ console.log(props.loading)
      </Col>
    </Row>
     <Button style={{'backgroundColor':'#064e68','borderColor':'#064e68'}} type='submit'>Submit Your order</Button>
+    <Button style={{'backgroundColor':'#064e68','borderColor':'#064e68'}} onClick={(e)=>{props.onHide(); setcancel(false); setcancel2(false);}}>Cancel</Button>
    </Form>
    </>
       </Modal.Body>
