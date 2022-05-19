@@ -5,19 +5,22 @@ import {GiMedicines} from 'react-icons/gi';
 import SendIcon from '@mui/icons-material/Send';
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
+import Slot from './file';
 
 const Choose_pres=(props)=>{
 
-    
         const [show, setShow] = useState(props.show);
         const handleClose = () => {setShow(false); props.setshow(false);};
-        //const handleShow = () => setShow(true);
+        const[done, setdone] = useState(false);
+        const[pres, setpres]=useState([]);
+        const[number, setnumber] = useState(1);
+        const [q,setq]=useState([]);
         const token = JSON.parse(useSelector((state) => state.auth));
-        console.log(token.token);
+       
         const config = {headers: {
             'Authorization': `Bearer ${token.token}`}};
 
-        const[pres, setpres]=useState([]);
+        
         
        
         const get_pres = async ()=>{
@@ -47,47 +50,63 @@ for(var i=0; i<pres.length;i++)
   }
 
 }
-console.log(med_state);
+
 const change=(x)=>{
   for(var i=0; i<med_state.length;i++)
   {
     if(med_state[i].medicine === x) med_state[i].state=(!med_state[i].state);
   }
-  console.log(med_state);
+ 
 }
 
 const order_details=()=>{
+ 
+  props.set_order(q);
+}
+
+const quanity=()=>{
   var o=[];
   for(var i=0;i<med_state.length;i++)
   {
-      if(!(o.includes(med_state[i].medicine))&&(med_state[i].state===true)) o.push(med_state[i].medicine);
+      if(!(o.includes(med_state[i].medicine))&&(med_state[i].state===true)) o.push({medicine: med_state[i].medicine, quanity:1});
   }
-  props.set_order(o);
+  setq(o);
 }
 
-    //  const[medicine,setmedicine]=useState("");
-    //  console.log(medicine);
+    
      useEffect(()=>{
       get_pres();
       },[])
       
         return (
           <>
-            {/* <Button variant="primary" onClick={(e)=>{handleShow(); get_pres();}}>
-              choose 
-            </Button> */}
-
-      
+           
             <Modal show={show} onHide={handleClose}>
-              <Modal.Header closeButton>
+              <Modal.Header>
                 <Modal.Title>Choose from your Prescriptions</Modal.Title>
               </Modal.Header>
-              <Modal.Body>
+             { done ? 
+             <Modal.Body>
+               <Form>
+                {
+                  q.map(m=> 
+                    <Row>
+                      <Col>
+                      <li>{m.medicine}</li>
+                      </Col>
+                      <Col>
+                      <Slot setfrom={setnumber} data={{med:m.medicine, q:q} }/>
+                      </Col>
+                    </Row>
+                   
+                    )
+                }
+               </Form>
+             </Modal.Body>
+             : 
+             <Modal.Body>
                 <Form>
-                  <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  
-                  </Form.Group>
-                  
+                 
             <div style={{width:"350px", height:"350px"}}>
                 {
                     pres.length ===0 ? 
@@ -113,11 +132,6 @@ const order_details=()=>{
               <div key={`default-checkbox`} className="mb-3">
                 {
                     p.medicines.map((m)=>
-                //     <Form.Check 
-                //     type="checkbox"
-                //     id={`default-checkbox`}
-                //     label={m}
-                // />
                 <>
                 <input type="checkbox" id={m} name={m} value={m} onChange={(e)=>change(e.target.value)}/>
                 <label for={m}>  {" "+ m}</label><br></br></>
@@ -138,15 +152,24 @@ const order_details=()=>{
                 </Form>
               
 
-              </Modal.Body>
+              </Modal.Body>}
+              {done ? 
               <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+              <Button variant="secondary" onClick={(e)=>setdone(false)}>
+                Back
+              </Button>
+              <Button variant="primary" onClick={(e)=>{handleClose(); order_details();}}>
+                Order Now
+              </Button>
+            </Modal.Footer>
+              :<Modal.Footer>
+                <Button variant="secondary" onClick={(e)=>{handleClose(); props.cancel(false);}}>
                   Cancel
                 </Button>
-                <Button variant="primary" onClick={(e)=>{handleClose(); order_details();}}>
-                  Order Now
+                <Button variant="primary" onClick={(e)=>{setdone(true); quanity();}}>
+                  Next
                 </Button>
-              </Modal.Footer>
+              </Modal.Footer>}
             </Modal>
           </>
         );

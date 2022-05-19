@@ -2,42 +2,39 @@ import React,{useState} from "react";
 import './file.css';
 
 const Slot=(props)=>{
-    var [num , setnum] =useState(0);
+    var [num , setnum] =useState(1);
     const inc = ()=>{
         num+=1;
-        if (num <=24) setnum(num);
-        else  if (num === 24 || num > 24 )
-        {
-          num =24; 
-          setnum(24);
-        }};
+        setnum(num)};
     
       const dec = ()=>{
         num-=1;
-        if (num >=0) setnum(num);
-        else if (num ===0 || num <0 )
+        if (num >=1) setnum(num);
+        else if (num ===1 || num <1 )
         {
-         num =0;
-          setnum(0);
+         num =1;
+          setnum(1);
         }};
         if (props.setfrom !== undefined)
         {
-            props.setfrom(num);
-        }
-        if (props.setto !== undefined)
-        {
-            props.setto(num);
+          console.log(props.data.med)
+          for(var i=0;i<props.data.q.length;i++)
+          {
+            if(props.data.q[i].medicine === props.data.med) props.data.q[i].quanity=(num);
+          }
+          console.log(props.data.q);  
+          props.setfrom(num);
         }
         
        
     return(
         <body>
     <div className="container_block">
-      <button className="minus" onClick={dec}>
+      <button type="button" className="minus" onClick={dec}>
         <span>-</span>
       </button>
       <span className="num">{num}</span>
-      <button className="plus" onClick={inc}>
+      <button type="button" className="plus" onClick={inc}>
         <span>+</span>
         <span></span>
       </button>
