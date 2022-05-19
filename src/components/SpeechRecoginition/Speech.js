@@ -13,8 +13,10 @@ import moment from "moment";
 
 
 import axios from 'axios';
-import { info ,myorders , order_status ,appointments , meetings , selected_slot} from '../../actions';
+import { info ,myorders , order_status ,appointments , meetings , selected_slot, logout , chart , info_doc} 
+from '../../actions';
 import { CountertopsOutlined } from '@mui/icons-material';
+import { list } from 'firebase/storage';
 
 const Speech = () => {
 
@@ -30,10 +32,17 @@ var counter_var = 0 ;
 const [approved_count,set_approved_count] =useState(0) //THE COUNT OF APPROVED ORDERS
 const [counter_state,set_counter_state]=useState(0) //COUNTER OF READING THE APPROVED ORDERS
 //////// USER ORDER PROFILE
+const [flag_kind_orders,set_flag_kind_orders]= useState(false);
 const [approved_array_orders,set_approved_array_orders] = useState([]); //Array of approved array of use
 const [current_order_id,set_current_id]=useState("");
 const [flag_approve_my_order ,set_approve_my_order] =useState(false); // if wants to make action to order 
+const [pending_orders_array , set_pending_orders_array] = useState([]); //To complete reading meetings
+const [count_pending_order , set_count_pending_order] = useState(0)
+const [counter_pending_order , set_counter_pending_order] = useState(0)
+const [reply_pending_order,set_reply_pending_order] = useState(false);
 
+
+/////Reserve meetings
 const [flag_reserve_meeting,set_flag_reserve_meeting] = useState(false) ; //if wants to ask to reserve
 
 const [flag_meeting_time,set_flag_meeting_time] = useState(false) ; //if wants to reply 1 - am / 2 = pm 
@@ -41,8 +50,19 @@ const [wanted_slot,set_wanted_slot]=useState(""); //AM OR PM
 const [wanted_dep,set_wanted_dep]=useState(""); //wanted department for reservation 
 const [flag_sure_reserve,set_sure_reserve] = useState(false); // TO MAKE RESERVATION ACTION
 
+//// profile meetings 
+const [pendig_array_Meetings, set_pending_array_meetings] = useState([]); //Pending Arrays of meetings
+const [today_array_Meetings, set_today_array_meetings] = useState([]); //Pending Arrays of meetings
+const [flag_enter_meeting , set_enter_meeting] = useState(false) //If he desides to enter the meeting
+const [flag_complete_reading , set_complete_reading] = useState(false); //To complete reading meetings
+const [count_today_meetings , set_count_today_meetings] = useState(0)
+const [counter_today_meetings , set_counter_today_meetings] = useState(0)
+
+
+const [flag_logout,set_flag_logout] = useState(false); //To make logout 
+
 const [flag_ask_my_order ,set_my_order] =useState(false); // if wants to ask about his orders
-const [wanted_sentence,set_wanted]=useState("")
+const [wanted_sentence,set_wanted]=useState("");
 
 let wanted_sentece = ""; //to send to model api   
 const [meeting_data,set_meeting_data] = useState({});
@@ -106,9 +126,22 @@ const voice = voices[1] || null; //voices [1] arabic eg 1/6/7
       Get_Pharmacies_Api();
   break;  
    case "account":
+     if(!token.token){
      SpeechRecognition.stopListening();
-     handle_speak = 'انا مش هقدر اساعدك فى عملية الدخول عشان محتاجة كتابة و عملية الخروج عشان الحماية'
-     speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+     handle_speak = 'انا مش هقدر اساعدك فى عملية الدخول عشان محتاجة كتابة'
+     navigate('/login')
+     speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say
+     }
+     else{
+       SpeechRecognition.stopListening();
+     handle_speak = 'حضرتك فاتح الأكونت بتاعك'
+     speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say
+
+     }
+
+
+
+
   break;  
   case "profile information":
      SpeechRecognition.stopListening();
@@ -144,6 +177,19 @@ const voice = voices[1] || null; //voices [1] arabic eg 1/6/7
     case 'reserve meeting' :
       reserve_meeting();
     break; 
+    case "logout":
+      if (token.token){
+      SpeechRecognition.stopListening();
+      handle_speak = 'لو عاوز انى اعمل لحضرتك تسجيل خروج اوول واحد'
+     speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+     set_flag_logout(true);
+      }
+      else{
+        SpeechRecognition.stopListening();
+      handle_speak = 'انت مش فاتح الأكونت بتاعك'
+     speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+      }
+      break;
         
 
   default:
@@ -178,47 +224,126 @@ axios.get(`https://future-medical.herokuapp.com/user/meetings`,
   headers : { 'Authorization': `Bearer ${token.token}` }
 }).then((res)=>{
 console.log(res.data);
+if (res.data != "you have no meetings yet"){
+var meetings_api = res.data ;
+var state = "Pending"
+ const current = new Date();
+
+// Get the State of the meeting 
+  for (var i = 0; i < meetings_api.length; i++) {
+    const day = meetings_api[i].Date.split("-");
+    if (parseInt(day[2]) < current.getFullYear()) state = "Done"; //year check
+    else if (parseInt(day[2]) > current.getFullYear())
+      state = "Pending"; //next year
+    else if ( parseInt(day[1]) === current.getMonth() + 1 &&  parseInt(day[0]) === current.getDate() && parseInt(day[2]) === current.getFullYear() )
+      state = "Today";
+    else if (parseInt(day[1]) < current.getMonth() + 1)
+      state = "Done"; //month check
+    else if (
+      parseInt(day[1]) === current.getMonth() + 1 && parseInt(day[0]) < current.getDate()
+    )
+      state = "Done"; //month check
+    else state = "Pending";
+    meetings_api[i].state = state;
+  }
+  console.log(meetings_api)
+
 
   SpeechRecognition.stopListening();
    //specialization = res.data[0].specialization ;
   //handle_speak = ` الطلبات بتاعتك هى  ` ;  
   var pending_meetings = "" ; var flag_pending = false;
-  //var approved_orders = ""; var flag_approved = false;
+  var Today_meetings = ""; var flag_Today_meetings = false;
+  var Today_meetings_List = [] ;
+  var pending_meetings_list = [];
   //var disapproved_orders = ""; var flag_disapproved = false;
   //var app_order_list = []
-  res.data.forEach((x) => {
-           if (x.status === "pending")
+  meetings_api.forEach((x) => {
+           if (x.state === "Pending")
            {
              flag_pending =true ;
+             pending_meetings_list.push(x);
              var time_slot =  x.slot.split("-");
                pending_meetings+="مقابلة بالتاريخ"+ " " + x.Date+ " مع دكتور " + x.doctor.arabic_username + " من الساعة " + time_slot[0] + " الى"+time_slot[1] + " . ";
-           }   
+           }
+           else if (x.state === "Today")
+           {
+              flag_Today_meetings = true ;
+              Today_meetings_List.push(x);
+           }
+           
           }  )
-if (flag_pending)
+
+           
+if(Today_meetings_List.length != 0 )
 {
-  handle_speak+=" مقابلات معادها مش الأن " +" . "+ pending_meetings;
+  set_pending_array_meetings(pending_meetings_list); //TO READ IT AFTER IF HE WANT IT 
+  var time_slot =  Today_meetings_List[0].slot.split("-");
+  handle_speak += "مقابلة اليوم" + " مع دكتور " + Today_meetings_List[0].doctor.arabic_username + " من الساعة " + time_slot[0] + " الى"+time_slot[1] + " لو عاوز تدخل المقابلة اوول واحد "
+  set_enter_meeting(true);
+  if (Today_meetings_List.length > 1){ //SET COUNT OF LIST AND CURRENT COUNT
+    
+    set_count_today_meetings(Today_meetings_List.length - 1);
+    set_counter_today_meetings(0);
+    set_today_array_meetings(Today_meetings_List);
+   }
+}
+
+if (flag_pending && (flag_Today_meetings == false))
+{
+  //Pending Only
+  handle_speak+=" مقابلات معادها مش اليوم " +" . "+ pending_meetings;
 } 
 
-if (flag_pending == false)
+if (flag_pending == false && flag_Today_meetings == false )
 {
    handle_speak += "لا يوجد مقابلات للمتابعة"
 }
 
         speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
-
+}
+else {
+  //NO MEETINGS
+  SpeechRecognition.stopListening();
+  handle_speak += "لا يوجد مقابلات للمتابعة"
+  speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+}
 
 }).catch((err)=>{console.log(err)})
 }
 
+const complete_today_meetings = (today_list) =>{
+  SpeechRecognition.stopListening();
+  var time_slot =  today_list[counter_today_meetings+1].slot.split("-");
+  handle_speak += "مقابلة اليوم" + " مع دكتور " + today_list[counter_today_meetings+1].doctor.arabic_username + " من الساعة " + time_slot[0] + " الى"+time_slot[1] + " لو عاوز تدخل المقابلة اوول واحد "
+  set_enter_meeting(true);
+  set_counter_today_meetings(count_today_meetings+1) ; 
+  speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+} 
+
+
+const complete_reading_meetings = (list) =>{
+  var pending_meetings = "";
+  SpeechRecognition.stopListening();
+for (var x = 0 ; x < list.length ; x++)
+{
+  var time_slot =  list[x].slot.split("-");
+  pending_meetings+="مقابلة بالتاريخ"+ " " + list[x].Date+ " مع دكتور " + list[x].doctor.arabic_username + " من الساعة " + time_slot[0] + " الى"+time_slot[1] + " . ";
+}
+handle_speak+=" مقابلات معادها مش اليوم " +" . "+ pending_meetings;
+speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+}
+
+
 // GET USER ORDERS PROFILE 
-const Get_User_Orders =()=>{
+const Get_User_Orders =(kind_order)=>{
   
 axios.get(`https://future-medical.herokuapp.com/user/orders`,
 {
   headers : { 'Authorization': `Bearer ${token.token}` }
 }).then((res)=>{
 console.log(res.data);
-if(res.data !== "no doctors found in this department"){
+if(res.data !== "you have no orders yet"){
   SpeechRecognition.stopListening();
    //specialization = res.data[0].specialization ;
   //handle_speak = ` الطلبات بتاعتك هى  ` ;  
@@ -226,7 +351,36 @@ if(res.data !== "no doctors found in this department"){
   var approved_orders = ""; var flag_approved = false;
   var disapproved_orders = ""; var flag_disapproved = false;
   var app_order_list = []
-  res.data.forEach((x) => {
+  var pending_order_list =[]
+  if (kind_order == "disapproved"){
+   res.data.forEach((x) => {
+       if (x.status === "disapproved")
+           {
+               flag_disapproved = true ;
+               disapproved_orders+="طلب بالتاريخ"+ " " + x.order_data.Date+ " من " + x.pharmacy.arabic_name + " . " ;
+           } 
+   } )
+  }
+  else if (kind_order == "approved"){
+    res.data.forEach((x) => {
+       if (x.status === "approved")
+           {
+               app_order_list.push(x);
+               flag_approved = true ;
+               //disapproved_orders+="طلب بالتاريخ"+ " " + x.order_data.Date+ " من " + x.pharmacy.arabic_name + " . " ;
+           } 
+   } )
+ }
+ else{
+     res.data.forEach((x) => {
+           if (x.status === "pending")
+           {
+             pending_order_list.push(x);
+             flag_pending =true ;
+               //pending_oders+="طلب بالتاريخ"+ " " + x.order_data.Date+ " من " + x.pharmacy.arabic_name + " . " ;
+           } })
+ }
+  /*res.data.forEach((x) => {
            if (x.status === "pending")
            {
              flag_pending =true ;
@@ -239,70 +393,117 @@ if(res.data !== "no doctors found in this department"){
               /*if (flag_approved = false)
               { //Fisrt approved order
               approved_orders+="طلب بالتاريخ"+ " " + x.order_data.Date+ " من " + x.pharmacy.arabic_name + " . " + " السعر " + x.price + " . ";
-              }*/
+              }
                flag_approved = true ;
             }   
-           if (x.status === "disapproved")
-           {
-               flag_disapproved = true ;
-               disapproved_orders+="طلب بالتاريخ"+ " " + x.order_data.Date+ " من " + x.pharmacy.arabic_name + " . " ;
-           }       
-     })
-set_approved_array_orders(app_order_list); //Approved order List      
-if (flag_pending)
-{
-  handle_speak+=" الطلبات دى لسة متردش عليها من الصيدلية" +" . "+ pending_oders;
-} 
-if (flag_disapproved)
-{
-  handle_speak+=" الطلبات دى متوافقش عليها من الصيدلية" + ". " +disapproved_orders;
-} 
-if (flag_approved)
-{
-  handle_speak+=" الطلبات دى اتوافق عليها من الصيدلية" + " . "+approved_orders;
-  handle_speak+="طلب بالتاريخ "+ " " + app_order_list[0].order_data.Date+ " من " + app_order_list[0].pharmacy.arabic_name + " . " + " السعر " + app_order_list[0].price + " . ";
-   handle_speak += " لو عاوز توافق على الطلب اوول واحد لو عاوز تلغى الطلب اوول اتنين "
-   set_approve_my_order(true)
-   //console.log(app_order_list[0])
-   set_current_id(app_order_list[0]._id)
-  if (app_order_list.length == 1)
+               
+     })*/
+//set_approved_array_orders(app_order_list); //Approved order List      
+if (kind_order == "pending")
+{ 
+  if (flag_pending)
   {
-    console.log("only one approved ")
-  }
-  else 
-  {
-    set_approved_count( app_order_list.length);
-   //approved_count = app_order_list.length ; //Length of array approved 
-   counter_var = 1 ;// alli at2ra wahed 
-   set_counter_state(1);
-    //more than one element 
-    //function takes the list say first .. 
+    if(pending_order_list.length == 1){
+       pending_oders="طلب بالتاريخ"+ " " + pending_order_list[0].order_data.Date+ " من " + pending_order_list[0].pharmacy.arabic_name +" لو عاوز تلغى الطلب اوول واحد "+ " . " ;
+       handle_speak=" الطلبات دى لسة متردش عليها من الصيدلية" +" . "+ pending_oders;
+       set_reply_pending_order(true);
+       set_current_id(pending_order_list[0]._id)
+    }
+   else{
+     pending_oders="طلب بالتاريخ"+ " " + pending_order_list[0].order_data.Date+ " من " + pending_order_list[0].pharmacy.arabic_name +" لو عاوز تلغى الطلب اوول واحد "+ " . " ;
+       handle_speak=" الطلبات دى لسة متردش عليها من الصيدلية" +" . "+ pending_oders;
+       set_reply_pending_order(true);
+     set_pending_orders_array(pending_order_list)
+     set_count_pending_order(pending_order_list.length-1);
+     set_counter_pending_order(0);
+     set_current_id(pending_order_list[0]._id) //id if first order
+   }
 
+}
+  else{
+    //no pending 
+    handle_speak ="لا يوجد طلبات لم يتم الرد عليها"
   }
 } 
-if (flag_approved == false && flag_disapproved == false && flag_pending == false)
+if (kind_order == "disapproved")
 {
-   handle_speak += "لا يوجد طلبات للمتابعة"
-}
+  if(flag_disapproved){
+  handle_speak+=" الطلبات التى لم يتوافق عليها من الصيدلية" + ". " +disapproved_orders;
+  }
+  else{
+    //no disapproved 
+     handle_speak ="لا يوجد طلبات لم يتم التوافق عليها"
+  }
+} 
+if (kind_order == "approved")
+{
+    if (flag_approved)
+  {
+    if(pending_order_list.length == 1){
+       handle_speak=" الطلبات دى اتوافق عليها من الصيدلية" + " . "
+       handle_speak+="طلب بالتاريخ "+ " " + app_order_list[0].order_data.Date+ " من " + app_order_list[0].pharmacy.arabic_name + " . " + " السعر " + app_order_list[0].price + " . ";
+       handle_speak += " لو عاوز توافق على الطلب اوول واحد لو عاوز تلغى الطلب اوول اتنين "
+       set_approve_my_order(true)
+       set_current_id(app_order_list[0]._id)
+    }
+   else{
+     handle_speak+="طلب بالتاريخ "+ " " + app_order_list[0].order_data.Date+ " من " + app_order_list[0].pharmacy.arabic_name + " . " + " السعر " + app_order_list[0].price + " . ";
+       handle_speak += " لو عاوز توافق على الطلب اوول واحد لو عاوز تلغى الطلب اوول اتنين "
+       set_approve_my_order(true)
+       set_current_id(app_order_list[0]._id)
 
-        speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
-}
+     set_approved_array_orders(app_order_list);
+     set_approved_count( app_order_list.length-1);
+       set_counter_state(0);
+     //set_count_pending_order(pending_order_list.length-1);
+     //set_counter_pending_order(0);
+     //set_current_id(pending_order_list[0]._id) //id if first order
+   }
 
+}
+else {
+  handle_speak ="لا يوجد طلبات تم التوافق عليها"
+}}      
+}
+else{
+  handle_speak =" لا يوجد طلبات للمتابعة"
+}
+ speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
 }).catch((err)=>{console.log(err)})
 }
 
+const complete_pending_orders =(cancel_flag)=>{
+  // "  تمت العملية بنجاح " + " "
+      console.log("here",cancel_flag);
+      SpeechRecognition.stopListening();
+      if (cancel_flag == "done cancel"){
+        handle_speak = "  تمت العملية بنجاح " + " . "
+      }
+      var pending_oders="طلب بالتاريخ"+ " " + pending_orders_array[counter_pending_order+1].order_data.Date+ " من " + pending_orders_array[counter_pending_order+1].pharmacy.arabic_name +" لو عاوز تلغى الطلب اوول واحد "+ " . " ;
+       handle_speak += " . "+ pending_oders;
+       speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+       set_reply_pending_order(true);
+       set_counter_pending_order(counter_pending_order+1);
+       set_current_id(pending_orders_array[counter_pending_order+1]._id) //Current order id 
+}
+
 /// HANDLE THE REST OF APPROVED ORDERS 
-const handle_rest_approved = ()=>{
-  console.log("approved array" ,approved_array_orders)
+const handle_rest_approved = (cancel_flag)=>{
+   SpeechRecognition.stopListening();
+
+  if (cancel_flag == "done cancel"){
+        handle_speak += "  تمت العملية بنجاح " + " . "
+      }
+  //console.log("approved array" ,approved_array_orders)
   //console.log("counter var ",counter_var )
-  console.log("counter state ",counter_state ) 
-  SpeechRecognition.stopListening();
-  handle_speak +="طلب بالتاريخ "+ " " + approved_array_orders[counter_state].order_data.Date+ " من " + approved_array_orders[counter_state].pharmacy.arabic_name + " . " + " السعر " + approved_array_orders[counter_state].price + " . ";
+  //console.log("counter state ",counter_state ) 
+ 
+  handle_speak +="طلب بالتاريخ "+ " " + approved_array_orders[counter_state+1].order_data.Date+ " من " + approved_array_orders[counter_state+1].pharmacy.arabic_name + " . " + " السعر " + approved_array_orders[counter_state+1].price + " . ";
   handle_speak += " لو عاوز توافق على الطلب اوول واحد لو عاوز تلغى الطلب اوول اتنين "
    set_approve_my_order(true)
    //console.log(app_order_list[0])
-   set_current_id(approved_array_orders[counter_state]._id)
-   counter_var = counter_var + 1 ;
+   set_current_id(approved_array_orders[counter_state+1]._id)
+   //counter_var = counter_var + 1 ;
    set_counter_state(counter_state + 1);
     speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
 } 
@@ -419,7 +620,7 @@ const Approve_Order_Api = async(id)=>{
   headers : { 'Authorization': `Bearer ${token.token}` }
 })
         const data = await res.data;
-        //SpeechRecognition.stopListening();
+        SpeechRecognition.stopListening();
          //handle_speak = " تمت العملية بنجاح " + " ";  
          //speak({ text: handle_speak , voice : voice , rate :1 }) //What to say 
         //alert('Order approved')
@@ -431,6 +632,18 @@ const Approve_Order_Api = async(id)=>{
            }
            console.log(o)
            dispatch(order_status(o));
+           if(counter_state!=approved_count)
+             {
+               //complete pending 
+               handle_rest_approved("done cancel");
+             }
+             else {
+               //Last order 
+               handle_speak = "  تمت العملية بنجاح " + " ";  
+               speak({ text: handle_speak , voice : voice , rate : 1}) //What to say 
+               set_counter_state(0)
+               set_approved_count(0)
+             }
         
         console.log(data)       
 
@@ -442,7 +655,7 @@ const Approve_Order_Api = async(id)=>{
 }
 
 ///////////////// Cancel ORDER USER 
-const Cancel_Order_Api = async(id)=>{
+const Cancel_Order_Api = async(id,type)=>{
   console.log("Order Id" , id)
   try {
         const res = await axios.patch('https://future-medical.herokuapp.com/user/order/cancel',{
@@ -451,7 +664,7 @@ const Cancel_Order_Api = async(id)=>{
   headers : { 'Authorization': `Bearer ${token.token}` }
 })
         const data = await res.data;
-        //SpeechRecognition.stopListening();
+        SpeechRecognition.stopListening();
         //alert('Order cancelled successfully');
            var o=[];
            for(var i=0; i<get_orders_store.length;i++)
@@ -459,6 +672,35 @@ const Cancel_Order_Api = async(id)=>{
              if(get_orders_store[i]._id !== id) o.push(get_orders_store[i]);
            }
            dispatch(order_status(o));
+           console.log(counter_pending_order)
+           if (type == "pending"){
+            if(count_pending_order!=counter_pending_order)
+             {
+               //complete pending 
+               complete_pending_orders("done cancel");
+             }
+             else {
+               //Last order 
+                handle_speak = "  تمت العملية بنجاح " + " ";  
+                speak({ text: handle_speak , voice : voice , rate : 1}) //What to say 
+               set_counter_pending_order(0);
+               set_count_pending_order(0)
+             }
+           }
+           else if (type ="approved"){
+            if(counter_state!=approved_count)
+             {
+               //complete pending 
+               handle_rest_approved("done cancel");
+             }
+             else {
+               //Last order 
+              handle_speak = "  تمت العملية بنجاح " + " ";  
+         speak({ text: handle_speak , voice : voice , rate : 1}) //What to say 
+               set_counter_state(0)
+               set_approved_count(0)
+             }
+            }
          //handle_speak = "  تمت العملية بنجاح " + " ";  
         // speak({ text: handle_speak , voice : voice , rate : 1}) //What to say 
         console.log(data)       
@@ -479,8 +721,8 @@ const Cancel_Order_Api = async(id)=>{
 
 
 ///////////////// departments tag 
-const departments_format = ['طوارئ','جلدية','قلب','صدر و التنفس','تغذية','مسالك بولية','اطفال'];
-const departments = ['الطوارئ','الجلدية','القلب','الصدر و التنفس','التغذية','مسالك بولية','طب الاطفال'];
+const departments_format = ['جلدية','قلب','صدر و التنفس','تغذية','مسالك بولية','اطفال','نفسي'];
+const departments = ['الجلدية','القلب','الصدر و التنفس','التغذية','مسالك بولية','طب الاطفال','الطب النفسي'];
 //const departments = ['طب الاطفال','جراحة عامة','طب الاطفال','جراحة عامة','طب الاطفال','جراحة عامة'] ;
 const read_departments = async ()=>{
   var word = wanted_sentece;
@@ -508,7 +750,7 @@ const read_departments = async ()=>{
   if (flag_speicific_dep == false){
   //SpeechRecognition.stopListening();
   SpeechRecognition.stopListening();
-  handle_speak = "الأقسام الموجودة هى" ;  
+  handle_speak = "الأقسام الموجودة هى"+ " . " ;  
 for (let i = 0 ; i < departments.length ; i++)
 {
     //await sleepNow (2500)
@@ -524,9 +766,12 @@ const my_orders = ()=>{
    SpeechRecognition.stopListening(); 
    if (token.token)
    {
+           handle_speak = "لو عاوز تعرف الطلبات التى توافق عليها اوول واحد و  لو عاوز تعرف الطلبات التى لم يتوافق عليها اوول اتنين و لو عاوز تعرف الطلبات التى لم يتم الرد عليها اوول تلاتة" 
            dispatch(myorders())
            navigate('/user')
-           Get_User_Orders();
+           speak({ text: handle_speak , voice : voice , rate : 1}) //What to say 
+           set_flag_kind_orders(true);
+           //Get_User_Orders();
    }
    else { //not logined 
     
@@ -555,7 +800,7 @@ const reserve_meeting = ()=>{
      set_wanted_dep("");
    if (token.token)
    {
-             handle_speak = "الأقسام الموجودة هى" ;  
+             handle_speak = "الأقسام الموجودة هى" + " . ";  
              for (let i = 0 ; i < departments.length ; i++)
              {
                //await sleepNow (2500)
@@ -691,80 +936,6 @@ const GET_DATES_DOCTORS = (timetable) =>{
     }
   };
 
-  /*const Get_Date_Slots = (date,dr_name)=>{
-      var reserved = Get_reserved_Slots(date,dr_name);
-
-  }*/
-
-//returns array for morning slots, another array for evening slots
-  /*const [mor, setmor] = useState([]);
-  const [eve, seteve] = useState([]);
-  const [data, setdata] = useState("");
-
-   const get_slots = (item,dr_name,slot) => {
-    //setdone_reserve(false);
-    setdata(item); //to know the day and date clicked
-    var morning_shifts = [];
-    var evening_shifts = [];
-    const day = item.format("dddd");
-    const date = `${item.format("DD-MM-YYYY")}`; //to api
-    (async () => {
-      var reserved = await Get_reserved_Slots(date,dr_name);
-      console.log(reserved);
-
-      for (var i = 0; i < dr_app.length; i++) {
-        if (dr_app[i].day === day) {
-          //check day
-          if (dr_app[i].from <= 12) {
-            const num_slots =
-              parseInt(parseInt(dr_app[i].to) - parseInt(dr_app[i].from)) * 2;
-            console.log(num_slots);
-            var c = parseInt(dr_app[i].from);
-            var d = parseInt(dr_app[i].from) + 1;
-
-            for (var k = 0; k < num_slots; k++) {
-              //check for slot state
-              if (k % 2 === 0) 
-              {
-                if (!(reserved.includes(`${c}:00 - ${c}:30`)))
-              {  morning_shifts.push(`${c}:00 - ${c}:30`);}
-              }
-              else 
-                {
-                  if (!(reserved.includes(`${c}:30 - ${d}:00`)))
-                  {morning_shifts.push(`${c}:30 - ${d}:00`);}
-                  c += 1;
-                  d += 1;
-              }
-              }
-            
-          } else if (dr_app[i].from > 12) {
-            const num_slots =
-              parseInt(parseInt(dr_app[i].to) - parseInt(dr_app[i].from)) * 2;
-            console.log(num_slots);
-            var c = parseInt(dr_app[i].from);
-            var d = parseInt(dr_app[i].from) + 1;
-            for (var k = 0; k < num_slots; k++) {
-              if (k % 2 === 0) {
-                if (!(reserved.includes(`${c}:00 - ${c}:30`)))
-               { evening_shifts.push(`${c}:00 - ${c}:30`);}
-              } else {
-                if (!(reserved.includes(`${c}:30 - ${d}:00`)))
-                {evening_shifts.push(`${c}:30 - ${d}:00`);}
-                  c += 1;
-                  d += 1;
-                }
-              }
-            }
-          }
-        }
-      })();
-      console.log(morning_shifts)
-      if(slot == "AM")
-      {return morning_shifts ;}
-      if(slot == "PM")
-      {return evening_shifts ;}
-  };*/
 
 const handle_reserve_meeting = (dept_name)=>{
  var flag_exist = false ;
@@ -843,14 +1014,15 @@ if(data !== "no doctors found in this department"){
   for (var j = 0 ; j < data.length ; j++) {
      var items = GET_DATES_DOCTORS(data[j].timetable)  ;  //ALL DATES FOR DOCTORS
     //const uppercaseItem = await asyncUppercase(items[i]);
-     
+     var flag_found_slot = false ;
     await (async () => {
      for (var i = 0 ; i < items.length ; i++ )
      {
        var required_slots = [] ; 
         required_slots = await Get_Slots( items[i],data[j].email ,slot )
-            if (required_slots!= []) //GET SLOTS FOR EACH DATE
+            if (required_slots.length != 0) //GET SLOTS FOR EACH DATE
                  {
+                   flag_found_slot = true ;
                    var time_slot =  required_slots[0].split("-");
                      console.log(required_slots[0]) ;                     
                      navigate("/clinicdoctor", { state: { Doctor_id: data[j].email } });
@@ -869,6 +1041,16 @@ if(data !== "no doctors found in this department"){
                  } 
      }
      })()
+     ///////*/////// Break of doctors List if we found a slot 
+       if(flag_found_slot)
+       {
+         break ;
+       }
+       if(flag_found_slot == false && j == data.length - 1)
+       {
+          handle_speak += " لا يوجد مواعيد متاحة "
+           speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
+       }
     }       
 })()
 }
@@ -961,6 +1143,10 @@ const {
      set_flag_reserve_meeting(false)
      set_flag_meeting_time(false)
      set_sure_reserve(false);
+     set_count_today_meetings(0)
+     set_counter_today_meetings(0)
+     set_count_pending_order(0)
+     set_counter_pending_order(0)
      cancel(); //Stop speaking
    }
  },[press_state])
@@ -984,13 +1170,13 @@ const {
  },[])*/
 
 
-const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"," إتنين"," اثنان"]; 
+const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"," إتنين"," اثنان"," تلاتة."," تلاتة"]; 
  useEffect(() => {
 
     //console.log("first Done",handle_first_render)
     //if(handle_first_render){listenContinuously();}
     //console.log("malkkkkkkkkk")
-     listenContinuously();
+     //listenContinuously();
    if (finalTranscript !== '') {
     // console.log("my odrer",flag_ask_my_order);
     
@@ -1004,7 +1190,146 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
      }
      console.log('sentece', wanted_sentece); //GO TO THE MODEL 
      set_wanted(wanted_sentece)
-    if (flag_sure_reserve){
+     if (reply_pending_order){
+         set_reply_pending_order(false)
+         //wait one to cancel 
+          if(replies_my_order.includes(wanted_sentece)){
+          var index_reply = replies_my_order.indexOf(wanted_sentece);
+          if (index_reply == 0 || index_reply == 3)
+           { 
+             ///Cancel 
+             //Cancel_Order_Api
+             Cancel_Order_Api(current_order_id,"pending");
+           }}
+           else{
+             if(count_pending_order!=counter_pending_order)
+             {
+               //complete pending 
+               complete_pending_orders();
+             }
+             else{
+               set_count_pending_order(0); //Initial state
+               set_counter_pending_order(0);
+               Get_Voice_model(wanted_sentece); //voice moedl 
+              setindex(finalTranscript.length); //Update the index 
+
+             }
+           }
+
+     }
+     else if(flag_kind_orders)
+     {
+       set_flag_kind_orders(false);
+          //one approved 2 disapproved // 3 pending
+          if(replies_my_order.includes(wanted_sentece)){
+          var index_reply = replies_my_order.indexOf(wanted_sentece);
+          if (index_reply == 0 || index_reply == 3)
+           { 
+                   //one 
+                   console.log("one")
+                   Get_User_Orders("approved");
+
+           }
+           else if (index_reply == 6 || index_reply == 7){
+             //3
+             console.log("three")
+             Get_User_Orders("pending");
+           }
+           else{
+             //two
+             console.log("two")
+             Get_User_Orders("disapproved");
+           } 
+          }
+           else{
+              //model
+           Get_Voice_model(wanted_sentece); //voice moedl 
+          setindex(finalTranscript.length); //Update the index 
+           }
+
+     }
+     else if(flag_logout){
+      set_flag_logout(false)
+         //wait one to execute logout
+               if(replies_my_order.includes(wanted_sentece)){
+          var index_reply = replies_my_order.indexOf(wanted_sentece);
+          if (index_reply == 0 || index_reply == 3)
+           { 
+                   dispatch(logout());
+                   dispatch(chart());
+                   dispatch(info())
+                   dispatch(info_doc())
+                   navigate("/");
+           }}
+           else{
+              //model
+           Get_Voice_model(wanted_sentece); //voice moedl 
+          setindex(finalTranscript.length); //Update the index 
+           } 
+    }
+    else if (flag_complete_reading)
+    {
+      //Wait one if wants to complete reading 
+      set_complete_reading(false)
+      if(replies_my_order.includes(wanted_sentece)){
+          var index_reply = replies_my_order.indexOf(wanted_sentece);
+          if (index_reply == 0 || index_reply == 3)
+           { 
+               console.log("complete")
+               if (count_today_meetings != counter_today_meetings)
+               {
+                 complete_today_meetings(today_array_Meetings);
+               }
+               else if (count_today_meetings == counter_today_meetings && pendig_array_Meetings.length !=0 )
+               { 
+                 //if equal complete pending
+                 complete_reading_meetings(pendig_array_Meetings)}
+                 set_counter_today_meetings(0);
+                 set_count_today_meetings(0); //Return to the initial state 
+               
+              }
+          }
+      else{
+           //model
+           Get_Voice_model(wanted_sentece); //voice moedl 
+          setindex(finalTranscript.length); //Update the index 
+      }
+    }
+
+    else if (flag_enter_meeting){
+      //WAIT ONE IF WANT TO ENTER THE MEETING
+      set_enter_meeting(false);
+
+      if(replies_my_order.includes(wanted_sentece)){
+          var index_reply = replies_my_order.indexOf(wanted_sentece);
+          if (index_reply == 0 || index_reply == 3)
+           { // One enter 
+              navigate('/user/meetingroom') ; //return to init state lw d5l meeting 
+              set_counter_today_meetings(0);
+              set_count_today_meetings(0); //Return to the initial state 
+            }
+          }
+      else
+          {
+            console.log(pendig_array_Meetings)
+            if (pendig_array_Meetings.length != 0 || today_array_Meetings.length > 1)
+                {
+                  SpeechRecognition.stopListening();
+                  var speaking_ask = "لو عاوز تعرف باقى المواعيد اوول واحد" 
+                   speak({ text: speaking_ask , voice : voice , rate : 1}) //What to say }
+                   set_complete_reading(true)
+                }
+                else{
+                  // mfesh meetings tt2ry 
+                   Get_Voice_model(wanted_sentece); //voice moedl 
+                setindex(finalTranscript.length); //Update the index 
+                } 
+                
+              }
+    }
+
+
+    else if (flag_sure_reserve){
       //wait one to make reservation 
       set_sure_reserve(false)
       if(replies_my_order.includes(wanted_sentece)){
@@ -1056,7 +1381,39 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
      }
     else if(flag_approve_my_order)
      {
-       set_approve_my_order(false) 
+
+      set_approve_my_order(false)
+         //wait one to cancel 
+          if(replies_my_order.includes(wanted_sentece)){
+          var index_reply = replies_my_order.indexOf(wanted_sentece);
+          if (index_reply == 0 || index_reply == 3)
+           { 
+             ///Cancel 
+             //Cancel_Order_Api
+              Approve_Order_Api(current_order_id);
+            
+           }
+           else if (index_reply == 1 || index_reply == 2 || index_reply == 5)
+           {//two //cancel order
+              Cancel_Order_Api(current_order_id,"approved");
+           }
+          }
+           else{
+             if(counter_state != approved_count)
+             {
+               //complete approved 
+               handle_rest_approved();   
+             }
+             else{
+                set_counter_state(0) //initial state
+              set_approved_count(0)
+               Get_Voice_model(wanted_sentece); //voice moedl 
+              setindex(finalTranscript.length); //Update the index 
+
+             }
+           }
+
+       /*set_approve_my_order(false) 
        if(replies_my_order.includes(wanted_sentece))
        {
          console.log("yes")
@@ -1091,7 +1448,7 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
               counter_var = 0 ; 
               set_counter_state(0)
               set_approved_count(0)
-            }
+            }*/
         
      }
      else{

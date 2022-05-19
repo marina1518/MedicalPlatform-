@@ -18,9 +18,11 @@ function PharmacyOrder(props) {
     const [Formerrors, setFormerrors ] = useState({});
     const [issubmit, setissubmit ] = useState(false);
     console.log(props)
+        //const day_date = (d.getMonth()+1) +"-" +d.getDate()  + "-" + d.getFullYear();
+        //console.log(day_date)
 
     const make_order_api = ()=>{
-        const day_date = (d.getMonth()+1) +"-" +d.getDate()  + "-" + d.getFullYear();
+        const day_date = d.getDate() +"-" + (d.getMonth()+1) + "-" + d.getFullYear();
         console.log(day_date)
         console.log(FormValues)
         console.log( props.pharmacyadmin)

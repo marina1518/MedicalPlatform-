@@ -3,7 +3,7 @@ import {useNavigate,Navigate} from 'react-router-dom'
 import {useSelector,useDispatch} from 'react-redux'
 import { useJwt } from 'react-jwt'
 function Privateuser({ children }) {
-  const token = useSelector(state => state.auth) //state of token 
+  const token = JSON.parse(useSelector(state => state.auth)) //state of token 
   //let { decodedToken, isExpired } = useJwt(token.token);
   //console.log(decodedToken)
   console.log(token); 
