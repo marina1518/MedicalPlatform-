@@ -74,3 +74,18 @@
 .react-chatbot-kit-chat-message-container::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
 }
+
+.react-chatbot-kit-user-chat-message {
+  direction: rtl;
+}
+.react-chatbot-kit-chat-input {
+  direction: rtl;
+}
+.react-chatbot-kit-chat-bot-message {
+  text-align: start;
+  direction: rtl;
+  /* direction: ltr; */
+  /* font-family: Arial, Helvetica, sans-serif; */
+  /* font-family: "Cairo", sans-serif; */
+  /* unicode-bidi: normal; */
+}
