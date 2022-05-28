@@ -168,7 +168,7 @@ const quanity=()=>{
                 <Button variant="secondary" onClick={(e)=>{handleClose(); props.cancel(false);}}>
                   Cancel
                 </Button>
-                <Button variant="primary" onClick={(e)=>{setdone(true); quanity();}} disabled={next} disabled={dis}>
+                <Button variant="primary" onClick={(e)=>{setdone(true); quanity();}} disabled={next || dis} >
                   Next
                 </Button>
               </Modal.Footer>}
