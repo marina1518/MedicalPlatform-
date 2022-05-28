@@ -1,0 +1,42 @@
+.coupon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.coupon-card {
+  width: 400px;
+  padding: 10px;
+  border-radius: 20px;
+  background: #355861;
+  border: none;
+  color: #fff;
+  height: 400px;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.coupon-code {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+  padding-bottom: 1rem;
+  color: whitesmoke;
+}
+
+.image1free {
+  position: absolute;
+  opacity: 0.1;
+  left: 0;
+  top: 0;
+}
+
+.image2free {
+  position: absolute;
+  bottom: 0;
+  right: 9px;
+  opacity: 0.1;
+}

@@ -1,4 +1,4 @@
-import { React, useRef, useEffect ,useState } from "react";
+import { React, useRef, useEffect, useState } from "react";
 import { ListGroup, Row, Col, Button } from "react-bootstrap";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,15 +12,19 @@ import Carousel from "react-grid-carousel";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Reserve_Date from "./Reserve_Date";
+import Backdrop from "@mui/material/Backdrop";
+import Coupon from "../Coupon/Coupon";
 
 const Calendar = (props) => {
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(selected_slot({})); //EMPTY
-  },[])
-  console.log(props.data.timetable)
+  }, []);
+  console.log(props.data.timetable);
   const dispatch = useDispatch();
-   const slot_state = JSON.parse(useSelector((state) => state.reserving_reducer));
-   console.log("slot_state",slot_state)
+  const slot_state = JSON.parse(
+    useSelector((state) => state.reserving_reducer)
+  );
+  console.log("slot_state", slot_state);
   console.log(props.data.id);
   const config = { headers: { Authorization: `Bearer ${props.data.token}` } };
   var reserved_slots = [];
@@ -55,13 +59,12 @@ const Calendar = (props) => {
       const data = await res.data;
       console.log(data);
       alert(data);
-      dispatch(selected_slot({})); //EMPTY 
+      dispatch(selected_slot({})); //EMPTY
     } catch (err) {
       console.error(err);
     }
   };
 
- 
   let momentObject = moment();
   mom.tz.setDefault("Egypt/Cairo");
 
@@ -90,12 +93,12 @@ const Calendar = (props) => {
   const get_slots = (e, item) => {
     setdone_reserve(false);
     setdata(item); //to know the day and date clicked
-   
+
     var morning_shifts = [];
     var evening_shifts = [];
     const day = item.format("dddd");
     const date = `${item.format("DD-MM-YYYY")}`; //to api
-     dispatch(selected_slot({"slot":slot_time , "date" : date })); //WHEN CHANGE THE DAY
+    dispatch(selected_slot({ slot: slot_time, date: date })); //WHEN CHANGE THE DAY
     (async () => {
       var reserved = await Get_timetable(date);
       console.log(reserved);
@@ -191,6 +194,8 @@ const Calendar = (props) => {
   const [slot_time, setslot] = useState("");
   let r = {};
   const reserve = (e, slot) => {
+    console.log("event", e);
+    console.log("time_slot", slot_time);
     e.preventDefault();
     let y = `${data.format("DD-MM-YYYY")}`;
     r.doctorEmail = props.data.email;
@@ -206,6 +211,15 @@ const Calendar = (props) => {
   };
 
   const [done_reserve, setdone_reserve] = useState(false);
+
+  // Backdrop code
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   return (
     <ListGroup variant="flush">
@@ -243,7 +257,6 @@ const Calendar = (props) => {
                         id="calender-btn"
                         class="btn"
                         onClick={(e) => get_slots(e, item)}
-                        
                       >
                         <Reserve_Date
                           day={item.format("DD")}
@@ -275,7 +288,12 @@ const Calendar = (props) => {
                   : mor.map((item) => (
                       <Button
                         onClick={() => {
-                          dispatch(selected_slot({"slot":item.slot , "date" : `${data.format("DD-MM-YYYY")}`}));
+                          dispatch(
+                            selected_slot({
+                              slot: item.slot,
+                              date: `${data.format("DD-MM-YYYY")}`,
+                            })
+                          );
                           setslot(item.slot);
                           setcan(true);
                         }}
@@ -320,17 +338,40 @@ const Calendar = (props) => {
             </Col>
           </Row>
           <br />
-          {(slot_state.slot != "" && slot_state.date != "" && slot_state.slot && slot_state.date ) && !done_reserve && props.data.token ? (
+          {slot_state.slot != "" &&
+          slot_state.date != "" &&
+          slot_state.slot &&
+          slot_state.date &&
+          !done_reserve &&
+          props.data.token ? (
             <>
               <Row>
                 <Col>
-                  <BsClockFill /> {/*<label>{`${data.format("DD-MM-YYYY")}`} {slot_time}</label>*/}
-                  {<label>{slot_state.date} {slot_state.slot}</label>}
+                  <BsClockFill />{" "}
+                  {/*<label>{`${data.format("DD-MM-YYYY")}`} {slot_time}</label>*/}
+                  {
+                    <label>
+                      {slot_state.date} {slot_state.slot}
+                    </label>
+                  }
                 </Col>
                 <Col>
-                  <Button onClick={(e) => reserve(e, slot_time)}>
+                  {/* <Button onClick={(e) => reserve(e, slot_time)}>
                     Reserve
-                  </Button>
+                  </Button> */}
+                  <Button onClick={handleOpen}>Reserve</Button>
+                  <Backdrop
+                    sx={{
+                      color: "#fff",
+                      zIndex: (theme) => theme.zIndex.drawer + 1,
+                    }}
+                    open={open}
+                  >
+                    <Coupon
+                      clickSubmit={(e) => reserve(e, slot_time)}
+                      close={handleClose}
+                    />
+                  </Backdrop>
                 </Col>
               </Row>
             </>
