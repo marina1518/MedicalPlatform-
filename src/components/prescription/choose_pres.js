@@ -16,6 +16,7 @@ const Choose_pres=(props)=>{
         const[number, setnumber] = useState(1);
         const [q,setq]=useState([]);
         const[next, setnext] = useState(false);
+        const[dis, setdis] = useState(true);
         const token = JSON.parse(useSelector((state) => state.auth));
        
         const config = {headers: {
@@ -134,7 +135,7 @@ const quanity=()=>{
                 {
                     p.medicines.map((m)=>
                 <>
-                <input type="checkbox" id={m} name={m} value={m} onChange={(e)=>change(e.target.value)}/>
+                <input type="checkbox" id={m} name={m} value={m} onChange={(e)=>{change(e.target.value); setdis(false);}} />
                 <label for={m}>  {" "+ m}</label><br></br></>
                     )
                 }
@@ -167,7 +168,7 @@ const quanity=()=>{
                 <Button variant="secondary" onClick={(e)=>{handleClose(); props.cancel(false);}}>
                   Cancel
                 </Button>
-                <Button variant="primary" onClick={(e)=>{setdone(true); quanity();}} disabled={next}>
+                <Button variant="primary" onClick={(e)=>{setdone(true); quanity();}} disabled={next} disabled={dis}>
                   Next
                 </Button>
               </Modal.Footer>}
