@@ -61,7 +61,10 @@ const Calendar = (props) => {
       alert(data);
       dispatch(selected_slot({})); //EMPTY
     } catch (err) {
-      console.error(err);
+              if (err.response) {
+          console.log(err.response.data);
+          console.log(err.response.status);}
+      //console.error(err);
     }
   };
 
@@ -96,8 +99,14 @@ const Calendar = (props) => {
 
     var morning_shifts = [];
     var evening_shifts = [];
-    const day = item.format("dddd");
-    const date = `${item.format("DD-MM-YYYY")}`; //to api
+    const day = item.format("dddd")
+    //const date = `${item.format("dd-MM-YYYY")}`
+    const date = `${item.format("YYYY")+"-"+item.format("MM")+"-"+item.format("D")}`; //to api
+
+    console.log(date)
+    //const d= new Date();
+    //const date_test = `${ite.getFullYear() +"-"+(d.getMonth()+1)+ "-"+ d.getDate()}`
+    //d.getFullYear() +"-"+(d.getMonth()+1)+ "-"+ d.getDate()
     dispatch(selected_slot({ slot: slot_time, date: date })); //WHEN CHANGE THE DAY
     (async () => {
       var reserved = await Get_timetable(date);
