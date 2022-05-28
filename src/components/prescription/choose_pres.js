@@ -15,6 +15,7 @@ const Choose_pres=(props)=>{
         const[pres, setpres]=useState([]);
         const[number, setnumber] = useState(1);
         const [q,setq]=useState([]);
+        const[next, setnext] = useState(false);
         const token = JSON.parse(useSelector((state) => state.auth));
        
         const config = {headers: {
@@ -31,7 +32,7 @@ const Choose_pres=(props)=>{
                 )
      
                 console.log(res.data);
-                if (res.data==="you have no prescriptions yet") return
+                if (res.data==="you have no prescriptions yet") {setnext(true);return}
                 setpres(res.data);
                 
               
@@ -166,7 +167,7 @@ const quanity=()=>{
                 <Button variant="secondary" onClick={(e)=>{handleClose(); props.cancel(false);}}>
                   Cancel
                 </Button>
-                <Button variant="primary" onClick={(e)=>{setdone(true); quanity();}}>
+                <Button variant="primary" onClick={(e)=>{setdone(true); quanity();}} disabled={next}>
                   Next
                 </Button>
               </Modal.Footer>}
