@@ -206,7 +206,8 @@ const Calendar = (props) => {
     console.log("event", e);
     console.log("time_slot", slot_time);
     e.preventDefault();
-    let y = `${data.format("DD-MM-YYYY")}`;
+    //let y = `${data.format("DD-MM-YYYY")}`;
+    let y = `${data.format("YYYY")+"-"+data.format("MM")+"-"+data.format("D")}`;
     r.doctorEmail = props.data.email;
     r.date = y;
     y = `${data.format("dddd")}`;
