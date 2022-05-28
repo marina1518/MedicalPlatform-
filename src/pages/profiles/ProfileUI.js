@@ -688,7 +688,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                                 : { opacity: "0.5" }
                             }
                           >
-                            <td width="20%">{item.date.split('T')[0].split("-").reverse().join("-").split("-")}</td>
+                            <td width="20%">{item.date.split('T')[0].split("-").reverse().join("-")}</td>
                             <td width="20%">{item.slot}</td>
 
                             <td
