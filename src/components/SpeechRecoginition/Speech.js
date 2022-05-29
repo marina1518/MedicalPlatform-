@@ -13,7 +13,7 @@ import moment from "moment";
 
 
 import axios from 'axios';
-import { info ,myorders , order_status ,appointments , meetings , selected_slot, logout , chart , info_doc} 
+import { info ,myorders , order_status ,appointments , meetings , selected_slot, logout , chart , info_doc , channel_name} 
 from '../../actions';
 import { CountertopsOutlined } from '@mui/icons-material';
 import { list } from 'firebase/storage';
@@ -57,6 +57,7 @@ const [flag_enter_meeting , set_enter_meeting] = useState(false) //If he desides
 const [flag_complete_reading , set_complete_reading] = useState(false); //To complete reading meetings
 const [count_today_meetings , set_count_today_meetings] = useState(0)
 const [counter_today_meetings , set_counter_today_meetings] = useState(0)
+const [current_meeting_id,set_current_meeting]=useState(""); // to detect dr email & slot 
 
 
 const [flag_logout,set_flag_logout] = useState(false); //To make logout 
@@ -226,6 +227,15 @@ axios.get(`https://future-medical.herokuapp.com/user/meetings`,
 console.log(res.data);
 if (res.data != "you have no meetings yet"){
 var meetings_api = res.data ;
+/*                meet_date = x.Date.split('-');
+                meet_day = meet_date[2].split('T')
+                meeting_date =  meet_day[0]+'-'+meet_date[1]+'-' +meet_date[0] ;*/
+  for (var i = 0; i < meetings_api.length; i++) {
+      var meet_date = meetings_api[i].Date.split('-');
+      var meet_day = meet_date[2].split('T')
+    meetings_api[i].Date =  meet_day[0]+'-'+meet_date[1]+'-' +meet_date[0]
+  }                
+console.log("dates meetings",meetings_api)
 var state = "Pending"
  const current = new Date();
 
@@ -281,6 +291,7 @@ if(Today_meetings_List.length != 0 )
   var time_slot =  Today_meetings_List[0].slot.split("-");
   handle_speak += "مقابلة اليوم" + " مع دكتور " + Today_meetings_List[0].doctor.arabic_username + " من الساعة " + time_slot[0] + " الى"+time_slot[1] + " لو عاوز تدخل المقابلة اوول واحد "
   set_enter_meeting(true);
+  set_current_meeting(Today_meetings_List[0]);
   if (Today_meetings_List.length > 1){ //SET COUNT OF LIST AND CURRENT COUNT
     
     set_count_today_meetings(Today_meetings_List.length - 1);
@@ -317,6 +328,7 @@ const complete_today_meetings = (today_list) =>{
   var time_slot =  today_list[counter_today_meetings+1].slot.split("-");
   handle_speak += "مقابلة اليوم" + " مع دكتور " + today_list[counter_today_meetings+1].doctor.arabic_username + " من الساعة " + time_slot[0] + " الى"+time_slot[1] + " لو عاوز تدخل المقابلة اوول واحد "
   set_enter_meeting(true);
+  set_current_meeting(today_list[counter_today_meetings+1]);
   set_counter_today_meetings(count_today_meetings+1) ; 
   speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
 } 
@@ -588,7 +600,7 @@ else {
         navigate('/Entities/pharmacies');
         SpeechRecognition.stopListening();
         if (flag_order){
-          handle_speak = "تقدر تحط صورة الروشتة و تطلبها من اى صيدلية من الصيدليات الموجودة" + " "; 
+          handle_speak = "تقدر تحط صورة الروشتة او تقدر تحط من الروشتات اللى موجودة و تطلبها من اى صيدلية من الصيدليات الموجودة" + " "; 
           
          data.forEach((x) => {
            handle_speak+=x.arabic_name+ "  . ";
@@ -830,7 +842,7 @@ const GET_DATES_DOCTORS = (timetable) =>{
   }
   var days = [];
 
-  for (var i = 0; i < 90; i++) {
+  for (var i = 0; i < 7; i++) {
     const day = moment().add(i, "day");
     for (var j = 0; j < dr_app.length; j++) {
       if (day.format("dddd") === dr_app[j].day) {
@@ -855,10 +867,12 @@ const GET_DATES_DOCTORS = (timetable) =>{
   const Get_Slots = async (item,dr_name,slot) => {
     var reserved_slots = [];
     const day = item.format("dddd");
-    const date = `${item.format("DD-MM-YYYY")}`;
+    const date = `${item.format("YYYY")+"-"+item.format("MM")+"-"+item.format("D")}`
     var reserved = [];
     var morning_shifts = [] ;
     var evening_shifts = [];
+    //const dd= new Date();
+    //const date_test = `${dd.getFullYear() +"-"+(dd.getMonth()+1)+ "-"+ dd.getDate()}`
     try {
       const res = await axios.get(
         `https://future-medical.herokuapp.com/user/timetable/${dr_name}/${date}`
@@ -1031,9 +1045,9 @@ if(data !== "no doctors found in this department"){
                      handle_speak +=  " من الساعة " + time_slot[0] + " الى "+ time_slot[1] ; 
                      handle_speak += " لو عاوز تحجز المعاد ده اوول واحد "
                      console.log(handle_speak)
-                     
+                     //${data.format("YYYY")+"-"+data.format("MM")+"-"+data.format("D")}
                      //dispatch(selected_slot({"slot":required_slots[0] , "date" : `${items[i].format("DD/MM/YYYY")}` }))
-                     set_meeting_data({"doctorEmail":data[j].email , "date" : items[i].format("DD-MM-YYYY") , "day" : items[i].format("dddd") ,"slot" : required_slots[0]})
+                     set_meeting_data({"doctorEmail":data[j].email , "date" : items[i].format("YYYY")+"-"+items[i].format("MM")+"-"+items[i].format("D") , "day" : items[i].format("dddd") ,"slot" : required_slots[0]})
                       speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
                        dispatch(selected_slot({"slot":required_slots[0], "date" : `${items[i].format("DD-MM-YYYY")}` }));
                       set_sure_reserve(true);
@@ -1304,6 +1318,9 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
           var index_reply = replies_my_order.indexOf(wanted_sentece);
           if (index_reply == 0 || index_reply == 3)
            { // One enter 
+               console.log(current_meeting_id) //CHECK 
+               var saved_channel = current_meeting_id.doctor.email
+               dispatch(channel_name(saved_channel));//dr email & slot
               navigate('/user/meetingroom') ; //return to init state lw d5l meeting 
               set_counter_today_meetings(0);
               set_count_today_meetings(0); //Return to the initial state 

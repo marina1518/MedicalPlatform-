@@ -115,7 +115,7 @@ const Header = () => {
                 }}
               >
                 <div className="icon-circle">
-                  { <Badge color="primary" badgeContent={2} > 
+                  { <Badge color="primary"  > 
                 <Avatar  style={{height:'40px',width:'40px'}} src={token.profilePic}  />
 
                   </Badge> }
