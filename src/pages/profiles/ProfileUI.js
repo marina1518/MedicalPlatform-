@@ -768,13 +768,14 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
 
                                 <Accordion.Collapse eventKey={item._id}>
                                   <Card.Body>
-                                    <img
+                                    {item.flag == "image" ? <img
                                       id="myImg"
                                       src={item.order_data.form}
                                       width="300px"
                                       height="300px"
                                       onClick={(e) => setOpen(true)}
-                                    />
+                                    /> : <div><h5>{JSON.parse(item.order_data.form).map((f)=><li>{f.medicine} with Quantity={f.quanity}</li>)}</h5></div>}
+                                    
 
                                     {open ? (
                                       <div id="myModal" class="modal_image">
