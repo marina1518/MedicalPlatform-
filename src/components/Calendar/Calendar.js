@@ -334,6 +334,12 @@ const Calendar = (props) => {
                   : eve.map((item) => (
                       <Button
                         onClick={() => {
+                          dispatch(
+                            selected_slot({
+                              slot: item.slot,
+                              date: `${data.format("DD-MM-YYYY")}`,
+                            })
+                          );
                           setslot(item.slot);
                           setcan(true);
                         }}
