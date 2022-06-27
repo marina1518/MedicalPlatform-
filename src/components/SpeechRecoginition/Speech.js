@@ -809,6 +809,7 @@ const my_meetings = ()=>{
 
 const reserve_meeting = ()=>{
      SpeechRecognition.stopListening(); 
+     navigate('/'); //home page departments 
      set_wanted_slot(""); // initial when start
      set_wanted_dep("");
    if (token.token)
