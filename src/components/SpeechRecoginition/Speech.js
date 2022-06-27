@@ -86,7 +86,8 @@ let navigate = useNavigate();
     onEnd,
   });
 
-const voice = voices[1] || null; //voices [1] arabic eg 1/6/7
+  console.log("voices Api : " , voices[1])
+const voice = voices[1] || null; //voices [1] arabic eg 1/6/7 
 
   const handleKeyDown = (event) => {
     
