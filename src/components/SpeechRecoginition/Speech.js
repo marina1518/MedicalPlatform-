@@ -65,6 +65,9 @@ const [flag_logout,set_flag_logout] = useState(false); //To make logout
 const [flag_ask_my_order ,set_my_order] =useState(false); // if wants to ask about his orders
 const [wanted_sentence,set_wanted]=useState("");
 
+
+const [selected_voice,set_voice]=useState(0);
+
 let wanted_sentece = ""; //to send to model api   
 const [meeting_data,set_meeting_data] = useState({});
 //TO DETECED KEY PRESS
@@ -86,8 +89,22 @@ let navigate = useNavigate();
     onEnd,
   });
 
-  console.log("voices Api : " , voices[1])
-const voice = voices[1] || null; //voices [1] arabic eg 1/6/7 
+const get_arabic = () =>{
+  //console.log("Arabicccccc")
+  for (var i = 0 ; i < voices.length ; i++)
+  {
+    if (voices[i].lang == "ar-EG" || voices[i].lang == "ar-SA")
+    {
+      set_voice(i)
+      
+      //break;
+      //console.log("voice_api_loop",voices[i].name);
+    }
+    //console.log(voices[i])
+  }
+}  
+console.log("voices Api : " , voices[selected_voice])
+var voice = voices[selected_voice] || null; //voices [1] arabic eg 1/6/7 
 
   const handleKeyDown = (event) => {
     
@@ -1143,9 +1160,14 @@ const {
 
 
 
+ useEffect(()=>{
+  if (listening){
+  get_arabic();//get arabic voice first time 
+  }
+ },[listening])
 
  useEffect(()=>{  
-
+get_arabic();//get arabic voice first time 
    if(key_sound == 32)  
    {
      if(listening)
@@ -1193,9 +1215,10 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
     //if(handle_first_render){listenContinuously();}
     //console.log("malkkkkkkkkk")
      //listenContinuously();
+     
    if (finalTranscript !== '') {
     // console.log("my odrer",flag_ask_my_order);
-    
+    //get_arabic(); //get arabic voice
      set_wanted('');
      wanted_sentece ='';
      //console.log("index",transcript_index)
