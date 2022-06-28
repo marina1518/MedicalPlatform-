@@ -5,7 +5,8 @@ import { Link , useParams} from "react-router-dom";
 import {Button} from 'react-bootstrap'
 import axios from "axios";
 import PharmacyOrder from '../../components/PharmacyOrder/PharmacyOrder'
-
+//import Login from "../Login & Sign Up/login_f"
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 const HospitalsPage = () => {
 const token = JSON.parse(useSelector(state => state.auth));
@@ -15,7 +16,10 @@ console.log(token)
   const [modalShow, setModalShow] = useState(false); //for pharmacy card
   const [loading,setloading]=useState(false);
   //const [modalShowload, setModalShowload] = useState(false); //for pharmacy card  
-
+  const navigate = useNavigate();
+  const login = () => {
+      navigate("/login");
+    }
   const handle_order = (pharmacy_details)=>{
 
     //check of logined 
@@ -28,7 +32,8 @@ console.log(token)
     clicked_pharmacy.pharmacyadmin= pharmacy_details.admin.email
     setpharmacy_details(clicked_pharmacy);}
     else{
-      alert("you must be logined first to make order")
+      {login()}
+      //alert("you must be logined first to make order")
     }
   }
 
