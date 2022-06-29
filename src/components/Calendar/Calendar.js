@@ -14,8 +14,16 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Reserve_Date from "./Reserve_Date";
 import Backdrop from "@mui/material/Backdrop";
 import Coupon from "../Coupon/Coupon";
-
+import { useNavigate } from "react-router-dom";
+import Login from "../../pages/Login & Sign Up/login_f"
+import { Route, BrowserRouter, Link , Navigate  as Router, Routes } from "react-router-dom";
+//import {Link , BrowserRouter} from "react-dom"
 const Calendar = (props) => {
+  //console.log(props);
+  const navigate = useNavigate();
+  const login = () => {
+    navigate("/login");
+    }
   useEffect(() => {
     dispatch(selected_slot({})); //EMPTY
   }, []);
@@ -297,7 +305,7 @@ const Calendar = (props) => {
                   ? ""
                   : mor.map((item) => (
                       <Button
-                        onClick={() => {
+                        onClick={() => { 
                           dispatch(
                             selected_slot({
                               slot: item.slot,
@@ -306,6 +314,7 @@ const Calendar = (props) => {
                           );
                           setslot(item.slot);
                           setcan(true);
+                          console.log("MADONNA",item);
                         }}
                         variant="outline-primary"
                         disabled={item.state}
@@ -331,9 +340,9 @@ const Calendar = (props) => {
               <div className="slots-UI">
                 {done_reserve
                   ? ""
-                  : eve.map((item) => (
+                  : eve.map((item) => ( 
                       <Button
-                        onClick={() => {
+                        onClick={() => { !props.data.token ?  login() :
                           dispatch(
                             selected_slot({
                               slot: item.slot,
@@ -342,6 +351,7 @@ const Calendar = (props) => {
                           );
                           setslot(item.slot);
                           setcan(true);
+                          console.log("MADONNA",item);
                         }}
                         variant="outline-primary"
                         style={{ color: "black", marginRight: "1px" }}
@@ -391,9 +401,9 @@ const Calendar = (props) => {
                 </Col>
               </Row>
             </>
-          ) : (
-            ""
-          )}
+          ) : 
+         ""
+        }
         </ListGroup.Item>
       </div>
       <br />
