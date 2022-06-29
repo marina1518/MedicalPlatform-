@@ -41,6 +41,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import VideoChat from "../../components/Meeting_room/Video_chat/VideoChat";
 import Tooltip from "@mui/material/Tooltip";
 import { channel_name } from "./../../actions";
+import  ModalImage  from 'react-modal-image'
 
 const ProfileUI = () => {
   let navigate = useNavigate();
@@ -358,7 +359,6 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
     return <h3>{compactName}</h3>;
   };
 
-  const [open, setOpen] = useState(false);
 
   return (
     <div className="main-container">
@@ -768,31 +768,19 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
 
                                 <Accordion.Collapse eventKey={item._id}>
                                   <Card.Body>
-                                    {item.flag == "image" ? <img
-                                      id="myImg"
-                                      src={item.order_data.form}
-                                      width="300px"
-                                      height="300px"
-                                      onClick={(e) => setOpen(true)}
-                                    /> : <div><h5>{JSON.parse(item.order_data.form).map((f)=><li>{f.medicine} with Quantity={f.quanity}</li>)}</h5></div>}
+                                    {item.flag == "image" ? <div size='small'>
+        <div >    
+        <ModalImage
+          small={item.order_data.form}
+          large={item.order_data.form}
+          alt={"Order Image"}
+          hideDownload={true}
+          hideZoom={true}
+          className="modal-image" 
+        />    
+</div>
+</div> : <div><h5>{JSON.parse(item.order_data.form).map((f)=><li>{f.medicine} with Quantity={f.quanity}</li>)}</h5></div>}
                                     
-
-                                    {open ? (
-                                      <div id="myModal" class="modal_image">
-                                        <span
-                                          class="close"
-                                          onClick={(e) => setOpen(false)}
-                                        >
-                                          &times;
-                                        </span>
-                                        <img
-                                          class="modal-content"
-                                          src={item.order_data.form}
-                                        />
-                                      </div>
-                                    ) : (
-                                      ""
-                                    )}
                                   </Card.Body>
                                 </Accordion.Collapse>
                               </Accordion>
