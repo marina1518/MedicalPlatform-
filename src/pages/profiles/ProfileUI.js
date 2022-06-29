@@ -742,7 +742,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                     <tr>
                       <th>Pharmacy Name</th>
                       <th>Date</th>
-                      <th>Time</th>
+                      {/* <th>Time</th> */}
                       <th>Price</th>
                       <th>Order</th>
                       <th>State</th>
@@ -757,8 +757,8 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                         {get_orders_store.map((item) => (
                           <tr key={item._id}>
                             <td>{item.pharmacy.name}</td>
-                            <td>{item.order_data.Date.split("T")[0]}</td>
-                            <td>{item.order_data.Date.split("T")[1]}</td>
+                            <td>{item.order_data.Date}</td>
+                            {/* <td>{item.order_data.Date.split("T")[1]}</td> */}
                             <td>{item.price}</td>
                             <td>
                               <Accordion defaultActiveKey="0">
