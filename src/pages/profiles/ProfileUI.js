@@ -608,6 +608,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                           style={{ cursor: "pointer" }}
                           onChange={(e) => setblood(e.target.value)}
                         >
+                          <option value="">Choose</option>
                           <option value="A+">A+</option>
                           <option value="A-">A-</option>
                           <option value="B+">B+</option>
