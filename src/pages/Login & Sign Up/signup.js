@@ -29,11 +29,16 @@ const Signup = () => {
   };
 
   const register_api = () => {
-    axios
-      .post("https://future-medical.herokuapp.com/register", {
+    //console.log("MADONNAAAA" , data);
+    axios.post("https://future-medical.herokuapp.com/register", {
+        
         username: data.username,
         email: data.email,
         password: data.password,
+        address : data.add,
+        blood : data.blood ,
+        dob : data.dob,
+        phone : data.phone
         //gender :
       })
       .then((res) => {
@@ -75,7 +80,6 @@ const Signup = () => {
 
   const [e_u, sete_u] = useState("");
   const [e_p, sete_p] = useState("");
-
   const [e_b, sete_b] = useState("");
   const [e_a, sete_a] = useState("");
   const [e_e, sete_e] = useState("");
@@ -140,7 +144,6 @@ const Signup = () => {
     if (password === cpass && flag === 0) {
       data.email = email;
       data.password = password;
-
       data.dob = dob;
       data.phone = phone;
       data.add = add;

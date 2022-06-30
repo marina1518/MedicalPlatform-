@@ -174,7 +174,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
   const [date, setDob] = useState(null);
   const [user_name, setuser_name] = useState(null);
   const [email, setemail] = useState(null);
-
+  const [phone, setphone] = useState(null);
   //edit photo
   const [edit, setEdit] = useState(false);
   const [edit_photo, setEdit_photo] = useState(false);
@@ -223,7 +223,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
     editted.blood = blood;
     editted.user_name = user_name;
     editted.email = email;
-
+    editted.phone = phone;
     if (editted.address !== null) {
       Edit_data.address = editted.address;
       token_copy.address = editted.address;
@@ -235,6 +235,10 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
     if (editted.email !== null) {
       Edit_data.email = editted.email;
       token_copy.email = editted.email;
+    }
+    if (editted.phone !== null) {
+      Edit_data.phone = editted.phone;
+      token_copy.phone = editted.phone;
     }
     if (editted.blood !== null) {
       Edit_data.blood = editted.blood;
@@ -548,6 +552,22 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                 <hr id="profile-hr" />
                 <div class="row mt-3">
                   <div class="col-sm-3">
+                    <h6 class="mb-0">Phone</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {edit ? (
+                      <input
+                        placeholder={token.phone}
+                        onChange={(e) => setphone(e.target.value)}
+                      ></input>
+                    ) : (
+                      token.phone
+                    )}
+                  </div>
+                </div>
+                <hr id="profile-hr" />
+                <div class="row mt-3">
+                  <div class="col-sm-3">
                     <h6 class="mb-0">Date of Birth</h6>
                   </div>
                   <div class="col-sm-9 text-secondary">
@@ -608,7 +628,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                           style={{ cursor: "pointer" }}
                           onChange={(e) => setblood(e.target.value)}
                         >
-                          <option value="">Choose</option>
+                          <option value="nth">Choose</option>
                           <option value="A+">A+</option>
                           <option value="A-">A-</option>
                           <option value="B+">B+</option>
