@@ -29,6 +29,7 @@ import ProfileUI from "./pages/profiles/ProfileUI";
 import VideoCall from "./components/Meeting_room/Video_chat/VideoCall";
 import Payment from "./components/Coupon/Coupon";
 import Maps from "./components/Maps/Maps";
+import Complaint from "./components/Complaints/complaints"
 // import Keyboard from "./components/KeboardMego/Keyboard";
 function App() {
   let navigate = useNavigate();
@@ -131,6 +132,7 @@ function App() {
             />
             <Route path="/user/meetingroom" element={<VideoCall />}></Route>
             <Route path="/maps" element={<Maps />}></Route>
+            <Route path="/complaint" element={<Complaint />}></Route>
           </Routes>
           {location.pathname !== "/user/meetingroom" && (
             <>
