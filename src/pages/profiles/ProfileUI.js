@@ -40,8 +40,8 @@ import History from "../../components/User_History/History";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import VideoChat from "../../components/Meeting_room/Video_chat/VideoChat";
 import Tooltip from "@mui/material/Tooltip";
-import { channel_name } from "./../../actions";
-import  ModalImage  from 'react-modal-image'
+import { channel_name, leave } from "./../../actions";
+import  ModalImage  from 'react-modal-image';
 
 const ProfileUI = () => {
   let navigate = useNavigate();
@@ -50,6 +50,10 @@ const ProfileUI = () => {
   };
   const dispatch = useDispatch();
   dispatch(channel_name(""));
+  // const no = useSelector(state => state.page_reducer);
+  // console.log(no)
+  // if(no>=1)
+  // dispatch(leave());
 const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
   console.log(action_state)
 
@@ -175,6 +179,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
   const [user_name, setuser_name] = useState(null);
   const [email, setemail] = useState(null);
   const [phone, setphone] = useState(null);
+
   //edit photo
   const [edit, setEdit] = useState(false);
   const [edit_photo, setEdit_photo] = useState(false);
@@ -224,6 +229,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
     editted.user_name = user_name;
     editted.email = email;
     editted.phone = phone;
+
     if (editted.address !== null) {
       Edit_data.address = editted.address;
       token_copy.address = editted.address;
@@ -236,10 +242,6 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
       Edit_data.email = editted.email;
       token_copy.email = editted.email;
     }
-    if (editted.phone !== null) {
-      Edit_data.phone = editted.phone;
-      token_copy.phone = editted.phone;
-    }
     if (editted.blood !== null) {
       Edit_data.blood = editted.blood;
       token_copy.blood = editted.blood;
@@ -251,6 +253,10 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
     if (editted.gender !== null) {
       Edit_data.gender = editted.gender;
       token_copy.gender = editted.gender;
+    }
+    if (editted.phone !== null) {
+      Edit_data.phone = editted.phone;
+      token_copy.phone = editted.phone;
     }
     console.log(Edit_data);
     dispatch(signin(token_copy));
@@ -278,7 +284,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
   var meetings = [];
   const current = new Date();
   let state;
-
+ 
   for (var i = 0; i < meetings_api.length; i++) {
     const day = meetings_api[i].Date.split('T')[0].split("-").reverse().join("-").split("-");
     if (parseInt(day[2]) < current.getFullYear()) state = "Done"; //year check
@@ -328,6 +334,66 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
     );
   }
 
+
+  //meeting button
+  const local_date = new Date();
+  var utc_offset = local_date.getTimezoneOffset()/60;
+  console.log(utc_offset)
+  var utc = (2+utc_offset)*60;
+  var hour = local_date.getHours();
+  var min = local_date.getMinutes();
+  local_date.setMinutes(min+utc);
+  hour = local_date.getHours();
+  min = local_date.getMinutes();
+  console.log(hour, min);
+  console.log(local_date);
+  
+
+  const check_button_state=(item)=>{
+    if(item.state === "Today" && hour === parseInt(item.slot.split('-')[0].split(':')[0]) ) 
+    {
+      if(min < 30 &&  parseInt(item.slot.split('-')[0].split(':')[1]) === 0)
+      {
+        return(
+          <VideoChat
+                                  dr_email={item.email}
+                                  slot = {item.slot}
+                                  button_state={true}
+                                />
+        )
+      }
+      else if(min >= 30 &&  parseInt(item.slot.split('-')[0].split(':')[1]) === 30)
+      {
+        return(
+          <VideoChat
+                                  dr_email={item.email}
+                                  slot = {item.slot}
+                                  button_state={true}
+                                />
+        )
+      }
+      else {
+        return(
+        <VideoChat
+                                    dr_email={item.email}
+                                    slot = {item.slot}
+                                    button_state={false}
+                                  />
+        )
+      }
+    }
+    else {
+      return(
+      <VideoChat
+                                  dr_email={item.email}
+                                  slot = {item.slot}
+                                  button_state={false}
+                                />
+      )
+    }
+  }
+
+
   const [compact, setCompact] = useState(false);
 
   const compacthandler = () => {
@@ -363,6 +429,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
     return <h3>{compactName}</h3>;
   };
 
+  
 
   return (
     <div className="main-container">
@@ -628,7 +695,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                           style={{ cursor: "pointer" }}
                           onChange={(e) => setblood(e.target.value)}
                         >
-                          <option value="nth">Choose</option>
+                          <option value="" selected hidden disabled >Choose</option>
                           <option value="A+">A+</option>
                           <option value="A-">A-</option>
                           <option value="B+">B+</option>
@@ -723,17 +790,23 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                             </td>
                             {/* <td width="20%">{item.state ==="Today" ? <VideoChat dr_email={item.email}/>:""}</td> */}
                             <td width="20%">
-                              {item.state === "Today" ? (
+                              {/* {(item.state === "Today" && hour === parseInt(item.slot.split('-')[0].split(':')[0]) ) ?
+                              (min <30) ? 
+                               ( parseInt(item.slot.split('-')[0].split(':')[1]) === 0 )
+                              ? (
                                 <VideoChat
                                   dr_email={item.email}
+                                  slot = {item.slot}
                                   button_state={true}
                                 />
                               ) : (
                                 <VideoChat
                                   dr_email={item.email}
+                                  slot = {item.slot}
                                   button_state={false}
                                 />
-                              )}
+                              )} */}
+                              {check_button_state(item)}
                             </td>
                             <td width="20%">{item.state}</td>
                           </tr>
@@ -789,7 +862,7 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
 
                                 <Accordion.Collapse eventKey={item._id}>
                                   <Card.Body>
-                                    {item.flag == "image" ? <div size='small'>
+                                  {item.flag == "image" ? <div size='small'>
         <div >    
         <ModalImage
           small={item.order_data.form}
@@ -801,7 +874,8 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
         />    
 </div>
 </div> : <div><h5>{JSON.parse(item.order_data.form).map((f)=><li>{f.medicine} with Quantity={f.quanity}</li>)}</h5></div>}
-                                    
+
+                                   
                                   </Card.Body>
                                 </Accordion.Collapse>
                               </Accordion>
