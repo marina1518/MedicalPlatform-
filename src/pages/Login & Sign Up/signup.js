@@ -38,8 +38,8 @@ const Signup = () => {
         address : data.add,
         blood : data.blood ,
         dob : data.dob,
-        phone : data.phone
-        //gender :
+        phone : data.phone,
+        gender : data.gender
       })
       .then((res) => {
         console.log(res.data);
@@ -62,6 +62,7 @@ const Signup = () => {
   const [add, setadd] = useState("");
   const [blood, setblood] = useState("Don't Know");
   const [history, seth] = useState("");
+  const[gender, setgender] = useState("");
   const [msg, setmsg] = useState("");
   const [username, setusername] = useState("");
 
@@ -75,17 +76,18 @@ const Signup = () => {
       history: "",
       blood: "",
       username: "",
+      gender:""
     },
   ];
 
   const [e_u, sete_u] = useState("");
   const [e_p, sete_p] = useState("");
-  const [e_b, sete_b] = useState("");
   const [e_a, sete_a] = useState("");
   const [e_e, sete_e] = useState("");
   const [e_c, sete_c] = useState("");
+  const [e_dob, sete_dob] = useState("");
   const [e_ph, sete_ph] = useState("");
-
+  const [e_g, sete_g] = useState("");
   const submit_value = (e) => {
     e.preventDefault();
     var flag = 0;
@@ -97,6 +99,10 @@ const Signup = () => {
     if (email === "") {
       flag = 1;
       sete_e("!! required Email");
+    }
+    if (dob === "") {
+      flag = 1;
+      sete_dob("!! required Date of Birth");
     }
     if (password === "") {
       flag = 1;
@@ -128,12 +134,12 @@ const Signup = () => {
     //   sete_b("!! required Date of Birth");
     //   //setflag("true");
     // }
-    // if (add === "")
-    // {
-    //   flag=1;
-    //   sete_a("!! required Address");
-    //   //setflag("true");
-    // }
+    if (gender === "")
+    {
+      flag=1;
+      sete_g("!! required gender");
+      //setflag("true");
+    }
     // if (phone === "")
     // {
     //   flag=1;
@@ -150,6 +156,7 @@ const Signup = () => {
       data.blood = blood;
       data.history = history;
       data.username = username;
+      data.gender = gender;
       console.log(data);
       register_api();
     } else if (flag === 0) {
@@ -252,10 +259,10 @@ const Signup = () => {
                       type="date"
                       onChange={(e) => {
                         setDob(e.target.value);
-                        sete_b("");
+                        sete_dob("");
                       }}
                     />
-                    <h6 style={{ color: "red" }}>{e_b}</h6>
+                    <h6 style={{ color: "red" }}>{e_dob}</h6>
                   </Form.Group>
                 </div>
                 <br />
@@ -311,7 +318,25 @@ const Signup = () => {
                     </div>
                   </Form.Group>
                 </div>
+
                 <br />
+                <div style={{ gridArea: " 4 / 2 / 5 / 3" }}>
+                  <Form.Group controlId="formBasicPassword">
+                    <MdBloodtype style={{ color: "#06a3da" }} />{" "}
+                    <Form.Label>Gender</Form.Label>
+                    <div>
+                      <select onChange={(e) => {setgender(e.target.value); sete_g("");}}>
+                      <option value="" selected disabled hidden>Choose Gender ...</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </select>
+                    </div>
+                    <h6 style={{ color: "red" }}>{e_g}</h6>
+                  </Form.Group>
+                </div>
+                
+                <br />
+
 
                 <div className="d-grid" style={{ gridArea: " 5 / 1 / 6 / 3" }}>
                   <Button
