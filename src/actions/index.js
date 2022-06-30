@@ -85,3 +85,11 @@ export const selected_slot = (state)=>{
     return {type : "selected_slot" , state:state} 
 }
 
+export const join = ()=>{
+    return {type : "join"} 
+}
+export const leave = ()=>{
+    return {type : "leave"} 
+}
+
+

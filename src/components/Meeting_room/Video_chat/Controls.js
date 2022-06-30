@@ -11,6 +11,7 @@ import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { channel_name } from "./../../../actions";
+import { leave } from "../../../actions";
 
 const Controls = (props) => {
   let navigate = useNavigate();
@@ -41,6 +42,7 @@ const Controls = (props) => {
     tracks[0].close();
     tracks[1].close();
     setStart(false);
+    dispatch(leave());
     //localStorage.removeItem("Dr_email");
     // dispatch(channel_name(""));
     navigate("/user");

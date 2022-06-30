@@ -7,6 +7,7 @@ import profile_reducer from "./Profilesidebar";
 import order_reducer from "./order";
 import Doctor_reducer from "./DoctorSide"
 import reserving_reducer from "./Reserving";
+import page_reducer from './page';
 
 const allreducers = combineReducers ({
    sidebarcomp:sidebarstate_reducer,
@@ -15,7 +16,8 @@ const allreducers = combineReducers ({
   meeting_reducer:meeting_reducer,
    order_reducer:order_reducer ,
   Doctor_reducer : Doctor_reducer , 
-  reserving_reducer : reserving_reducer
+  reserving_reducer : reserving_reducer,
+  page_reducer : page_reducer
    
 })
 
