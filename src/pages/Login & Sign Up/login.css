@@ -68,7 +68,7 @@
   width: 60%;
 }
 
-@media (max-width: 956px) {
+@media (max-width: 990px) {
   .form-container_login,
   .form-container_signup {
     box-sizing: inherit;

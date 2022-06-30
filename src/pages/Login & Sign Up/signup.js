@@ -171,7 +171,7 @@ const Signup = () => {
             <Col lg={4} md={6} sm={12}> */}
           <h1
             // className="shadow-sm mt-5 p-3 text-center rounded"
-            style={{ color: "#06a3da" }}
+            style={{ color: "#06a3da", marginTop: "30px" }}
           >
             Welcome To Future Medical
           </h1>

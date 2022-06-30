@@ -28,6 +28,7 @@ import Voice from "./components/SpeechRecoginition/Voice";
 import ProfileUI from "./pages/profiles/ProfileUI";
 import VideoCall from "./components/Meeting_room/Video_chat/VideoCall";
 import Payment from "./components/Coupon/Coupon";
+import Maps from "./components/Maps/Maps";
 // import Keyboard from "./components/KeboardMego/Keyboard";
 function App() {
   let navigate = useNavigate();
@@ -120,8 +121,16 @@ function App() {
                 </Privateuser>
               }
             />*/}
-            <Route path="/user" element={<Privateuser><ProfileUI /></Privateuser>} />
+            <Route
+              path="/user"
+              element={
+                <Privateuser>
+                  <ProfileUI />
+                </Privateuser>
+              }
+            />
             <Route path="/user/meetingroom" element={<VideoCall />}></Route>
+            <Route path="/maps" element={<Maps />}></Route>
           </Routes>
           {location.pathname !== "/user/meetingroom" && (
             <>

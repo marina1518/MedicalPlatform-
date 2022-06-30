@@ -14,7 +14,7 @@ const Slider = (props) => {
           <h6>
             Welcome to <span>future medical</span>
           </h6>
-          <h1>
+          <h1 className="slogan-slider">
             We are here
             <br />
             For Your care
@@ -33,7 +33,7 @@ const Slider = (props) => {
         <img
           className="d-block w-100"
           //src="holder.js/800x400?text=First slide&bg=373940"
-          src="assets/images/slide1-edited2.png"
+          src="assets/images/slide1(1).png"
           alt="First slide"
         />
       </Carousel.Item>
@@ -42,7 +42,7 @@ const Slider = (props) => {
           <h6>
             Welcome to <span>future medical</span>
           </h6>
-          <h1>
+          <h1 className="slogan-slider">
             We are here
             <br />
             For Your care
@@ -59,37 +59,36 @@ const Slider = (props) => {
         <img
           className="d-block w-100"
           //src="holder.js/800x400?text=First slide&bg=373940"
-          src="assets/images/slide2.jpg"
+          src="assets/images/slide2(1).png"
           alt="Second slide"
         />
       </Carousel.Item>
-      {/* <Carousel.Item>
-        <img
-          className="d-block w-100"
-          src="holder.js/800x400?text=Second slide&bg=282c34"
-          alt="Second slide"
-        />
-
-        <Carousel.Caption>
-          <h3>Second slide label</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </Carousel.Caption>
-      </Carousel.Item> */}
-
-      {/* <Carousel.Item>
-        <img
-          className="d-block w-100"
-          src="holder.js/800x400?text=Third slide&bg=20232a"
-          alt="Third slide"
-        />
-
-        <Carousel.Caption>
-          <h3>Third slide label</h3>
-          <p>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+      <Carousel.Item className="edit-item">
+        <div className="edit-caption">
+          <h6>
+            Welcome to <span>future medical</span>
+          </h6>
+          <h1 className="service-slider">
+            Location
+            <br />
+            Service
+          </h1>
+          <p className="p-s3-color">
+            You can find all nearby Hospitals,Clinics and Pharmacies
           </p>
-        </Carousel.Caption>
-      </Carousel.Item> */}
+          <Link to="/maps">
+            <button className="slide1-btn btn-3-color">
+              Get your location
+            </button>
+          </Link>
+        </div>
+        <img
+          className="d-block w-100"
+          //src="holder.js/800x400?text=First slide&bg=373940"
+          src="assets/images/location12.png"
+          alt="third slide"
+        />
+      </Carousel.Item>
     </Carousel>
   );
 };
