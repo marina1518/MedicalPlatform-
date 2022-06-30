@@ -37,7 +37,7 @@ const Signup = () => {
         password: data.password,
         address : data.add,
         blood : data.blood ,
-        dob : data.dob,
+        dateOfBirth : data.dob,
         phone : data.phone,
         gender : data.gender
       })
