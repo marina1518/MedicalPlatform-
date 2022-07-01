@@ -9,7 +9,7 @@
   width: 400px;
   padding: 10px;
   border-radius: 20px;
-  background: #355861;
+  /* background: #355861; */
   border: none;
   color: #fff;
   height: 400px;
@@ -18,6 +18,17 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  background: #36d1dc; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #5b86e5,
+    #36d1dc
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #5b86e5,
+    #36d1dc
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .coupon-code {

@@ -15,15 +15,23 @@ import Reserve_Date from "./Reserve_Date";
 import Backdrop from "@mui/material/Backdrop";
 import Coupon from "../Coupon/Coupon";
 import { useNavigate } from "react-router-dom";
-import Login from "../../pages/Login & Sign Up/login_f"
-import { Route, BrowserRouter, Link , Navigate  as Router, Routes } from "react-router-dom";
+import Login from "../../pages/Login & Sign Up/login_f";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import {
+  Route,
+  BrowserRouter,
+  Link,
+  Navigate as Router,
+  Routes,
+} from "react-router-dom";
 //import {Link , BrowserRouter} from "react-dom"
 const Calendar = (props) => {
   //console.log(props);
   const navigate = useNavigate();
   const login = () => {
     navigate("/login");
-    }
+  };
   useEffect(() => {
     dispatch(selected_slot({})); //EMPTY
   }, []);
@@ -66,12 +74,13 @@ const Calendar = (props) => {
       );
       const data = await res.data;
       console.log(data);
-      alert(data);
+      // alert(data);
       dispatch(selected_slot({})); //EMPTY
     } catch (err) {
-              if (err.response) {
-          console.log(err.response.data);
-          console.log(err.response.status);}
+      if (err.response) {
+        console.log(err.response.data);
+        console.log(err.response.status);
+      }
       //console.error(err);
     }
   };
@@ -107,11 +116,13 @@ const Calendar = (props) => {
 
     var morning_shifts = [];
     var evening_shifts = [];
-    const day = item.format("dddd")
+    const day = item.format("dddd");
     //const date = `${item.format("dd-MM-YYYY")}`
-    const date = `${item.format("YYYY")+"-"+item.format("MM")+"-"+item.format("D")}`; //to api
+    const date = `${
+      item.format("YYYY") + "-" + item.format("MM") + "-" + item.format("D")
+    }`; //to api
 
-    console.log(date)
+    console.log(date);
     //const d= new Date();
     //const date_test = `${ite.getFullYear() +"-"+(d.getMonth()+1)+ "-"+ d.getDate()}`
     //d.getFullYear() +"-"+(d.getMonth()+1)+ "-"+ d.getDate()
@@ -206,6 +217,14 @@ const Calendar = (props) => {
       seteve(evening_shifts);
     })();
   };
+  // Notification
+  const [notification, setNotification] = useState({
+    open: false,
+    vertical: "top",
+    horizontal: "right",
+  });
+
+  const { vertical, horizontal, open } = notification;
 
   const [can, setcan] = useState(false);
   const [slot_time, setslot] = useState("");
@@ -215,7 +234,9 @@ const Calendar = (props) => {
     console.log("time_slot", slot_time);
     e.preventDefault();
     //let y = `${data.format("DD-MM-YYYY")}`;
-    let y = `${data.format("YYYY")+"-"+data.format("MM")+"-"+data.format("D")}`;
+    let y = `${
+      data.format("YYYY") + "-" + data.format("MM") + "-" + data.format("D")
+    }`;
     r.doctorEmail = props.data.email;
     r.date = y;
     y = `${data.format("dddd")}`;
@@ -226,18 +247,43 @@ const Calendar = (props) => {
     setdone_reserve(true);
     setcan(false);
     setslot("");
+    // handleopennotify();
+
+    console.log("reversed is done from coupon");
+  };
+
+  const reserve_button = (e) => {
+    setNotification({ ...notification, open: true });
+    setTimeout(() => {
+      reserve(e, slot_time);
+    }, 2000);
+    setTimeout(() => {
+      SetValidCode(false);
+      Closing_notify();
+    }, 5000);
+  };
+
+  const handleopennotify = () => {
+    setNotification({ ...notification, open: true });
+  };
+
+  const Closing_notify = () => {
+    setNotification({ ...notification, open: false });
   };
 
   const [done_reserve, setdone_reserve] = useState(false);
 
   // Backdrop code
-  const [open, setOpen] = useState(false);
+  const [open_back, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
   };
   const handleOpen = () => {
     setOpen(true);
   };
+
+  // Coupon_Code
+  const [valid_code, SetValidCode] = useState(false);
 
   return (
     <ListGroup variant="flush">
@@ -305,7 +351,7 @@ const Calendar = (props) => {
                   ? ""
                   : mor.map((item) => (
                       <Button
-                        onClick={() => { 
+                        onClick={() => {
                           dispatch(
                             selected_slot({
                               slot: item.slot,
@@ -314,7 +360,7 @@ const Calendar = (props) => {
                           );
                           setslot(item.slot);
                           setcan(true);
-                          console.log("MADONNA",item);
+                          console.log("MADONNA", item);
                         }}
                         variant="outline-primary"
                         disabled={item.state}
@@ -340,18 +386,20 @@ const Calendar = (props) => {
               <div className="slots-UI">
                 {done_reserve
                   ? ""
-                  : eve.map((item) => ( 
+                  : eve.map((item) => (
                       <Button
-                        onClick={() => { !props.data.token ?  login() :
-                          dispatch(
-                            selected_slot({
-                              slot: item.slot,
-                              date: `${data.format("DD-MM-YYYY")}`,
-                            })
-                          );
+                        onClick={() => {
+                          !props.data.token
+                            ? login()
+                            : dispatch(
+                                selected_slot({
+                                  slot: item.slot,
+                                  date: `${data.format("DD-MM-YYYY")}`,
+                                })
+                              );
                           setslot(item.slot);
                           setcan(true);
-                          console.log("MADONNA",item);
+                          console.log("MADONNA", item);
                         }}
                         variant="outline-primary"
                         style={{ color: "black", marginRight: "1px" }}
@@ -385,25 +433,48 @@ const Calendar = (props) => {
                   {/* <Button onClick={(e) => reserve(e, slot_time)}>
                     Reserve
                   </Button> */}
-                  <Button onClick={handleOpen}>Reserve</Button>
+                  {valid_code && (
+                    <h6 style={{ color: "green", marginLeft: "-20px" }}>
+                      Coupon Added ✔
+                    </h6>
+                  )}
+                  {valid_code && (
+                    <div>
+                      <Button onClick={reserve_button}>Reserve</Button>
+                      <Snackbar
+                        anchorOrigin={{ vertical, horizontal }}
+                        open={open}
+                        onClose={Closing_notify}
+                        key={vertical + horizontal}
+                      >
+                        <Alert
+                          onClose={Closing_notify}
+                          severity="success"
+                          variant="filled"
+                          sx={{ width: "100%" }}
+                        >
+                          Reserving Meeting is Done succufully
+                        </Alert>
+                      </Snackbar>
+                    </div>
+                  )}
+                  {!valid_code && <Button onClick={handleOpen}>Reserve</Button>}
+
                   <Backdrop
                     sx={{
                       color: "#fff",
                       zIndex: (theme) => theme.zIndex.drawer + 1,
                     }}
-                    open={open}
+                    open={open_back}
                   >
-                    <Coupon
-                      clickSubmit={(e) => reserve(e, slot_time)}
-                      close={handleClose}
-                    />
+                    <Coupon validcode={SetValidCode} close={handleClose} />
                   </Backdrop>
                 </Col>
               </Row>
             </>
-          ) : 
-         ""
-        }
+          ) : (
+            ""
+          )}
         </ListGroup.Item>
       </div>
       <br />
