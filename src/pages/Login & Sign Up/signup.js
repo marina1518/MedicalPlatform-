@@ -30,16 +30,16 @@ const Signup = () => {
 
   const register_api = () => {
     //console.log("MADONNAAAA" , data);
-    axios.post("https://future-medical.herokuapp.com/register", {
-        
+    axios
+      .post("https://future-medical.herokuapp.com/register", {
         username: data.username,
         email: data.email,
         password: data.password,
-        address : data.add,
-        blood : data.blood ,
-        dateOfBirth : data.dob,
-        phone : data.phone,
-        gender : data.gender
+        address: data.add,
+        blood: data.blood,
+        dateOfBirth: data.dob,
+        phone: data.phone,
+        gender: data.gender,
       })
       .then((res) => {
         console.log(res.data);
@@ -62,7 +62,7 @@ const Signup = () => {
   const [add, setadd] = useState("");
   const [blood, setblood] = useState("Don't Know");
   const [history, seth] = useState("");
-  const[gender, setgender] = useState("");
+  const [gender, setgender] = useState("");
   const [msg, setmsg] = useState("");
   const [username, setusername] = useState("");
 
@@ -76,7 +76,7 @@ const Signup = () => {
       history: "",
       blood: "",
       username: "",
-      gender:""
+      gender: "",
     },
   ];
 
@@ -134,9 +134,8 @@ const Signup = () => {
     //   sete_b("!! required Date of Birth");
     //   //setflag("true");
     // }
-    if (gender === "")
-    {
-      flag=1;
+    if (gender === "") {
+      flag = 1;
       sete_g("!! required gender");
       //setflag("true");
     }
@@ -320,13 +319,20 @@ const Signup = () => {
                 </div>
 
                 <br />
-                <div style={{ gridArea: " 4 / 2 / 5 / 3" }}>
+                <div style={{ gridArea: " 5 / 1 / 6 / 2" }}>
                   <Form.Group controlId="formBasicPassword">
                     <MdBloodtype style={{ color: "#06a3da" }} />{" "}
                     <Form.Label>Gender</Form.Label>
                     <div>
-                      <select onChange={(e) => {setgender(e.target.value); sete_g("");}}>
-                      <option value="" selected disabled hidden>Choose Gender ...</option>
+                      <select
+                        onChange={(e) => {
+                          setgender(e.target.value);
+                          sete_g("");
+                        }}
+                      >
+                        <option value="" selected disabled hidden>
+                          Choose Gender ...
+                        </option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                       </select>
@@ -334,11 +340,10 @@ const Signup = () => {
                     <h6 style={{ color: "red" }}>{e_g}</h6>
                   </Form.Group>
                 </div>
-                
+
                 <br />
 
-
-                <div className="d-grid" style={{ gridArea: " 5 / 1 / 6 / 3" }}>
+                <div className="d-grid" style={{ gridArea: " 6 / 1 / 7 / 3" }}>
                   <Button
                     variant="primary btn-block"
                     type="submit"
