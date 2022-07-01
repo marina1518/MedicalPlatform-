@@ -35,7 +35,8 @@ function PharmacyOrder(props) {
 
 
     const make_order_api = ()=>{
-      const day_date = d.getDate() +"-" + (d.getMonth()+1) + "-" + d.getFullYear();
+     const day_date = d.getFullYear() +"-" + (d.getMonth()+1) + "-" + d.getDate();
+     // const day_date = d.getDate() +"-" + (d.getMonth()+1) + "-" + d.getFullYear();
         console.log(day_date)
         console.log(FormValues)
         console.log( props.pharmacyadmin)
