@@ -80,6 +80,7 @@ let navigate = useNavigate();
   const onEnd = () => {
     // You could do something here after speaking has finished
      listenContinuously();
+     set_wanted(""); // to make text_box empty
      handle_speak='';
      flag_speicific_dep = false;
      //specialization = '';
@@ -387,7 +388,7 @@ if(res.data !== "you have no orders yet"){
        if (x.status === "disapproved")
            {
                flag_disapproved = true ;
-               disapproved_orders+="طلب بالتاريخ"+ " " + x.order_data.Date+ " من " + x.pharmacy.arabic_name + " . " ;
+               disapproved_orders+="طلب بالتاريخ"+ " " + x.order_data.Date.split("T")[0]+ " من " + x.pharmacy.arabic_name + " . " ;
            } 
    } )
   }
@@ -434,13 +435,13 @@ if (kind_order == "pending")
   if (flag_pending)
   {
     if(pending_order_list.length == 1){
-       pending_oders="طلب بالتاريخ"+ " " + pending_order_list[0].order_data.Date+ " من " + pending_order_list[0].pharmacy.arabic_name +" لو عاوز تلغى الطلب اوول واحد "+ " . " ;
+       pending_oders="طلب بالتاريخ"+ " " + pending_order_list[0].order_data.Date.split("T")[0]+ " من " + pending_order_list[0].pharmacy.arabic_name +" لو عاوز تلغى الطلب اوول واحد "+ " . " ;
        handle_speak=" الطلبات دى لسة متردش عليها من الصيدلية" +" . "+ pending_oders;
        set_reply_pending_order(true);
        set_current_id(pending_order_list[0]._id)
     }
    else{
-     pending_oders="طلب بالتاريخ"+ " " + pending_order_list[0].order_data.Date+ " من " + pending_order_list[0].pharmacy.arabic_name +" لو عاوز تلغى الطلب اوول واحد "+ " . " ;
+     pending_oders="طلب بالتاريخ"+ " " + pending_order_list[0].order_data.Date.split("T")[0]+ " من " + pending_order_list[0].pharmacy.arabic_name +" لو عاوز تلغى الطلب اوول واحد "+ " . " ;
        handle_speak=" الطلبات دى لسة متردش عليها من الصيدلية" +" . "+ pending_oders;
        set_reply_pending_order(true);
      set_pending_orders_array(pending_order_list)
@@ -471,13 +472,13 @@ if (kind_order == "approved")
   {
     if(pending_order_list.length == 1){
        handle_speak=" الطلبات دى اتوافق عليها من الصيدلية" + " . "
-       handle_speak+="طلب بالتاريخ "+ " " + app_order_list[0].order_data.Date+ " من " + app_order_list[0].pharmacy.arabic_name + " . " + " السعر " + app_order_list[0].price + " . ";
+       handle_speak+="طلب بالتاريخ "+ " " + app_order_list[0].order_data.Date.split("T")[0]+ " من " + app_order_list[0].pharmacy.arabic_name + " . " + " السعر " + app_order_list[0].price + " . ";
        handle_speak += " لو عاوز توافق على الطلب اوول واحد لو عاوز تلغى الطلب اوول اتنين "
        set_approve_my_order(true)
        set_current_id(app_order_list[0]._id)
     }
    else{
-     handle_speak+="طلب بالتاريخ "+ " " + app_order_list[0].order_data.Date+ " من " + app_order_list[0].pharmacy.arabic_name + " . " + " السعر " + app_order_list[0].price + " . ";
+     handle_speak+="طلب بالتاريخ "+ " " + app_order_list[0].order_data.Date.split("T")[0]+ " من " + app_order_list[0].pharmacy.arabic_name + " . " + " السعر " + app_order_list[0].price + " . ";
        handle_speak += " لو عاوز توافق على الطلب اوول واحد لو عاوز تلغى الطلب اوول اتنين "
        set_approve_my_order(true)
        set_current_id(app_order_list[0]._id)
@@ -1494,7 +1495,7 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
         
      }
      else{
-     Get_Voice_model(wanted_sentece); //voice moedl 
+     Get_Voice_model(wanted_sentece); //voice model 
      set_wanted(wanted_sentece)}
      
      //transcript_index = finalTranscript.length ; 
@@ -1531,7 +1532,7 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
      </div>
      <div>
      <span>{transcript}</span>*/}
-       {/* wanted_sentence && <textarea className="text"
+       {/*wanted_sentence && <textarea className="text"
         value={wanted_sentence}        
     />*/}
       <Tooltip title="To turn the mic on/off (press space) , 
