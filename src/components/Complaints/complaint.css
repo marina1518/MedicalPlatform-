@@ -57,7 +57,7 @@
   .form-details_signup2 {
     /* width: 60%; */
     display: grid;
-    height: 22rem;
+    height: 23rem;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(4, 1fr);
     grid-column-gap: 40px;
