@@ -304,7 +304,7 @@ const Signup = () => {
                     <Form.Label>Blood Type</Form.Label>
                     <div>
                       <select onChange={(e) => setblood(e.target.value)}>
-                        <option value="nth">Don't Know</option>
+                        <option value="" selected disabled hidden>Don't Know</option>
                         <option value="A+">A+</option>
                         <option value="A-">A-</option>
                         <option value="B+">B+</option>
