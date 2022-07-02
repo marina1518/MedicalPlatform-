@@ -111,7 +111,7 @@ const Complaint = () => {
           <div className="Total_form_signup">
             <Form onSubmit={submit_value}>
               <div className="form-details_signup2">
-                <div style={{ gridArea: "1 / 1 / 2 / 2" }}>
+                {/* <div style={{ gridArea: "1 / 1 / 2 / 2" }}>
                   <Form.Group controlId="formBasicusername">
                     <FaUser style={{ color: "#06a3da" }} />{" "}
                     <Form.Label> Full Name </Form.Label>
@@ -122,8 +122,8 @@ const Complaint = () => {
                     />
                   </Form.Group>
                 </div>
-                <br />
-                <div style={{ gridArea: "1 / 2 / 2 / 3" }}>
+                <br /> */}
+                <div style={{ gridArea: "1 / 1 / 2 / 3" }}>
                   <Form.Group controlId="formBasicEmail">
                     <MdEmail style={{ color: "#06a3da" }} />{" "}
                     <Form.Label> Email address </Form.Label>
