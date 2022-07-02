@@ -67,11 +67,11 @@ const Complaint = () => {
     // }
     if (email === "") {
       flag = 1;
-      sete_e("!! required Email");
+      sete_e("Required Email !!");
     }
     if (phone.length !== 11 && phone != "") {
       flag = 1;
-      sete_ph("Required 11 numbers");
+      sete_ph("Required 11 numbers !!");
       //setflag("true");
       console.log(flag);
     }
