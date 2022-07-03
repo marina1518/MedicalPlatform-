@@ -132,6 +132,10 @@
   color: orange;
 }
 
+.card {
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
 /* 
 .card {
   position: relative;
@@ -186,6 +190,7 @@
   /* opacity: 0; */
   opacity: inherit;
   background-color: inherit;
+  width: 99%;
 }
 
 /*image enlargement*/
@@ -276,4 +281,8 @@
   .modal-content {
     width: 100%;
   }
+}
+
+.pres-container {
+  min-height: 12rem;
 }

@@ -37,6 +37,7 @@
     "react-grid-carousel": "^1.0.1",
     "react-icons": "^4.3.1",
     "react-jwt": "^1.1.4",
+    "react-modal-image": "^2.5.0",
     "react-placeholder-loading": "^0.5.29",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.1.1",

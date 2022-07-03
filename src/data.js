@@ -1,5 +1,4 @@
 export const Specialization = [
-
   {
     id: 2,
     name: "Dermatology (Skin)",
@@ -14,7 +13,7 @@ export const Specialization = [
   },
   {
     id: 4,
-    name: "Chest/Respiratory Medicine",
+    name: "Respiratory(Chest) Medicine",
     Arabic_name: "الصدر و الامراض التنفسية",
     image: "assets/images/Chest(Respiratory Medicine)-blue.png",
   },
@@ -25,14 +24,13 @@ export const Specialization = [
     image: "assets/images/Dietetics-blue.png",
   },
 
-
   {
     id: 7,
     name: "Urology",
     Arabic_name: "طب المسالك البولية",
     image: "assets/images/Urology-blue.png",
   },
-    {
+  {
     id: 6,
     name: "Pediatrics",
     Arabic_name: "طب الأطفال",

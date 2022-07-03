@@ -41,7 +41,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import VideoChat from "../../components/Meeting_room/Video_chat/VideoChat";
 import Tooltip from "@mui/material/Tooltip";
 import { channel_name, leave } from "./../../actions";
-import  ModalImage  from 'react-modal-image';
+import ModalImage from "react-modal-image";
+
+import Table_mui from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 const ProfileUI = () => {
   let navigate = useNavigate();
@@ -54,8 +62,10 @@ const ProfileUI = () => {
   // console.log(no)
   // if(no>=1)
   // dispatch(leave());
-const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
-  console.log(action_state)
+  const action_state = JSON.parse(
+    useSelector((state) => state.meeting_reducer)
+  );
+  console.log(action_state);
 
   const sidebar_profile = useSelector((state) => state.profile_reducer); //state of token
   const get_orders_store = JSON.parse(
@@ -284,9 +294,13 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
   var meetings = [];
   const current = new Date();
   let state;
- 
+
   for (var i = 0; i < meetings_api.length; i++) {
-    const day = meetings_api[i].Date.split('T')[0].split("-").reverse().join("-").split("-");
+    const day = meetings_api[i].Date.split("T")[0]
+      .split("-")
+      .reverse()
+      .join("-")
+      .split("-");
     if (parseInt(day[2]) < current.getFullYear()) state = "Done"; //year check
     else if (parseInt(day[2]) > current.getFullYear())
       state = "Pending"; //next year
@@ -334,65 +348,62 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
     );
   }
 
-
   //meeting button
   const local_date = new Date();
-  var utc_offset = local_date.getTimezoneOffset()/60;
-  console.log(utc_offset)
-  var utc = (2+utc_offset)*60;
+  var utc_offset = local_date.getTimezoneOffset() / 60;
+  console.log(utc_offset);
+  var utc = (2 + utc_offset) * 60;
   var hour = local_date.getHours();
   var min = local_date.getMinutes();
-  local_date.setMinutes(min+utc);
+  local_date.setMinutes(min + utc);
   hour = local_date.getHours();
   min = local_date.getMinutes();
   console.log(hour, min);
   console.log(local_date);
-  
 
-  const check_button_state=(item)=>{
-    if(item.state === "Today" && hour === parseInt(item.slot.split('-')[0].split(':')[0]) ) 
-    {
-      if(min < 30 &&  parseInt(item.slot.split('-')[0].split(':')[1]) === 0)
-      {
-        return(
+  const check_button_state = (item) => {
+    if (
+      item.state === "Today" &&
+      hour === parseInt(item.slot.split("-")[0].split(":")[0])
+    ) {
+      if (min < 30 && parseInt(item.slot.split("-")[0].split(":")[1]) === 0) {
+        return (
           <VideoChat
-                                  dr_email={item.email}
-                                  slot = {item.slot}
-                                  button_state={true}
-                                />
-        )
-      }
-      else if(min >= 30 &&  parseInt(item.slot.split('-')[0].split(':')[1]) === 30)
-      {
-        return(
+            dr_email={item.email}
+            slot={item.slot}
+            button_state={true}
+          />
+        );
+      } else if (
+        min >= 30 &&
+        parseInt(item.slot.split("-")[0].split(":")[1]) === 30
+      ) {
+        return (
           <VideoChat
-                                  dr_email={item.email}
-                                  slot = {item.slot}
-                                  button_state={true}
-                                />
-        )
+            dr_email={item.email}
+            slot={item.slot}
+            button_state={true}
+          />
+        );
+      } else {
+        return (
+          <VideoChat
+            dr_email={item.email}
+            slot={item.slot}
+            button_state={false}
+          />
+        );
       }
-      else {
-        return(
+    } else {
+      return (
         <VideoChat
-                                    dr_email={item.email}
-                                    slot = {item.slot}
-                                    button_state={false}
-                                  />
-        )
-      }
+          dr_email={item.email}
+          slot={item.slot}
+          button_state={false}
+        />
+      );
     }
-    else {
-      return(
-      <VideoChat
-                                  dr_email={item.email}
-                                  slot = {item.slot}
-                                  button_state={false}
-                                />
-      )
-    }
-  }
-
+  };
 
   const [compact, setCompact] = useState(false);
 
@@ -429,8 +440,6 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
     return <h3>{compactName}</h3>;
   };
 
-  
-
   return (
     <div className="main-container">
       <SideBarUI compact={compact} oncompact={compacthandler}>
@@ -439,8 +448,8 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
             <Avatar
               className="profile_img"
               src={token.profilePic}
-              style={{height:'70px',width:'70px'}}
-              sx={{  bgcolor: blueGrey[400] }}
+              style={{ height: "70px", width: "70px" }}
+              sx={{ bgcolor: blueGrey[400] }}
             />
             {compact ? CompactNameHandler() : <h3>{token.username}</h3>}
           </div>
@@ -528,8 +537,8 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                     className="profile_img"
                     src={token.profilePic}
                     onClick={(e) => setEdit_photo(!edit_photo)}
-                    style={{height:'150px',width:'150px'}}
-                    sx={{  bgcolor: blueGrey[400] }}
+                    style={{ height: "150px", width: "150px" }}
+                    sx={{ bgcolor: blueGrey[400] }}
                   />
                   {edit_photo ? (
                     <>
@@ -584,10 +593,10 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                   )}
                 </div>
                 <div class="row mt-3">
-                  <div class="col-sm-3">
+                  <div class="col-sm-3" style={{ width: "20%" }}>
                     <h6 class="mb-0">Email</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
+                  <div class="col-sm-9 text-secondary" style={{ width: "80%" }}>
                     {edit ? (
                       <input
                         style={{ cursor: "pointer" }}
@@ -602,10 +611,10 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                 </div>
                 <hr id="profile-hr" />
                 <div class="row mt-3">
-                  <div class="col-sm-3">
+                  <div class="col-sm-3" style={{ width: "20%" }}>
                     <h6 class="mb-0">Address</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
+                  <div class="col-sm-9 text-secondary" style={{ width: "80%" }}>
                     {edit ? (
                       <input
                         placeholder={token.address}
@@ -618,10 +627,10 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                 </div>
                 <hr id="profile-hr" />
                 <div class="row mt-3">
-                  <div class="col-sm-3">
+                  <div class="col-sm-3" style={{ width: "20%" }}>
                     <h6 class="mb-0">Phone</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
+                  <div class="col-sm-9 text-secondary" style={{ width: "80%" }}>
                     {edit ? (
                       <input
                         placeholder={token.phone}
@@ -634,10 +643,10 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                 </div>
                 <hr id="profile-hr" />
                 <div class="row mt-3">
-                  <div class="col-sm-3">
+                  <div class="col-sm-3" style={{ width: "20%" }}>
                     <h6 class="mb-0">Date of Birth</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
+                  <div class="col-sm-9 text-secondary" style={{ width: "80%" }}>
                     {edit ? (
                       <input
                         style={{ cursor: "pointer" }}
@@ -645,17 +654,23 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                         type="date"
                         onChange={(e) => setDob(e.target.value)}
                       ></input>
+                    ) : token.dateOfBirth ? (
+                      token.dateOfBirth
+                        .split("T")[0]
+                        .split("-")
+                        .reverse()
+                        .join("-")
                     ) : (
-                      token.dateOfBirth ? token.dateOfBirth.split('T')[0].split('-').reverse().join('-') :token.dateOfBirth
+                      token.dateOfBirth
                     )}
                   </div>
                 </div>
                 <hr id="profile-hr" />
                 <div class="row mt-3">
-                  <div class="col-sm-3">
+                  <div class="col-sm-3" style={{ width: "20%" }}>
                     <h6 class="mb-0">Gender</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
+                  <div class="col-sm-9 text-secondary" style={{ width: "80%" }}>
                     {edit ? (
                       <div>
                         <input
@@ -685,17 +700,19 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                 </div>
                 <hr id="profile-hr" />
                 <div class="row mt-3">
-                  <div class="col-sm-3">
+                  <div class="col-sm-3" style={{ width: "20%" }}>
                     <h6 class="mb-0">Blood</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
+                  <div class="col-sm-9 text-secondary" style={{ width: "80%" }}>
                     {edit ? (
                       <div>
                         <select
                           style={{ cursor: "pointer" }}
                           onChange={(e) => setblood(e.target.value)}
                         >
-                          <option value="" selected hidden disabled >Choose</option>
+                          <option value="" selected hidden disabled>
+                            Choose
+                          </option>
                           <option value="A+">A+</option>
                           <option value="A-">A-</option>
                           <option value="B+">B+</option>
@@ -776,7 +793,13 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                                 : { opacity: "0.5" }
                             }
                           >
-                            <td width="20%">{item.date.split('T')[0].split("-").reverse().join("-")}</td>
+                            <td width="20%">
+                              {item.date
+                                .split("T")[0]
+                                .split("-")
+                                .reverse()
+                                .join("-")}
+                            </td>
                             <td width="20%">{item.slot}</td>
 
                             <td
@@ -845,15 +868,23 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                   </thead>
                   <tbody>
                     {get_orders_store.length === 0 ? (
-                      ""
+                      <>
+                        <Alert
+                          key="primary"
+                          variant="primary"
+                          style={{ margin: "1rem 2rem" }}
+                        >
+                          There are no Orders yet.
+                        </Alert>
+                      </>
                     ) : (
                       <>
                         {get_orders_store.map((item) => (
                           <tr key={item._id}>
                             <td>{item.pharmacy.name}</td>
-                                     
+
                             {/*<td>{item.order_data.Date}</td>*/}
-                            { <td>{item.order_data.Date.split("T")[0]}</td> }
+                            {<td>{item.order_data.Date.split("T")[0]}</td>}
                             <td>{item.price}</td>
                             <td>
                               <Accordion defaultActiveKey="0">
@@ -863,20 +894,85 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
 
                                 <Accordion.Collapse eventKey={item._id}>
                                   <Card.Body>
-                                  {item.flag == "image" ? <div size='small'>
-        <div >    
-        <ModalImage
-          small={item.order_data.form}
-          large={item.order_data.form}
-          alt={"Order Image"}
-          hideDownload={true}
-          hideZoom={true}
-          className="modal-image" 
-        />    
-</div>
-</div> : <div><h5>{JSON.parse(item.order_data.form).map((f)=><li>{f.medicine} with Quantity={f.quanity}</li>)}</h5></div>}
-
-                                   
+                                    {item.flag == "image" ? (
+                                      <div size="small">
+                                        <div>
+                                          <ModalImage
+                                            small={item.order_data.form}
+                                            large={item.order_data.form}
+                                            alt={"Order Image"}
+                                            hideDownload={true}
+                                            hideZoom={true}
+                                            className="modal-image"
+                                          />
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <div>
+                                        <TableContainer
+                                          component={Paper}
+                                          style={{
+                                            margin: 0,
+                                            marginLeft: "auto",
+                                            width: "60%",
+                                          }}
+                                        >
+                                          <Table_mui
+                                            sx={{ minWidth: 250 }}
+                                            size="small"
+                                            aria-label="a dense table"
+                                          >
+                                            <TableHead>
+                                              <TableRow>
+                                                <TableCell
+                                                  style={{
+                                                    paddingBottom: 5,
+                                                    paddingTop: 5,
+                                                    fontWeight: "bold",
+                                                  }}
+                                                >
+                                                  Medicine Name
+                                                </TableCell>
+                                                <TableCell
+                                                  style={{
+                                                    paddingBottom: 5,
+                                                    paddingTop: 0,
+                                                    fontWeight: "bold",
+                                                  }}
+                                                >
+                                                  Quantity
+                                                </TableCell>
+                                              </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                              {JSON.parse(
+                                                item.order_data.form
+                                              ).map((f) => (
+                                                <TableRow
+                                                  key="Medicinies"
+                                                  sx={{
+                                                    "&:last-child td, &:last-child th":
+                                                      {
+                                                        border: 0,
+                                                      },
+                                                  }}
+                                                >
+                                                  <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                  >
+                                                    {f.medicine}
+                                                  </TableCell>
+                                                  <TableCell>
+                                                    {f.quanity}
+                                                  </TableCell>
+                                                </TableRow>
+                                              ))}
+                                            </TableBody>
+                                          </Table_mui>
+                                        </TableContainer>
+                                      </div>
+                                    )}
                                   </Card.Body>
                                 </Accordion.Collapse>
                               </Accordion>
@@ -933,16 +1029,20 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
         {sidebar_profile === "prescription" ? (
           pres.length === 0 ? (
             <>
-              <Alert key="primary" variant="primary">
+              <Alert
+                key="primary"
+                variant="primary"
+                style={{ margin: "1rem 2rem" }}
+              >
                 There are no prescriptions yet.
               </Alert>
             </>
           ) : (
             // <CardGroup>
             <Row xs={1} md={3} className="g-4">
-                {pres.map((p) => (
-                  <Col>
-                  <Card>
+              {pres.map((p) => (
+                <Col>
+                  <Card className="pres-container">
                     <Card.Body>
                       <Card.Title>Prescriptions</Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">
@@ -961,8 +1061,8 @@ const action_state =  JSON.parse(useSelector((state) => state.meeting_reducer))
                       </Card.Text>
                     </Card.Body>
                   </Card>
-                  </Col>
-                ))}
+                </Col>
+              ))}
             </Row>
           )
         ) : (
