@@ -6,6 +6,7 @@ import SendIcon from '@mui/icons-material/Send';
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Slot from './file';
+import { Back } from "react-bootstrap-icons";
 
 const Choose_pres=(props)=>{
 
@@ -13,6 +14,7 @@ const Choose_pres=(props)=>{
         const handleClose = () => {setShow(false); props.setshow(false);};
         const[done, setdone] = useState(false);
         const[pres, setpres]=useState([]);
+        const[pres2, setpres2]=useState([]);
         const[number, setnumber] = useState(1);
         const [q,setq]=useState([]);
         const[next, setnext] = useState(false);
@@ -34,7 +36,17 @@ const Choose_pres=(props)=>{
      
                 console.log(res.data);
                 if (res.data==="you have no prescriptions yet") {setnext(true);return}
-                setpres(res.data);
+                var med_state=[];
+                for(var i=0; i<res.data.length;i++)
+                {
+                  for(var j=0; j<res.data[i].medicines.length;j++)
+                  {
+                    med_state.push({medicine:res.data[i].medicines[j], state:false});
+                  }
+
+                }
+                setpres(med_state);
+                setpres2(res.data);
                 
               
             } 
@@ -43,35 +55,44 @@ const Choose_pres=(props)=>{
             }
         }
 
-var med_state=[];
-for(var i=0; i<pres.length;i++)
-{
-  for(var j=0; j<pres[i].medicines.length;j++)
-  {
-    med_state.push({medicine:pres[i].medicines[j], state:false});
-  }
 
-}
+
 
 const change=(x)=>{
-  for(var i=0; i<med_state.length;i++)
+  console.log(x);
+  var med = [];
+  for(var i=0; i<pres.length;i++)
   {
-    if(med_state[i].medicine === x) med_state[i].state=(!med_state[i].state);
+    //if(pres[i].medicine === x) pres[i].state=!(pres[i].state);
+    if(pres[i].medicine === x) med.push({medicine:pres[i].medicine , state:!(pres[i].state)})
+    else med.push({medicine:pres[i].medicine , state:pres[i].state})
   }
- 
+  setpres(med);
+  console.log(med);
 }
-
+const setback=()=>{
+  var med_state=[];
+    for(var i=0; i<pres2.length;i++)
+    {
+      for(var j=0; j<pres2[i].medicines.length;j++)
+      {
+        med_state.push({medicine:pres2[i].medicines[j], state:false});
+      }
+    }
+    setpres(med_state);
+}
 const order_details=()=>{
  
   props.set_order(q);
 }
 
 const quanity=()=>{
-  var o=[];
-  for(var i=0;i<med_state.length;i++)
+  var o =[];
+  for(var i=0;i<pres.length;i++)
   {
-      if(!(o.includes(med_state[i].medicine))&&(med_state[i].state===true)) o.push({medicine: med_state[i].medicine, quanity:1});
+      if(!(o.includes(pres[i].medicine))&&(pres[i].state===true)) o.push({medicine: pres[i].medicine, quanity:1});
   }
+  console.log(o);
   setq(o);
 }
 
@@ -111,7 +132,7 @@ const quanity=()=>{
                  
             <div style={{width:"350px", height:"350px"}}>
                 {
-                    pres.length ===0 ? 
+                    pres2.length ===0 ? 
                     <>
                       <Alert key="primary" variant="primary">
                         There are no prescriptions yet.
@@ -121,7 +142,7 @@ const quanity=()=>{
                
             <Carousel variant="dark">
                     {
-                        pres.map((p)=>
+                        pres2.map((p)=>
                             <Carousel.Item>
         <div style={{ textAlign:"center"}}>
             <Card>
@@ -160,7 +181,7 @@ const quanity=()=>{
               </Modal.Body>}
               {done ? 
               <Modal.Footer>
-              <Button variant="secondary" onClick={(e)=>setdone(false)}>
+              <Button variant="secondary" onClick={(e)=>{setdone(false) ; setback();}}>
                 Back
               </Button>
               <Button variant="primary" onClick={(e)=>{handleClose(); order_details();}}>
