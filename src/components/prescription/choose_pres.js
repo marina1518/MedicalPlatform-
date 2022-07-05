@@ -127,7 +127,10 @@ const quanity=()=>{
             <Card>
             <Card.Body>
               <Card.Title>Prescription</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">{p.Date}</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">{p.Date.split("T")[0]
+                        .split("-")
+                        .reverse()
+                        .join("-")}</Card.Subtitle>
               <Card.Subtitle className="mb-2 text-muted">Dr {p.doctor.username}</Card.Subtitle>
               <Card.Subtitle className="mb-2 text-muted">{p.doctor.email}</Card.Subtitle>
               <Card.Text>
