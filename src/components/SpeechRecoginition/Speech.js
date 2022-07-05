@@ -86,26 +86,21 @@ let navigate = useNavigate();
      //specialization = '';
      flag_order = false;
   };
+
   const { speak, voices ,speaking ,supported ,cancel} = useSpeechSynthesis({
     onEnd,
   });
 
 const get_arabic = () =>{
-  //console.log("Arabicccccc")
   for (var i = 0 ; i < voices.length ; i++)
   {
     if (voices[i].lang == "ar-EG" || voices[i].lang == "ar-SA")
     {
       set_voice(i)
-      
-      //break;
-      //console.log("voice_api_loop",voices[i].name);
-    }
-    //console.log(voices[i])
+    }   
   }
 }  
-console.log("voices Api : " , voices[selected_voice])
-var voice = voices[selected_voice] || null; //voices [1] arabic eg 1/6/7 
+var voice = voices[selected_voice] || null; 
 
   const handleKeyDown = (event) => {
     
@@ -245,6 +240,19 @@ axios.get(`https://future-medical.herokuapp.com/user/meetings`,
 }).then((res)=>{
 console.log(res.data);
 if (res.data != "you have no meetings yet"){
+  //variables to control cuurent time 
+const local_date = new Date();
+var utc_offset = local_date.getTimezoneOffset()/60;
+  //console.log(utc_offset)
+var utc = (2+utc_offset)*60;
+var hour = local_date.getHours();
+var min = local_date.getMinutes();
+local_date.setMinutes(min+utc);
+hour = local_date.getHours();
+min = local_date.getMinutes();
+  //console.log(hour, min);
+  //console.log(local_date);
+
 var meetings_api = res.data ;
 /*                meet_date = x.Date.split('-');
                 meet_day = meet_date[2].split('T')
@@ -265,14 +273,36 @@ var state = "Pending"
     else if (parseInt(day[2]) > current.getFullYear())
       state = "Pending"; //next year
     else if ( parseInt(day[1]) === current.getMonth() + 1 &&  parseInt(day[0]) === current.getDate() && parseInt(day[2]) === current.getFullYear() )
-      state = "Today";
+    {
+      //today
+      
+      if( hour === parseInt(meetings_api[i].slot.split('-')[0].split(':')[0]))
+      {
+        if(min < 30 &&  parseInt(meetings_api[i].slot.split('-')[0].split(':')[1]) === 0)
+      {
+        state = "now";
+      }
+      else if (min >= 30 &&  parseInt(meetings_api[i].slot.split('-')[0].split(':')[1]) === 30)
+      {
+        state = "now";
+      }
+      else {
+        state = "Pending"
+      }
+      }
+      else {
+        state = "Pending"
+       
+      }
+    }
+      
     else if (parseInt(day[1]) < current.getMonth() + 1)
-      state = "Done"; //month check
+      {state = "Done";} //month check
     else if (
       parseInt(day[1]) === current.getMonth() + 1 && parseInt(day[0]) < current.getDate()
     )
-      state = "Done"; //month check
-    else state = "Pending";
+      {state = "Done";} //month check
+    else {state = "Pending";}
     meetings_api[i].state = state;
   }
   console.log(meetings_api)
@@ -283,6 +313,8 @@ var state = "Pending"
   //handle_speak = ` الطلبات بتاعتك هى  ` ;  
   var pending_meetings = "" ; var flag_pending = false;
   var Today_meetings = ""; var flag_Today_meetings = false;
+  var flag_now_meeting = false;
+  var now_meeting = {};
   var Today_meetings_List = [] ;
   var pending_meetings_list = [];
   //var disapproved_orders = ""; var flag_disapproved = false;
@@ -300,17 +332,29 @@ var state = "Pending"
               flag_Today_meetings = true ;
               Today_meetings_List.push(x);
            }
+           else if (x.state === "now")
+           {
+              flag_now_meeting = true ;              
+              now_meeting = x
+           }
            
-          }  )
+          }  
+          )
 
-           
-if(Today_meetings_List.length != 0 )
+if (flag_now_meeting ) 
+{
+    var time_slot =  now_meeting.slot.split("-");
+    handle_speak +=   "مقابلة الأن"+ " مع دكتور " + now_meeting.doctor.arabic_username + " من الساعة " + time_slot[0] + " الى"+time_slot[1] + " لو عاوز تدخل المقابلة اوول واحد " ;
+    set_enter_meeting(true);
+    set_current_meeting(now_meeting);
+}          
+else if(Today_meetings_List.length != 0 )
 {
   set_pending_array_meetings(pending_meetings_list); //TO READ IT AFTER IF HE WANT IT 
   var time_slot =  Today_meetings_List[0].slot.split("-");
-  handle_speak += "مقابلة اليوم" + " مع دكتور " + Today_meetings_List[0].doctor.arabic_username + " من الساعة " + time_slot[0] + " الى"+time_slot[1] + " لو عاوز تدخل المقابلة اوول واحد "
-  set_enter_meeting(true);
-  set_current_meeting(Today_meetings_List[0]);
+  handle_speak += "مقابلة اليوم" + " مع دكتور " + Today_meetings_List[0].doctor.arabic_username + " من الساعة " + time_slot[0] + " الى"+time_slot[1] 
+  //set_enter_meeting(true);
+  //set_current_meeting(Today_meetings_List[0]);
   if (Today_meetings_List.length > 1){ //SET COUNT OF LIST AND CURRENT COUNT
     
     set_count_today_meetings(Today_meetings_List.length - 1);
@@ -322,7 +366,7 @@ if(Today_meetings_List.length != 0 )
 if (flag_pending && (flag_Today_meetings == false))
 {
   //Pending Only
-  handle_speak+=" مقابلات معادها مش اليوم " +" . "+ pending_meetings;
+  handle_speak+=" مقابلات معادها ليس الأن " +" . "+ pending_meetings;
 } 
 
 if (flag_pending == false && flag_Today_meetings == false )
@@ -1179,6 +1223,7 @@ get_arabic();//get arabic voice first time
    {
      set_approved_count(0)
      set_counter_state(0)
+     set_complete_reading(false)
      set_flag_reserve_meeting(false)
      set_flag_meeting_time(false)
      set_sure_reserve(false);
@@ -1346,7 +1391,8 @@ const replies_my_order = [" واحد."," إتنين."," اثنان."," واحد"
            { // One enter 
                console.log(current_meeting_id) //CHECK 
                var saved_channel = current_meeting_id.doctor.email
-               dispatch(channel_name(saved_channel));//dr email & slot
+              // dispatch(channel_name(`${props.dr_email} ${props.slot}`));
+               dispatch(channel_name(`${saved_channel} ${current_meeting_id.slot}`));//dr email & slot
               navigate('/user/meetingroom') ; //return to init state lw d5l meeting 
               set_counter_today_meetings(0);
               set_count_today_meetings(0); //Return to the initial state 
