@@ -343,6 +343,7 @@ var state = "Pending"
 
 if (flag_now_meeting ) 
 {
+     set_pending_array_meetings(pending_meetings_list); //TO READ IT AFTER IF HE WANT IT 
     var time_slot =  now_meeting.slot.split("-");
     handle_speak +=   "مقابلة الأن"+ " مع دكتور " + now_meeting.doctor.arabic_username + " من الساعة " + time_slot[0] + " الى"+time_slot[1] + " لو عاوز تدخل المقابلة اوول واحد " ;
     set_enter_meeting(true);
@@ -363,13 +364,13 @@ else if(Today_meetings_List.length != 0 )
    }
 }
 
-if (flag_pending && (flag_Today_meetings == false))
+else if (flag_pending && (flag_Today_meetings == false))
 {
   //Pending Only
   handle_speak+=" مقابلات معادها ليس الأن " +" . "+ pending_meetings;
 } 
 
-if (flag_pending == false && flag_Today_meetings == false )
+else if (flag_pending == false && flag_Today_meetings == false )
 {
    handle_speak += "لا يوجد مقابلات للمتابعة"
 }
@@ -405,7 +406,7 @@ for (var x = 0 ; x < list.length ; x++)
   var time_slot =  list[x].slot.split("-");
   pending_meetings+="مقابلة بالتاريخ"+ " " + list[x].Date+ " مع دكتور " + list[x].doctor.arabic_username + " من الساعة " + time_slot[0] + " الى"+time_slot[1] + " . ";
 }
-handle_speak+=" مقابلات معادها مش اليوم " +" . "+ pending_meetings;
+handle_speak+=" مقابلات معادها ليس الأن " +" . "+ pending_meetings;
 speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
 }
 
