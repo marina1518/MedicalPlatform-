@@ -74,7 +74,8 @@ const Slider = (props) => {
             Service
           </h1>
           <p className="p-s3-color">
-            You can find all nearby Hospitals,Clinics and Pharmacies
+            You can find all Nearby <br />
+            Hospitals, Clinics and Pharmacies
           </p>
           <Link to="/maps">
             <button className="slide1-btn btn-3-color">

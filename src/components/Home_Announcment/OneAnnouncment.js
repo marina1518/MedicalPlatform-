@@ -2,6 +2,7 @@ import React from "react";
 import "./announcment.css";
 
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import CampaignIcon from "@mui/icons-material/Campaign";
 
 function OneAnnouncment(props) {
   console.log(props);
@@ -13,7 +14,8 @@ function OneAnnouncment(props) {
   return (
     <div>
       <p className="announcment_title">
-        ⚠ {props.announcement.announce.title}
+        <CampaignIcon />
+        {"  "} {props.announcement.announce.title}
         <KeyboardDoubleArrowRightIcon />
         <span className="announcement-date">Announced at </span> {dateparse}
       </p>

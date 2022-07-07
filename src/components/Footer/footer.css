@@ -30,5 +30,8 @@
   letter-spacing: 2px;
   background: transparent;
   color: white;
+}
+
+.complaints_btn:hover {
   text-decoration: underline;
 }
