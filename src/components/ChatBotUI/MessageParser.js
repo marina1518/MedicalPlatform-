@@ -39,9 +39,9 @@ class MessageParser {
     // ) {
     //   this.actionProvider.handlepharmacyoption();
     // }
-    if (lower_case_mess.includes("specialization")) {
-      this.actionProvider.handleSpecializationoption();
-    }
+    // if (lower_case_mess.includes("specialization")) {
+    //   this.actionProvider.handleSpecializationoption();
+    // }
     // this.actionProvider.handleoptions(message);
 
     // if (lowercase.includes("hi")) {

@@ -2,6 +2,7 @@ import { createChatBotMessage } from "react-chatbot-kit";
 import Options from "./Options/Options";
 import FMBotAvatar from "./FMBotAvatar";
 import OneOption from "./Options/OneOption";
+import LogoutOption from "./Options/LogoutOption";
 
 const botName = "Future Medical Bot";
 
@@ -61,6 +62,13 @@ const config = {
       },
     },
     {
+      widgetName: "complaints_option",
+      widgetFunc: (props) => <Options {...props} />,
+      props: {
+        id: 6,
+      },
+    },
+    {
       widgetName: "profile_option",
       widgetFunc: (props) => <OneOption {...props} />,
       props: {
@@ -73,6 +81,17 @@ const config = {
       props: {
         id: 8,
       },
+    },
+    {
+      widgetName: "home_option",
+      widgetFunc: (props) => <OneOption {...props} />,
+      props: {
+        id: 9,
+      },
+    },
+    {
+      widgetName: "logout_option",
+      widgetFunc: (props) => <LogoutOption {...props} />,
     },
   ],
 };

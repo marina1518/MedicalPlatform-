@@ -10,28 +10,45 @@ const OneOption = (props) => {
 
   return (
     <>
-      {token.token && props.id === 7 ? (
-        <div className="options">
-          <div className="options-container">
-            <Link to="/user">
-              <button className="option-item">Profile</button>
-            </Link>
+      {props.id === 7 ? (
+        token.token ? (
+          <div className="options">
+            <div className="options-container">
+              <Link to="/user">
+                <button className="option-item">Profile</button>
+              </Link>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="options">
+            <div className="options-container">
+              <Link to="/login">
+                <button className="option-item">Login</button>
+              </Link>
+            </div>
+          </div>
+        )
       ) : (
-        <div className="options">
-          <div className="options-container">
-            <Link to="/login">
-              <button className="option-item">Login</button>
-            </Link>
-          </div>
-        </div>
+        ""
       )}
-      {props.id === 8 && (
+      {props.id === 8 &&
+        (!token.token ? (
+          <div className="options">
+            <div className="options-container">
+              <Link to="/login">
+                <button className="option-item">Login</button>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div>You are already logged in</div>
+        ))}
+
+      {props.id === 9 && (
         <div className="options">
           <div className="options-container">
-            <Link to="/login">
-              <button className="option-item">Login</button>
+            <Link to="/">
+              <button className="option-item">Home</button>
             </Link>
           </div>
         </div>

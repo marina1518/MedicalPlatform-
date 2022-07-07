@@ -36,6 +36,12 @@ const Options = (props) => {
       id: 5,
       link: "/maps",
     },
+    {
+      text: "Complaints",
+      handler: () => {},
+      id: 6,
+      link: "/complaint",
+    },
   ];
 
   const ButtonMarkUp = options.map((option) => (

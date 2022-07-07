@@ -9,25 +9,6 @@ class ActionProvider {
     this.createClientMessage = createClientMessage;
   }
 
-  handlehospitaloption = () => {
-    const optionmess = this.createChatbotMessage("Click this button", {
-      widget: "hospital_option",
-    });
-    setTimeout(() => {
-      this.addMessageToState(optionmess);
-    }, 2000);
-  };
-
-  handleprofileoption = () => {
-    console.log("hereprofile");
-    const optionmess = this.createChatbotMessage("Click this button", {
-      widget: "profile_option",
-    });
-    setTimeout(() => {
-      this.addMessageToState(optionmess);
-    }, 2000);
-  };
-
   handlemess = async (message) => {
     try {
       // console.log("actionprovider", message);
@@ -44,74 +25,69 @@ class ActionProvider {
 
       console.log(lower_case_mess);
 
-      if (
-        lower_case_mess.includes("hospitals") ||
-        lower_case_mess.includes("hospital") ||
-        lower_case_mess.includes("مستشفى") ||
-        lower_case_mess.includes("مستشفيات")
-      ) {
-        console.log("مستشفى 1");
+      if (lower_case_mess.includes("hospitals")) {
+        // console.log("hospitals 1");
         this.handlehospitaloption();
       }
 
-      if (
-        lower_case_mess.includes("clinics") ||
-        lower_case_mess.includes("clinic") ||
-        lower_case_mess.includes("عيادة") ||
-        lower_case_mess.includes("عيادات")
-      ) {
-        console.log("عيادة 2");
+      if (lower_case_mess.includes("clinics")) {
+        // console.log("clinics 2");
         this.handlehclinicsoption();
       }
+      if (lower_case_mess.includes("future")) {
+        // console.log("home 9");
+        this.handlehomeoption();
+      }
       if (
-        lower_case_mess.includes("صيدلية") ||
-        lower_case_mess.includes("pharmacy") ||
         lower_case_mess.includes("pharmacies") ||
-        lower_case_mess.includes("صيدليات")
+        lower_case_mess.includes("الادوية") ||
+        lower_case_mess.includes("الدواء")
       ) {
-        console.log("صيدلية 3");
+        // console.log("pharmacies 3");
         this.handlepharmacyoption();
       }
       if (
         lower_case_mess.includes("تخصصات") ||
         lower_case_mess.includes("تخصص") ||
-        lower_case_mess.includes("دكاترة") ||
+        lower_case_mess.includes("التخصص") ||
+        // lower_case_mess.includes("دكاترة") ||
+        lower_case_mess.includes("الكوبونات") ||
         lower_case_mess.includes("specialization") ||
         lower_case_mess.includes("reserve")
       ) {
-        console.log("specialization 4");
+        // console.log("specialization 4");
         this.handleSpecializationoption();
       }
-      if (
-        // lower_case_mess.includes("location") ||
-        // lower_case_mess.includes("map") ||
-        // lower_case_mess.includes("maps")
-        lower_case_mess.includes("القريبة")
-      ) {
-        console.log("maps 5");
+      if (lower_case_mess.includes("location")) {
+        // console.log("maps 5");
         this.handleMapsoption();
       }
       if (
-        // lower_case_mess.includes("Personal") ||
-        lower_case_mess.includes("Appointment") ||
-        lower_case_mess.includes("Appointments") ||
-        lower_case_mess.includes("الاوردرات")
-        // lower_case_mess.includes("order") ||
-        // lower_case_mess.includes("orders") ||
+        lower_case_mess.includes("appointment") ||
+        lower_case_mess.includes("appointments") ||
+        lower_case_mess.includes("orders") ||
+        lower_case_mess.includes("profile")
       ) {
-        console.log("profile 7");
+        // console.log("profile 7");
         this.handleprofileoption();
       }
       if (
-        // lower_case_mess.includes("Personal") ||
-        // lower_case_mess.includes("Appointment") ||
-        // lower_case_mess.includes("Appointments") ||
-        // lower_case_mess.includes("order") ||
-        lower_case_mess.includes("Register here") ||
-        lower_case_mess.includes("login")
+        lower_case_mess.includes("register here") ||
+        lower_case_mess.includes("الايميل")
       ) {
-        console.log("login 8");
-        this.handleprofileoption();
+        // console.log("login 8");
+        this.handleloginoption();
+      }
+      if (lower_case_mess.includes("logout")) {
+        // console.log("logout 9");
+        this.handlelogoutoption();
+      }
+      if (
+        lower_case_mess.includes("الشكاوي") ||
+        lower_case_mess.includes("الشكوي")
+      ) {
+        // console.log("complaints 6");
+        this.handlecomplaintoption();
       }
       // const temp = "ممكن تضغط على زرار 'login'وبعد كده دوس 'Register'";
 
@@ -137,50 +113,126 @@ class ActionProvider {
     }
   };
 
+  handlehospitaloption = () => {
+    const optionmess = this.createChatbotMessage(
+      "او ممكن تضغط على الزرار ده هيجبلك كل مستشفيات اللى عندنا",
+      {
+        widget: "hospital_option",
+      }
+    );
+    setTimeout(() => {
+      this.addMessageToState(optionmess);
+    }, 2000);
+  };
+
+  handleprofileoption = () => {
+    const optionmess = this.createChatbotMessage(
+      "اضغط على الزرار ده هيوديك على ال profile بتاعك بس لازم تكون عامل login الاول 😀",
+      {
+        widget: "profile_option",
+      }
+    );
+    setTimeout(() => {
+      this.addMessageToState(optionmess);
+    }, 2000);
+  };
+
   handleMapsoption = () => {
-    const optionmess = this.createChatbotMessage("Click this button", {
-      widget: "maps_option",
-    });
+    const optionmess = this.createChatbotMessage(
+      "و ممكن تضغط على الزرار ده هيفتحلك الخريطة على طول",
+      {
+        widget: "maps_option",
+      }
+    );
     setTimeout(() => {
       this.addMessageToState(optionmess);
     }, 2000);
   };
 
   handleSpecializationoption = () => {
-    const optionmess = this.createChatbotMessage("Click this button", {
-      widget: "specialization_option",
-    });
+    const optionmess = this.createChatbotMessage(
+      "و ممكن تضغط على الزرار ده هيجبلك كل تخصصات اللى عندنا ، اختار الدكتور اللى انت عايزه و احجز عنده 😀",
+      {
+        widget: "specialization_option",
+      }
+    );
     setTimeout(() => {
       this.addMessageToState(optionmess);
     }, 2000);
   };
 
   handlehclinicsoption = () => {
-    const optionmess = this.createChatbotMessage("Click this button", {
-      widget: "clinics_option",
-    });
+    const optionmess = this.createChatbotMessage(
+      "و ممكن تضغط على الزرار ده هيجبلك كل العيادات اللى عندنا",
+      {
+        widget: "clinics_option",
+      }
+    );
     setTimeout(() => {
       this.addMessageToState(optionmess);
     }, 2000);
   };
 
   handlepharmacyoption = () => {
-    const optionmess = this.createChatbotMessage("Click this button", {
-      widget: "pharmacy_option",
-    });
+    const optionmess = this.createChatbotMessage(
+      "و ممكن تضغط على الزرار ده هيجبلك كل الصيدليات اللى عندنا",
+      {
+        widget: "pharmacy_option",
+      }
+    );
     setTimeout(() => {
       this.addMessageToState(optionmess);
     }, 2000);
   };
 
-  handlepharmacyoption = () => {
-    const optionmess = this.createChatbotMessage("Click this button", {
+  handleloginoption = () => {
+    const optionmess = this.createChatbotMessage("او ممكن تضغط على الزرار ده", {
       widget: "login_option",
     });
     setTimeout(() => {
       this.addMessageToState(optionmess);
     }, 2000);
   };
+
+  handlehomeoption = () => {
+    const optionmess = this.createChatbotMessage(
+      "و ممكن تضغط على الزرار ده هيوديك على ال Home على طول 😀",
+      {
+        widget: "home_option",
+      }
+    );
+    setTimeout(() => {
+      this.addMessageToState(optionmess);
+    }, 2000);
+  };
+
+  handlecomplaintoption = () => {
+    const optionmess = this.createChatbotMessage(
+      "و ممكن تضغط على زرار ده هيوديك على صفحة الشكاوى ",
+      {
+        widget: "complaints_option",
+      }
+    );
+    setTimeout(() => {
+      this.addMessageToState(optionmess);
+    }, 2000);
+  };
+
+  handlelogoutoption = () => {
+    const optionmess = this.createChatbotMessage("او ممكن تضغط على الزرار ده", {
+      widget: "logout_option",
+    });
+    setTimeout(() => {
+      this.addMessageToState(optionmess);
+    }, 2000);
+  };
+
+  // handleLogoutSuccess = () => {
+  //   const optionmess = this.createChatbotMessage("تمت عملية ال logout بنجاح");
+  //   setTimeout(() => {
+  //     this.addMessageToState(optionmess);
+  //   }, 2000);
+  // };
 
   // hihandler = () => {
   //   const message = this.createChatbotMessage(
