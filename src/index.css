@@ -26,3 +26,7 @@ body::-webkit-scrollbar-thumb {
 body::-webkit-scrollbar-thumb:hover {
   background: rgba(87, 84, 84, 0.7);
 }
+
+.loading_position {
+  margin: auto;
+}
