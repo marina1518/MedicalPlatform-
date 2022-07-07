@@ -54,10 +54,24 @@ const config = {
       },
     },
     {
+      widgetName: "maps_option",
+      widgetFunc: (props) => <Options {...props} />,
+      props: {
+        id: 5,
+      },
+    },
+    {
       widgetName: "profile_option",
       widgetFunc: (props) => <OneOption {...props} />,
       props: {
         id: 7,
+      },
+    },
+    {
+      widgetName: "login_option",
+      widgetFunc: (props) => <OneOption {...props} />,
+      props: {
+        id: 8,
       },
     },
   ],

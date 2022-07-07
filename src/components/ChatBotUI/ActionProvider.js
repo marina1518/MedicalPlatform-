@@ -50,6 +50,7 @@ class ActionProvider {
         lower_case_mess.includes("مستشفى") ||
         lower_case_mess.includes("مستشفيات")
       ) {
+        console.log("مستشفى 1");
         this.handlehospitaloption();
       }
 
@@ -59,6 +60,7 @@ class ActionProvider {
         lower_case_mess.includes("عيادة") ||
         lower_case_mess.includes("عيادات")
       ) {
+        console.log("عيادة 2");
         this.handlehclinicsoption();
       }
       if (
@@ -67,24 +69,48 @@ class ActionProvider {
         lower_case_mess.includes("pharmacies") ||
         lower_case_mess.includes("صيدليات")
       ) {
+        console.log("صيدلية 3");
         this.handlepharmacyoption();
       }
       if (
         lower_case_mess.includes("تخصصات") ||
         lower_case_mess.includes("تخصص") ||
         lower_case_mess.includes("دكاترة") ||
-        lower_case_mess.includes("specialization")
+        lower_case_mess.includes("specialization") ||
+        lower_case_mess.includes("reserve")
       ) {
+        console.log("specialization 4");
         this.handleSpecializationoption();
       }
       if (
-        lower_case_mess.includes("Personal") ||
+        // lower_case_mess.includes("location") ||
+        // lower_case_mess.includes("map") ||
+        // lower_case_mess.includes("maps")
+        lower_case_mess.includes("القريبة")
+      ) {
+        console.log("maps 5");
+        this.handleMapsoption();
+      }
+      if (
+        // lower_case_mess.includes("Personal") ||
         lower_case_mess.includes("Appointment") ||
         lower_case_mess.includes("Appointments") ||
-        lower_case_mess.includes("order") ||
-        lower_case_mess.includes("orders")
+        lower_case_mess.includes("الاوردرات")
+        // lower_case_mess.includes("order") ||
+        // lower_case_mess.includes("orders") ||
       ) {
-        // console.log("condition_here");
+        console.log("profile 7");
+        this.handleprofileoption();
+      }
+      if (
+        // lower_case_mess.includes("Personal") ||
+        // lower_case_mess.includes("Appointment") ||
+        // lower_case_mess.includes("Appointments") ||
+        // lower_case_mess.includes("order") ||
+        lower_case_mess.includes("Register here") ||
+        lower_case_mess.includes("login")
+      ) {
+        console.log("login 8");
         this.handleprofileoption();
       }
       // const temp = "ممكن تضغط على زرار 'login'وبعد كده دوس 'Register'";
@@ -111,6 +137,15 @@ class ActionProvider {
     }
   };
 
+  handleMapsoption = () => {
+    const optionmess = this.createChatbotMessage("Click this button", {
+      widget: "maps_option",
+    });
+    setTimeout(() => {
+      this.addMessageToState(optionmess);
+    }, 2000);
+  };
+
   handleSpecializationoption = () => {
     const optionmess = this.createChatbotMessage("Click this button", {
       widget: "specialization_option",
@@ -132,6 +167,15 @@ class ActionProvider {
   handlepharmacyoption = () => {
     const optionmess = this.createChatbotMessage("Click this button", {
       widget: "pharmacy_option",
+    });
+    setTimeout(() => {
+      this.addMessageToState(optionmess);
+    }, 2000);
+  };
+
+  handlepharmacyoption = () => {
+    const optionmess = this.createChatbotMessage("Click this button", {
+      widget: "login_option",
     });
     setTimeout(() => {
       this.addMessageToState(optionmess);
