@@ -352,6 +352,9 @@ const Calendar = (props) => {
                   : mor.map((item) => (
                       <Button
                         onClick={() => {
+                          !props.data.token
+                            ? login()
+                            :
                           dispatch(
                             selected_slot({
                               slot: item.slot,
