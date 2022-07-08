@@ -20,7 +20,7 @@ const Slider = (props) => {
             For Your care
           </h1>
           <p className="p-s1-color">
-            We make our appointment with any doctor much easier
+            We make your appointment with any doctor much easier
             <br />
             you can meet Doctors and Healthcare Professionals in real time video
           </p>

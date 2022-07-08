@@ -106,6 +106,14 @@ hr {
   background-color: #064e68;
   border-color: #064e68;
   color: white;
-  margin-left: 9rem;
+  /* margin-left: 38%; */
   margin-top: 1rem;
+}
+
+.order-btn-cont {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
 }

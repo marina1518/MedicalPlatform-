@@ -141,7 +141,7 @@ const HospitalsPage = () => {
               {entity !== "pharmacies" ? (
                 <div className="hosp-data">
                   <Link to={`/DoctorsEntity/${hospital.name}`}>
-                    <p className="hosp-name">{hospital.name}</p>
+                    <p className="hosp-name">{hospital.arabic_name}</p>
                     <p className="hosp-address">
                       {/* <strong>Address: </strong> */}
                       <i class="bi bi-geo-alt-fill"></i> {hospital.address[0]}
@@ -154,7 +154,7 @@ const HospitalsPage = () => {
                 </div> //Pharmacy Card
               ) : (
                 <div className="hosp-data">
-                  <p className="hosp-name">{hospital.name}</p>
+                  <p className="hosp-name">{hospital.arabic_name}</p>
                   <p className="hosp-address">
                     {/* <strong>Address: </strong> */}
                     <i class="bi bi-geo-alt-fill"></i> {hospital.address[0]}
@@ -162,12 +162,14 @@ const HospitalsPage = () => {
                   <p className="hosp-tele">
                     <i class="bi bi-telephone-fill"></i> {hospital.telephone[0]}
                   </p>
-                  <Button
-                    className="OrderButton"
-                    onClick={() => handle_order(hospital)}
-                  >
-                    Make order
-                  </Button>
+                  <div className="order-btn-cont">
+                    <Button
+                      className="OrderButton"
+                      onClick={() => handle_order(hospital)}
+                    >
+                      Make order
+                    </Button>
+                  </div>
                   <PharmacyOrder
                     pharmacyname={pharmacy_details.pharmacyname}
                     pharmacyaddress={pharmacy_details.pharmacyaddress}
