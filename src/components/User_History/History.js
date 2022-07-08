@@ -38,7 +38,12 @@ const History = () => {
       alert(res.data);
       console.log(res.data);
     } catch (err) {
-      console.error(err);
+      if (err.response) {
+        if(err.response.data === "not authorized, token is failed"){
+          dispatch(logout());
+          navigate("/")
+        }
+      }
     }
   };
   

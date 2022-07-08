@@ -98,7 +98,13 @@ const ProfileUI = () => {
       setorders(res.data);
       dispatch(order_status(res.data));
     } catch (err) {
-      console.error(err);
+      if (err.response) {
+        if(err.response.data === "not authorized, token is failed"){
+          dispatch(logout());
+          navigate("/")
+        }
+      }
+
     }
   };
 
@@ -117,7 +123,13 @@ const ProfileUI = () => {
       }
       dispatch(order_status(o));
     } catch (err) {
-      console.error(err);
+      if (err.response) {
+        if(err.response.data === "not authorized, token is failed"){
+          dispatch(logout());
+          navigate("/")
+        }
+      }
+
     }
   };
 
@@ -140,7 +152,13 @@ const ProfileUI = () => {
       console.log(o);
       dispatch(order_status(o));
     } catch (err) {
-      console.error(err);
+      if (err.response) {
+        if(err.response.data === "not authorized, token is failed"){
+          dispatch(logout());
+          navigate("/")
+        }
+      }
+
     }
   };
 
@@ -157,7 +175,13 @@ const ProfileUI = () => {
       if (res.data === "you have no prescriptions yet") return;
       setpres(res.data);
     } catch (err) {
-      console.error(err);
+      if (err.response) {
+        if(err.response.data === "not authorized, token is failed"){
+          dispatch(logout());
+          navigate("/")
+        }
+      }
+
     }
   };
 
@@ -177,7 +201,13 @@ const ProfileUI = () => {
       alert(res.data);
       console.log(res.data);
     } catch (err) {
-      console.error(err);
+      if (err.response) {
+        if(err.response.data === "not authorized, token is failed"){
+          dispatch(logout());
+          navigate("/")
+        }
+      }
+
     }
   };
 
@@ -204,7 +234,13 @@ const ProfileUI = () => {
       alert(res.data);
       console.log(res.data);
     } catch (err) {
-      console.error(err);
+      if (err.response) {
+        if(err.response.data === "not authorized, token is failed"){
+          dispatch(logout());
+          navigate("/")
+        }
+      }
+
     }
   };
 
@@ -287,7 +323,13 @@ const ProfileUI = () => {
       if (res.data === "you have no meetings yet") return;
       setmeetings(res.data);
     } catch (err) {
-      console.error(err);
+      if (err.response) {
+        if(err.response.data === "not authorized, token is failed"){
+          dispatch(logout());
+          navigate("/")
+        }
+      }
+
     }
   };
 

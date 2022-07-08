@@ -4,13 +4,14 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase";
 import axios from "axios";
 import { Row, Col } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector , useDispatch} from "react-redux";
 import "./pharmacyorder.css";
 import PlaceholderLoading from "react-placeholder-loading";
 import CircularProgress from "@mui/material/CircularProgress";
 import Choose_pres from "../prescription/choose_pres";
 
 function PharmacyOrder(props) {
+  const dispatch = useDispatch();
   const token = JSON.parse(useSelector((state) => state.auth));
   console.log(token.token);
   //const [loading,setloading]=useState(false) //flag for getting downloaded link
@@ -79,7 +80,12 @@ function PharmacyOrder(props) {
         props.setfalseloading(); //REQUEST DONE NOT LOADING
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response) {
+          if(err.response.data === "not authorized, token is failed"){
+            dispatch(logout());
+            navigate("/")
+          }
+        }
       });
   };
   useEffect(() => {

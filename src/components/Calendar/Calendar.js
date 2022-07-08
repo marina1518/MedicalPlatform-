@@ -78,10 +78,11 @@ const Calendar = (props) => {
       dispatch(selected_slot({})); //EMPTY
     } catch (err) {
       if (err.response) {
-        console.log(err.response.data);
-        console.log(err.response.status);
+        if(err.response.data === "not authorized, token is failed"){
+          dispatch(logout());
+          navigate("/")
+        }
       }
-      //console.error(err);
     }
   };
 

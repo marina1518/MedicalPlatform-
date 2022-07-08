@@ -9,7 +9,7 @@ import Slot from './file';
 import { Back } from "react-bootstrap-icons";
 
 const Choose_pres=(props)=>{
-
+        const dispatch = useDispatch();
         const [show, setShow] = useState(props.show);
         const handleClose = () => {setShow(false); props.setshow(false);};
         const[done, setdone] = useState(false);
@@ -51,8 +51,14 @@ const Choose_pres=(props)=>{
               
             } 
             catch (err) {
-                console.error(err);
-            }
+              if (err.response) {
+                if(err.response.data === "not authorized, token is failed"){
+                  dispatch(logout());
+                  navigate("/")
+                }
+              }
+          //console.error(error);
+          }
         }
 
 

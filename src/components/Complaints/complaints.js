@@ -13,9 +13,10 @@ import { MdBloodtype, MdLocationOn, MdEmail } from "react-icons/md";
 import "./complaint.css"
 import axios from "axios";
 import { async } from "@firebase/util";
-import { useSelector } from "react-redux";
+import { useSelector , useDispatch} from "react-redux";
 import { useNavigate } from "react-router-dom";
 const Complaint = () => {
+  const dispatch = useDispatch();
   const token = JSON.parse(useSelector((state) => state.auth));
   const navigate = useNavigate();
   const login = () => {
@@ -36,13 +37,16 @@ const Complaint = () => {
       console.log(res.data);
       alert("Complaint has been added Successfully");
     })
-    .catch(function (error) {
-      if (error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
+    .catch(function (err) {
+      if (err.response) {
+        if(err.response.data === "not authorized, token is failed"){
+          dispatch(logout());
+          navigate("/")
+        }
       }
     });
   }
+  
   const data = [
     {
       email: "",
