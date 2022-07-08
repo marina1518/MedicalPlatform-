@@ -42,7 +42,7 @@ import VideoChat from "../../components/Meeting_room/Video_chat/VideoChat";
 import Tooltip from "@mui/material/Tooltip";
 import { channel_name, leave } from "./../../actions";
 import ModalImage from "react-modal-image";
-
+import {logout} from '../../actions'
 import Table_mui from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";

@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import Login from "../../pages/Login & Sign Up/login_f";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import {logout} from '../../actions';
 import {
   Route,
   BrowserRouter,

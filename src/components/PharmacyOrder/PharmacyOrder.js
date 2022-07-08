@@ -9,9 +9,12 @@ import "./pharmacyorder.css";
 import PlaceholderLoading from "react-placeholder-loading";
 import CircularProgress from "@mui/material/CircularProgress";
 import Choose_pres from "../prescription/choose_pres";
+import {logout} from '../../actions';
+import { useNavigate } from "react-router-dom";
 
 function PharmacyOrder(props) {
   const dispatch = useDispatch();
+  let navigate = useNavigate();
   const token = JSON.parse(useSelector((state) => state.auth));
   console.log(token.token);
   //const [loading,setloading]=useState(false) //flag for getting downloaded link

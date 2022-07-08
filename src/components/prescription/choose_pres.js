@@ -7,9 +7,12 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Slot from './file';
 import { Back } from "react-bootstrap-icons";
+import {logout} from '../../actions';
+import { useNavigate } from "react-router-dom";
 
 const Choose_pres=(props)=>{
         const dispatch = useDispatch();
+        let navigate = useNavigate();
         const [show, setShow] = useState(props.show);
         const handleClose = () => {setShow(false); props.setshow(false);};
         const[done, setdone] = useState(false);

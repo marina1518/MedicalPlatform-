@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, ButtonGroup, Form } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import { useSelector, useDispatch } from "react-redux";
-import { signin } from "../../actions";
+import { signin , logout} from "../../actions";
 import { history } from "../../actions";
 
 import SwipeableViews from "react-swipeable-views";
@@ -15,9 +15,11 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import TabPanel from "../Floating_Buttons/TabPanel";
+import { useNavigate } from "react-router-dom";
 
 const History = () => {
   const dispatch = useDispatch();
+  let navigate = useNavigate();
   const token = JSON.parse(useSelector((state) => state.auth));
   console.log(token.token);
   var token_copy = token;

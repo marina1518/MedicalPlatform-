@@ -15,6 +15,7 @@ import axios from "axios";
 import { async } from "@firebase/util";
 import { useSelector , useDispatch} from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {logout} from '../../actions';
 const Complaint = () => {
   const dispatch = useDispatch();
   const token = JSON.parse(useSelector((state) => state.auth));

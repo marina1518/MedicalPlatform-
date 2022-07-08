@@ -53,6 +53,7 @@ const Doctor = () => {
       Doctor_Api.entityname = data.entity_id.name;
       Doctor_Api.rate_count = data.rate_count;
       Doctor_Api.meeting_price = data.meeting_price;
+      Doctor_Api.university = data.university;
 
       // Doctor_Api.reviews = data.reviews;
 
