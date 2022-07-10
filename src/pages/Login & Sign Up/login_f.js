@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { signin, logout } from "../../actions";
 import { useJwt } from "react-jwt";
+import Spinner from "react-bootstrap/Spinner";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -25,7 +26,9 @@ const Login = () => {
   const { decodedToken, isExpired } = useJwt(token);
   const [error_email, sete_error] = useState("");
   const [error_pass, setp_error] = useState("");
+    const [loading, setloading] = useState(false);
   const dispatch = useDispatch();
+  //console.log("Loading state", loading)
   const login_api = () => {
     axios
       .post("https://future-medical.herokuapp.com/login", {
@@ -34,12 +37,13 @@ const Login = () => {
       })
       .then((res) => {
         console.log(res.data);
-
+        //setloading(true);
         dispatch(signin(res.data));
         console.log(token);
         navigate("/");
       })
       .catch(function (error) {
+        setloading(false)
         if (error.response) {
           console.log(error.response.data);
           console.log(error.response.status);
@@ -74,13 +78,16 @@ const Login = () => {
       //setflag(1);
       flag = 1;
       console.log(flag);
+      setloading(false)
     }
     if (password === "") {
       seterror_p("Password required");
       // setflag(1);
       flag = 1;
+      setloading(false)
     }
     if (flag === 0) {
+      setloading(true)
       data.email = email;
       data.password = password;
       data.type = type;
@@ -89,18 +96,13 @@ const Login = () => {
     }
   };
 
-  return (
+  return (<>
+    {!loading ?(
     <div className="login_sigup_container">
       <Container>
-        {/* <h1 className="shadow-sm text-primary mt-5 p-3 text-center rounded">Login</h1> */}
-        <div className="form-container_login">
-          {/* <Row
-              className="mt-5 p-5 m-auto shadow-sm rounded-lg"
-              lg={4}
-              md={6}
-              sm={12}
-            >
-              <Col lg={4} md={6} sm={12}> */}
+       <div className="form-container_login">
+         
+          
           <h1
             // className="shadow-sm mt-5 p-3 text-center rounded"
             style={{ color: "#06a3da", marginTop: "30px" }}
@@ -121,6 +123,7 @@ const Login = () => {
                     sete_error("");
                     seterror_e("");
                   }}
+                  value={email}
                 />
                 <h6 style={{ color: "red" }}>{error_email}</h6>
                 <h6 style={{ color: "red" }}>{error_e}</h6>
@@ -132,6 +135,7 @@ const Login = () => {
                 <Form.Control
                   type="password"
                   placeholder="Password"
+                  value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
                     setp_error("");
@@ -166,11 +170,17 @@ const Login = () => {
               </p>
             </div>
           </div>
-          {/* </Col>
-            </Row> */}
+        
+
+
         </div>
       </Container>
-    </div>
+    </div>):(
+      <div style={{margin:'auto'}}>
+                <Spinner animation="border" variant="primary" />
+              </div>
+    )}
+    </>
   );
 };
 export default Login;
