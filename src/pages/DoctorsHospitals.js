@@ -45,7 +45,7 @@ function DoctorsHospitals() {
                     variant="primary"
                     style={{ margin: "1rem 2rem" }}
                   >
-                    There are no doctors in this Hospital yet.
+                    There are no doctors in this Entity yet.
                   </Alert>
                 </>
               ) : (
