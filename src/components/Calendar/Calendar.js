@@ -112,6 +112,45 @@ const Calendar = (props) => {
   const [eve, seteve] = useState([]);
   const [data, setdata] = useState("");
 
+/*useEffect(()=>{
+  handle_slots();
+},[])*/  
+  const handle_slots =(list , flag_timing)=>{
+    //console.log("coming list",list)
+    var return_list = [];
+    var current = new Date();
+     console.log("timenow",`${current.getHours()}:${current.getMinutes()}`)
+    for (var i = 0 ; i < list.length ; i++)
+    {
+      var compared_slot = list[i].slot.split('-')[1].split(':')  ; 
+      var compared_hour = compared_slot[0]
+      var compared_mins = compared_slot[1]
+       console.log("compared_slot",`${compared_hour}:${compared_mins}`)
+        if (current.getHours()>compared_hour)
+     {
+      console.log("not pushed")
+     }
+     else if (current.getHours()==compared_hour && current.getMinutes() > compared_mins)
+     {
+         console.log("not pushed")
+     }
+     else{
+       return_list.push(list[i])
+     }
+      
+    }
+    console.log("return list ",return_list);
+    if(flag_timing == "morning")
+    {
+      setmor(return_list)
+    }
+    else if (flag_timing == "night")
+    {
+      seteve(return_list)
+    }
+  }
+
+  
   const get_slots = (e, item) => {
     setdone_reserve(false);
     setdata(item); //to know the day and date clicked
@@ -214,11 +253,13 @@ const Calendar = (props) => {
           }
         }
       }
-
-      setmor(morning_shifts);
-      seteve(evening_shifts);
+      handle_slots(morning_shifts,"morning");
+      handle_slots(evening_shifts,"night");
+      //setmor(morning_shifts);
+      //seteve(evening_shifts);
     })();
   };
+
   // Notification
   const [notification, setNotification] = useState({
     open: false,
