@@ -3,8 +3,8 @@ import "./custom.css";
 import { Link, useNavigate } from "react-router-dom";
 function Onedoctor(props) {
   let navigate = useNavigate();
-  const navigation = (docid) => {
-    navigate("/clinicdoctor", { state: { Doctor_id: docid } }); //Send doc email despite doc id
+  const navigation = (docid,name) => {
+    navigate(`/doctor/${name}`, { state: { Doctor_id: docid } }); //Send doc email despite doc id
   };
 
   const doctor = props.doctor;
@@ -21,7 +21,7 @@ function Onedoctor(props) {
             alt={doctor.username}
             style={{ cursor: "pointer" }}
             onClick={() => {
-              navigation(doctor.email);
+              navigation(doctor.email,doctor.username);
             }}
           />
         </div>
@@ -33,7 +33,7 @@ function Onedoctor(props) {
             className="doctor-name"
             style={{ cursor: "pointer" }}
             onClick={() => {
-              navigation(doctor.email);
+              navigation(doctor.email,doctor.username);
             }}
           >
             Dr. {doctor.username}{" "}

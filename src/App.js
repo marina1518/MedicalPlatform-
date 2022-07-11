@@ -100,7 +100,7 @@ function App() {
             >
               {" "}
             </Route>
-            <Route path="/clinicdoctor" element={<Doctor />}>
+            <Route path="/doctor/:docname" element={<Doctor />}>
               {" "}
             </Route>
             {/*<Route
