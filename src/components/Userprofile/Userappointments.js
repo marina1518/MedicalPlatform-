@@ -199,7 +199,7 @@ useEffect(()=>{
                     </tr>
                   </thead>
                   <tbody>
-                    {meetings.lenght === 0 ? (
+                    {meetings.length === 0 ? (
                          loading?(
                  <div style={{'margin':'auto'}}>
                 <Spinner animation="border" variant="primary" />
