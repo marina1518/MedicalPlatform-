@@ -41,7 +41,11 @@ function Userappointments() {
       );
 
       console.log(res.data);
-      if (res.data === "you have no meetings yet") return;
+      if (res.data === "you have no meetings yet"){
+        setloading(false)
+         return;
+         
+      }
       setmeetings(res.data);
       setloading(false)
     } catch (err) {
@@ -172,6 +176,7 @@ function Userappointments() {
 useEffect(()=>{
     get_meetings();
 },[])
+
   return (
    
     <div className="card">

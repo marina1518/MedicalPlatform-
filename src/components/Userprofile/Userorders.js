@@ -60,6 +60,7 @@ function Userorders() {
       console.log(res.data);
       if (res.data === "you have no orders yet") {
         dispatch(order_status([]));
+        setloading(false)
         return;
       }
       setorders(res.data);

@@ -30,7 +30,9 @@ function Userprescription() {
       );
 
       console.log(res.data);
-      if (res.data === "you have no prescriptions yet") return;
+      if (res.data === "you have no prescriptions yet") {
+      setloading(false)
+      return;}
       setpres(res.data);
       setloading(false)
     } catch (err) {

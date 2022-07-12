@@ -20,6 +20,7 @@ const HospitalsPage = () => {
   });
   const [modalShow, setModalShow] = useState(false); //for pharmacy card
   const [loading, setloading] = useState(false);
+  const [entity_loading,set_entity_loading] = useState(true);
   //const [modalShowload, setModalShowload] = useState(false); //for pharmacy card
   const navigate = useNavigate();
   const login = () => {
@@ -52,6 +53,7 @@ const HospitalsPage = () => {
       .then((res) => {
         console.log(res.data);
         sethospitalsdata(res.data);
+        set_entity_loading(false)
       })
       .catch((err) => {
         console.log(err);
@@ -64,6 +66,7 @@ const HospitalsPage = () => {
       .then((res) => {
         console.log(res.data);
         sethospitalsdata(res.data);
+        set_entity_loading(false)
       })
       .catch((err) => {
         console.log(err);
@@ -75,6 +78,7 @@ const HospitalsPage = () => {
       .then((res) => {
         console.log(res.data);
         sethospitalsdata(res.data);
+        set_entity_loading(false)
       })
       .catch((err) => {
         console.log(err);
@@ -143,7 +147,7 @@ const HospitalsPage = () => {
                   <Link to={`/DoctorsEntity/${hospital.name}`}>
                     <p className="hosp-name">{hospital.arabic_name}</p>
                     <p className="hosp-address">
-                      {/* <strong>Address: </strong> */}
+                      {/* <strong>Address:</strong>*/}
                       <i class="bi bi-geo-alt-fill"></i> {hospital.address[0]}
                     </p>
                     <p className="hosp-tele">
