@@ -590,7 +590,13 @@ const ProfileUI = () => {
                         onChange={(e) => edit_pic_temp(e.target.files[0])}
                       ></input>
                       {temp === "" ? (
-                        ""
+                        <Button
+                        variant="outline-danger"
+                        className="col-md-12 text-right"
+                        onClick={(e) => setEdit_photo(false)}
+                      >
+                        Cancel
+                      </Button>
                       ) : (
                         <ButtonGroup>
                           <Button
