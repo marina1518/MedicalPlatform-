@@ -298,23 +298,7 @@ const Doctor = () => {
                   </div>
                 </div>
 
-                <hr id="profile-hr" />
-                <div class="row mt-3">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Date of Birth</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">{doctor_data.date}</div>
-                </div>
-
-                <hr id="profile-hr" />
-                <div class="row mt-3">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Gender</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    {doctor_data.gender}
-                  </div>
-                </div>
+                               
               </div>
             </div>
           ) : (

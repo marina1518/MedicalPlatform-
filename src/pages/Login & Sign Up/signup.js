@@ -18,12 +18,14 @@ import axios from "axios";
 import { signin, logout } from "../../actions";
 import { Link, useNavigate } from "react-router-dom";
 //import dr1 from './../../images/dr2.png';
+import Spinner from "react-bootstrap/Spinner";
 import "./login.css";
 
 const Signup = () => {
   const token = JSON.parse(useSelector((state) => state.auth)); //state of token
   const dispatch = useDispatch();
   let navigate = useNavigate();
+   const [loading, setloading] = useState(false);
   const routing_login = (type) => {
     navigate("/");
   };
@@ -47,6 +49,7 @@ const Signup = () => {
         navigate("/"); //Go to Home
       })
       .catch(function (error) {
+        setloading(false)
         if (error.response) {
           console.log(error.response.data);
           console.log(error.response.status);
@@ -95,38 +98,45 @@ const Signup = () => {
     if (username === "") {
       flag = 1;
       sete_u("!! required username");
+      setloading(false)
     }
     if (email === "") {
       flag = 1;
       sete_e("!! required Email");
+      setloading(false)
     }
     if (dob === "") {
       flag = 1;
       sete_dob("!! required Date of Birth");
+      setloading(false)
     }
     if (password === "") {
       flag = 1;
       sete_p("!! required Password");
       //setflag("true");
       console.log(flag);
+      setloading(false)
     }
     if (password.length < 8 && password != "") {
       flag = 1;
       sete_p("!! at least 8 numbers or charaters");
       //setflag("true");
       console.log(flag);
+      setloading(false)
     }
     if (phone.length !== 11 && phone != "") {
       flag = 1;
       sete_ph("!! required 11 numbers");
       //setflag("true");
       console.log(flag);
+      setloading(false)
     }
     if (cpass === "") {
       flag = 1;
       sete_c("!! confirm the password");
       //setflag("true");
       console.log(flag);
+      setloading(false)
     }
     // if (dob === "")
     // {
@@ -137,6 +147,7 @@ const Signup = () => {
     if (gender === "") {
       flag = 1;
       sete_g("!! required gender");
+      setloading(false)
       //setflag("true");
     }
     // if (phone === "")
@@ -158,13 +169,16 @@ const Signup = () => {
       data.gender = gender;
       console.log(data);
       register_api();
+      setloading(true)
     } else if (flag === 0) {
       setmsg("!! not matching passwords");
+       setloading(false)
     }
   };
 
   return (
-    <div className="login_sigup_container">
+    <>
+    {!loading ?(<div className="login_sigup_container">
       <Container>
         {/* <h1 className="shadow-sm text-primary mt-5 p-3 text-center rounded">Login</h1> */}
         <div className="form-container_signup">
@@ -192,6 +206,7 @@ const Signup = () => {
                     <Form.Control
                       type="text"
                       placeholder="Enter username"
+                      value={username}
                       onChange={(e) => {
                         setusername(e.target.value);
                         sete_u("");
@@ -207,6 +222,7 @@ const Signup = () => {
                     <Form.Label> Email address </Form.Label>
                     <Form.Control
                       type="email"
+                      value={email}
                       placeholder="Enter email"
                       onChange={(e) => {
                         setEmail(e.target.value);
@@ -224,6 +240,7 @@ const Signup = () => {
                     <Form.Control
                       type="password"
                       placeholder="Password"
+                      value={password}
                       onChange={(e) => {
                         setPassword(e.target.value);
                         sete_p("");
@@ -239,6 +256,7 @@ const Signup = () => {
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control
                       type="password"
+                      value={cpass}
                       placeholder="Password"
                       onChange={(e) => {
                         setcPassword(e.target.value);
@@ -256,6 +274,7 @@ const Signup = () => {
                     <Form.Label>Date of Birth</Form.Label>
                     <Form.Control
                       type="date"
+                      value={dob}
                       onChange={(e) => {
                         setDob(e.target.value);
                         sete_dob("");
@@ -271,6 +290,7 @@ const Signup = () => {
                     <Form.Label>Phone</Form.Label>
                     <Form.Control
                       placeholder="Phone"
+                      value={phone}
                       type="text"
                       onChange={(e) => {
                         setphone(e.target.value);
@@ -289,6 +309,7 @@ const Signup = () => {
                     <Form.Control
                       placeholder="Address"
                       type="text"
+                      value={add}
                       onChange={(e) => {
                         setadd(e.target.value);
                         sete_a("");
@@ -303,7 +324,7 @@ const Signup = () => {
                     <MdBloodtype style={{ color: "#06a3da" }} />{" "}
                     <Form.Label>Blood Type</Form.Label>
                     <div>
-                      <select onChange={(e) => setblood(e.target.value)}>
+                      <select onChange={(e) => setblood(e.target.value)} value={blood}>
                         <option value="" selected disabled hidden>Don't Know</option>
                         <option value="A+">A+</option>
                         <option value="A-">A-</option>
@@ -329,6 +350,7 @@ const Signup = () => {
                           setgender(e.target.value);
                           sete_g("");
                         }}
+                        value={gender}
                       >
                         <option value="" selected disabled hidden>
                           Choose Gender ...
@@ -356,11 +378,14 @@ const Signup = () => {
             </Form>
           </div>
           <br />
-          {/* </Col>
-          </Row> */}
         </div>
       </Container>
-    </div>
+    </div>):(
+       <div style={{margin:'auto'}}>
+            <Spinner animation="border" variant="primary" />
+       </div>
+    )}
+    </>
   );
 };
 export default Signup;
