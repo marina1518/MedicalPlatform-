@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import PharmacyOrder from "../../components/PharmacyOrder/PharmacyOrder";
+import Spinner from "react-bootstrap/Spinner";
 //import Login from "../Login & Sign Up/login_f"
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -93,6 +94,7 @@ const HospitalsPage = () => {
     } else if (entity === "pharmacies") {
       Get_Pharmacies_Api();
     }
+    set_entity_loading(true)
   }, [entity]);
   return (
     <div>
@@ -105,6 +107,7 @@ const HospitalsPage = () => {
           )}
           <hr />
         </div>
+        {!entity_loading ?(
         <div className="hosp-container">
           {hospitalsdata.map((hospital) => (
             <div className="hosp-item" key={hospital.id}>
@@ -196,7 +199,11 @@ const HospitalsPage = () => {
               )}
             </div>
           ))}
-        </div>
+        </div>):(
+            <div style={{'margin':'auto'}}>
+                             <Spinner animation="border" variant="primary" />
+            </div>
+        )}
       </section>
     </div>
   );
