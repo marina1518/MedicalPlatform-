@@ -115,11 +115,28 @@ const Calendar = (props) => {
 /*useEffect(()=>{
   handle_slots();
 },[])*/  
-  const handle_slots =(list , flag_timing)=>{
+  const handle_slots =(list , flag_timing,date)=>{
     //console.log("coming list",list)
+    console.log("day date",date.split("-"))
     var return_list = [];
     var current = new Date();
      console.log("timenow",`${current.getHours()}:${current.getMinutes()}`)
+     console.log("datenow",`${current.getMonth()+1}:${current.getDate()}`)
+     console.log("given date",`${date.split("-")[1]}:${date.split("-")[2]}`)
+     if (!(date.split("-")[2] == current.getDate() && date.split("-")[1] == current.getMonth()+1))
+     {
+      console.log("nottt same dateeeeeeeeeeeeeeeeee")
+      if(flag_timing == "morning")
+    {
+      setmor(list)
+    }
+    else if (flag_timing == "night")
+    {
+      seteve(list)
+    }
+    return ;
+     }
+    else { 
     for (var i = 0 ; i < list.length ; i++)
     {
       var compared_slot = list[i].slot.split('-')[1].split(':')  ; 
@@ -149,8 +166,9 @@ const Calendar = (props) => {
       seteve(return_list)
     }
   }
+  }
 
-  
+
   const get_slots = (e, item) => {
     setdone_reserve(false);
     setdata(item); //to know the day and date clicked
@@ -253,8 +271,8 @@ const Calendar = (props) => {
           }
         }
       }
-      handle_slots(morning_shifts,"morning");
-      handle_slots(evening_shifts,"night");
+      handle_slots(morning_shifts,"morning",date);
+      handle_slots(evening_shifts,"night",date);
       //setmor(morning_shifts);
       //seteve(evening_shifts);
     })();
