@@ -3,29 +3,16 @@ import SideBarUI from "../../components/SideBarUI/SideBarUI";
 import "./profileui.css";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Button,
-  ButtonGroup,
-  Form,
-  Table,
-  Card,
-  Accordion,
-  useAccordionButton,
-  Row,
-  Col,
-  Alert,
-} from "react-bootstrap";
+import {  Button,  ButtonGroup,  useAccordionButton,} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EditIcon from "@material-ui/icons/Edit";
 import CancelIcon from "@material-ui/icons/Cancel";
 import Avatar from "@material-ui/core/Avatar";
 import { BsInfoCircleFill } from "react-icons/bs";
 import { blueGrey } from "@material-ui/core/colors";
-import { BiMessageDetail } from "react-icons/bi";
-import { AiFillClockCircle } from "react-icons/ai";
-import { GiMedicines } from "react-icons/gi";
-import { MdOutlineDone, MdCancel } from "react-icons/md";
+
 import { signin } from "../../actions";
+import {logout} from '../../actions'
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase";
 import {
@@ -41,15 +28,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import VideoChat from "../../components/Meeting_room/Video_chat/VideoChat";
 import Tooltip from "@mui/material/Tooltip";
 import { channel_name, leave } from "./../../actions";
-import ModalImage from "react-modal-image";
-import {logout} from '../../actions'
-import Table_mui from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+
+
+import Userappointments from "../../components/Userprofile/Userappointments";
+import Userprescription from "../../components/Userprofile/Userprescription";
+import Userorders from "../../components/Userprofile/Userorders";
 
 const ProfileUI = () => {
   let navigate = useNavigate();
@@ -75,7 +58,7 @@ const ProfileUI = () => {
   const token = JSON.parse(useSelector((state) => state.auth));
   console.log(token);
   var token_copy = token;
-  const [orders, setorders] = useState([]);
+  
 
   const config = {
     headers: {
@@ -83,115 +66,7 @@ const ProfileUI = () => {
     },
   };
 
-  const get_ph_order = async () => {
-    try {
-      const res = await axios.get(
-        "https://future-medical.herokuapp.com/user/orders",
-        config
-      );
-
-      console.log(res.data);
-      if (res.data === "you have no orders yet") {
-        dispatch(order_status([]));
-        return;
-      }
-      setorders(res.data);
-      dispatch(order_status(res.data));
-    } catch (err) {
-      if (err.response) {
-        if(err.response.data === "not authorized, token is failed"){
-          dispatch(logout());
-          navigate("/")
-        }
-      }
-
-    }
-  };
-
-  const cancel_order = async (id) => {
-    try {
-      const res = await axios.patch(
-        "https://future-medical.herokuapp.com/user/order/cancel",
-        { id: id },
-        config
-      );
-      console.log(res.data);
-      alert("Order cancelled successfully");
-      var o = [];
-      for (var i = 0; i < get_orders_store.length; i++) {
-        if (get_orders_store[i]._id !== id) o.push(get_orders_store[i]);
-      }
-      dispatch(order_status(o));
-    } catch (err) {
-      if (err.response) {
-        if(err.response.data === "not authorized, token is failed"){
-          dispatch(logout());
-          navigate("/")
-        }
-      }
-
-    }
-  };
-
-  const approve_order = async (id) => {
-    try {
-      const res = await axios.patch(
-        "https://future-medical.herokuapp.com/user/order/approve",
-        { id: id },
-        config
-      );
-      console.log(res.data);
-      alert("Order approved");
-      var o = [];
-      for (var i = 0; i < get_orders_store.length; i++) {
-        if (get_orders_store[i]._id === id) {
-          o.push(get_orders_store[i]);
-          o[i]["status"] = "preparing";
-        } else o.push(get_orders_store[i]);
-      }
-      console.log(o);
-      dispatch(order_status(o));
-    } catch (err) {
-      if (err.response) {
-        if(err.response.data === "not authorized, token is failed"){
-          dispatch(logout());
-          navigate("/")
-        }
-      }
-
-    }
-  };
-
-  const [pres, setpres] = useState([]);
-
-  const get_pres = async () => {
-    try {
-      const res = await axios.get(
-        "https://future-medical.herokuapp.com/user/prescriptions",
-        config
-      );
-
-      console.log(res.data);
-      if (res.data === "you have no prescriptions yet") return;
-      setpres(res.data);
-    } catch (err) {
-      if (err.response) {
-        if(err.response.data === "not authorized, token is failed"){
-          dispatch(logout());
-          navigate("/")
-        }
-      }
-
-    }
-  };
-
-  useEffect(() => {
-    get_ph_order();
-    get_pres();
-    get_meetings();
-  }, []);
-
-  const Edit_personal_info = async (info) => {
+   const Edit_personal_info = async (info) => {
     try {
       const res = await axios.patch(
         "https://future-medical.herokuapp.com/user/edit/info",
@@ -309,142 +184,6 @@ const ProfileUI = () => {
     Edit_personal_info(Edit_data);
     Edit_data = {};
     setEdit(false);
-  };
-
-  const [meetings_api, setmeetings] = useState([]);
-  const get_meetings = async () => {
-    try {
-      const res = await axios.get(
-        "https://future-medical.herokuapp.com/user/meetings",
-        config
-      );
-
-      console.log(res.data);
-      if (res.data === "you have no meetings yet") return;
-      setmeetings(res.data);
-    } catch (err) {
-      if (err.response) {
-        if(err.response.data === "not authorized, token is failed"){
-          dispatch(logout());
-          navigate("/")
-        }
-      }
-
-    }
-  };
-
-  var meetings = [];
-  const current = new Date();
-  let state;
-
-  for (var i = 0; i < meetings_api.length; i++) {
-    const day = meetings_api[i].Date.split("T")[0]
-      .split("-")
-      .reverse()
-      .join("-")
-      .split("-");
-    if (parseInt(day[2]) < current.getFullYear()) state = "Done"; //year check
-    else if (parseInt(day[2]) > current.getFullYear())
-      state = "Pending"; //next year
-    else if (
-      parseInt(day[1]) === current.getMonth() + 1 &&
-      parseInt(day[0]) === current.getDate() &&
-      parseInt(day[2]) === current.getFullYear()
-    )
-      state = "Today";
-    else if (parseInt(day[1]) < current.getMonth() + 1)
-      state = "Done"; //month check
-    else if (
-      parseInt(day[1]) === current.getMonth() + 1 &&
-      parseInt(day[0]) < current.getDate()
-    )
-      state = "Done"; //month check
-    else state = "Pending";
-    meetings.push({
-      id: i,
-      dr_name: meetings_api[i].doctor.username,
-      slot: meetings_api[i].slot,
-      date: meetings_api[i].Date,
-      state: state,
-      email: meetings_api[i].doctor.email,
-    });
-  }
-
-  //sorting
-  if (meetings.length !== 0) {
-    meetings.sort((a, b) => {
-      const c = new Date(a.date.split("-").reverse().join("-"));
-      const d = new Date(b.date.split("-").reverse().join("-"));
-      return c - d;
-    });
-  }
-
-  function CustomToggle({ children, eventKey }) {
-    const decoratedOnClick = useAccordionButton(eventKey, () =>
-      console.log(" ")
-    );
-    return (
-      <Button type="button" onClick={decoratedOnClick} variant="primary">
-        {children}
-      </Button>
-    );
-  }
-
-  //meeting button
-  const local_date = new Date();
-  var utc_offset = local_date.getTimezoneOffset() / 60;
-  console.log(utc_offset);
-  var utc = (2 + utc_offset) * 60;
-  var hour = local_date.getHours();
-  var min = local_date.getMinutes();
-  local_date.setMinutes(min + utc);
-  hour = local_date.getHours();
-  min = local_date.getMinutes();
-  console.log(hour, min);
-  console.log(local_date);
-
-  const check_button_state = (item) => {
-    if (
-      item.state === "Today" &&
-      hour === parseInt(item.slot.split("-")[0].split(":")[0])
-    ) {
-      if (min < 30 && parseInt(item.slot.split("-")[0].split(":")[1]) === 0) {
-        return (
-          <VideoChat
-            dr_email={item.email}
-            slot={item.slot}
-            button_state={true}
-          />
-        );
-      } else if (
-        min >= 30 &&
-        parseInt(item.slot.split("-")[0].split(":")[1]) === 30
-      ) {
-        return (
-          <VideoChat
-            dr_email={item.email}
-            slot={item.slot}
-            button_state={true}
-          />
-        );
-      } else {
-        return (
-          <VideoChat
-            dr_email={item.email}
-            slot={item.slot}
-            button_state={false}
-          />
-        );
-      }
-    } else {
-      return (
-        <VideoChat
-          dr_email={item.email}
-          slot={item.slot}
-          button_state={false}
-        />
-      );
-    }
   };
 
   const [compact, setCompact] = useState(false);
@@ -806,314 +545,22 @@ const ProfileUI = () => {
 
           {sidebar_profile === "history" ? <History /> : ""}
         </div>
-        {sidebar_profile === "appointments" ? (
-          <div className="card">
-            <div className="card-header bg-transparent border-0">
-              <h3 className="mb-0">
-                <AiFillClockCircle /> Appointments
-              </h3>
-            </div>
-            <div className="card-body pt-0">
-              <div>
-                <Table responsive="sm">
-                  <thead>
-                    <tr>
-                      <th width="20%">Date</th>
-                      <th width="20%">Time</th>
-                      <th width="20%">Dr Name</th>
-                      <th width="20%">Meeting</th>
-
-                      <th width="20%">State</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {meetings.lenght === 0 ? (
-                      ""
-                    ) : (
-                      <>
-                        {meetings.reverse().map((item) => (
-                          <tr
-                            key={item.id}
-                            style={
-                              item.state === "Pending"
-                                ? { opacity: "1" }
-                                : item.state === "Today"
-                                ? { background: "#B9D9EB" }
-                                : { opacity: "0.5" }
-                            }
-                          >
-                            <td width="20%">
-                              {item.date
-                                .split("T")[0]
-                                .split("-")
-                                .reverse()
-                                .join("-")}
-                            </td>
-                            <td width="20%">{item.slot}</td>
-
-                            <td
-                              style={{ cursor: "pointer" }}
-                              width="20%"
-                              onClick={() => {
-                                navigation(item.email);
-                              }}
-                            >
-                              <Link to={`/clinicdoctor/`}>{item.dr_name}</Link>
-                            </td>
-                            {/* <td width="20%">{item.state ==="Today" ? <VideoChat dr_email={item.email}/>:""}</td> */}
-                            <td width="20%">
-                              {/* {(item.state === "Today" && hour === parseInt(item.slot.split('-')[0].split(':')[0]) ) ?
-                              (min <30) ? 
-                               ( parseInt(item.slot.split('-')[0].split(':')[1]) === 0 )
-                              ? (
-                                <VideoChat
-                                  dr_email={item.email}
-                                  slot = {item.slot}
-                                  button_state={true}
-                                />
-                              ) : (
-                                <VideoChat
-                                  dr_email={item.email}
-                                  slot = {item.slot}
-                                  button_state={false}
-                                />
-                              )} */}
-                              {check_button_state(item)}
-                            </td>
-                            <td width="20%">{item.state}</td>
-                          </tr>
-                        ))}
-                      </>
-                    )}
-                  </tbody>
-                </Table>
-              </div>
-            </div>
-          </div>
-        ) : (
+        {sidebar_profile === "appointments" ? 
+                                      
+          (<Userappointments/>):
+                           
+         (
           ""
         )}
 
         {sidebar_profile === "myorders" ? (
-          <div className="card shadow-sm">
-            <div className="card-header bg-transparent border-0">
-              <h3 className="mb-0">
-                <GiMedicines /> Orders
-              </h3>
-            </div>
-            <div className="card-body pt-0">
-              <div>
-                <Table responsive="sm">
-                  <thead>
-                    <tr>
-                      <th>Pharmacy Name</th>
-                      <th>Date</th>
-                      {/* <th>Time</th> */}
-                      <th>Price</th>
-                      <th>Order</th>
-                      <th>State</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {get_orders_store.length === 0 ? (
-                      <>
-                        <Alert
-                          key="primary"
-                          variant="primary"
-                          style={{ margin: "1rem 2rem" }}
-                        >
-                          There are no Orders yet.
-                        </Alert>
-                      </>
-                    ) : (
-                      <>
-                        {get_orders_store.map((item) => (
-                          <tr key={item._id}>
-                            <td>{item.pharmacy.name}</td>
-
-                            {/*<td>{item.order_data.Date}</td>*/}
-                            {<td>{item.order_data.Date.split("T")[0]}</td>}
-                            <td>{item.price}</td>
-                            <td>
-                              <Accordion defaultActiveKey="0">
-                                <CustomToggle eventKey={item._id}>
-                                  Show order
-                                </CustomToggle>
-
-                                <Accordion.Collapse eventKey={item._id}>
-                                  <Card.Body>
-                                    {item.flag == "image" ? (
-                                      <div size="small">
-                                        <div>
-                                          <ModalImage
-                                            small={item.order_data.form}
-                                            large={item.order_data.form}
-                                            alt={"Order Image"}
-                                            hideDownload={true}
-                                            hideZoom={true}
-                                            className="modal-image"
-                                          />
-                                        </div>
-                                      </div>
-                                    ) : (
-                                      <div>
-                                        <TableContainer
-                                          component={Paper}
-                                          style={{
-                                            margin: 0,
-                                            marginLeft: "auto",
-                                            width: "60%",
-                                          }}
-                                        >
-                                          <Table_mui
-                                            sx={{ minWidth: 250 }}
-                                            size="small"
-                                            aria-label="a dense table"
-                                          >
-                                            <TableHead>
-                                              <TableRow>
-                                                <TableCell
-                                                  style={{
-                                                    paddingBottom: 5,
-                                                    paddingTop: 5,
-                                                    fontWeight: "bold",
-                                                  }}
-                                                >
-                                                  Medicine Name
-                                                </TableCell>
-                                                <TableCell
-                                                  style={{
-                                                    paddingBottom: 5,
-                                                    paddingTop: 0,
-                                                    fontWeight: "bold",
-                                                  }}
-                                                >
-                                                  Quantity
-                                                </TableCell>
-                                              </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                              {JSON.parse(
-                                                item.order_data.form
-                                              ).map((f) => (
-                                                <TableRow
-                                                  key="Medicinies"
-                                                  sx={{
-                                                    "&:last-child td, &:last-child th":
-                                                      {
-                                                        border: 0,
-                                                      },
-                                                  }}
-                                                >
-                                                  <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                  >
-                                                    {f.medicine}
-                                                  </TableCell>
-                                                  <TableCell>
-                                                    {f.quanity}
-                                                  </TableCell>
-                                                </TableRow>
-                                              ))}
-                                            </TableBody>
-                                          </Table_mui>
-                                        </TableContainer>
-                                      </div>
-                                    )}
-                                  </Card.Body>
-                                </Accordion.Collapse>
-                              </Accordion>
-                            </td>
-                            <td>
-                              {item.status !== "pending" &&
-                                item.status !== "approved" && (
-                                  <td>{item.status}</td>
-                                )}
-                              {item.status === "pending" && (
-                                <Button
-                                  variant="outline-danger"
-                                  className="col-md-12 text-right"
-                                  onClick={(e) => cancel_order(item._id)}
-                                >
-                                  <MdCancel />
-                                </Button>
-                              )}
-                            </td>
-                            {item.status === "approved" && (
-                              <td>
-                                {" "}
-                                <ButtonGroup>
-                                  <Button
-                                    variant="outline-success"
-                                    className="col-md-12 text-right"
-                                    onClick={(e) => approve_order(item._id)}
-                                  >
-                                    <MdOutlineDone />
-                                  </Button>
-                                  <Button
-                                    variant="outline-danger"
-                                    className="col-md-12 text-right"
-                                    onClick={(e) => cancel_order(item._id)}
-                                  >
-                                    <MdCancel />
-                                  </Button>
-                                </ButtonGroup>
-                              </td>
-                            )}
-                          </tr>
-                        ))}
-                      </>
-                    )}
-                  </tbody>
-                </Table>
-              </div>
-            </div>
-          </div>
+          <Userorders/>
         ) : (
           ""
         )}
 
         {sidebar_profile === "prescription" ? (
-          pres.length === 0 ? (
-            <>
-              <Alert
-                key="primary"
-                variant="primary"
-                style={{ margin: "1rem 2rem" }}
-              >
-                There are no prescriptions yet.
-              </Alert>
-            </>
-          ) : (
-            // <CardGroup>
-            <Row xs={1} md={3} className="g-4">
-              {pres.map((p) => (
-                <Col>
-                  <Card className="pres-container">
-                    <Card.Body>
-                      <Card.Title>Prescriptions</Card.Title>
-                      <Card.Subtitle className="mb-2 text-muted">
-                        {p.Date.split("T")[0].split("-").reverse().join("-")}
-                      </Card.Subtitle>
-                      <Card.Subtitle className="mb-2 text-muted">
-                        Dr {p.doctor.username}
-                      </Card.Subtitle>
-                      <Card.Subtitle className="mb-2 text-muted">
-                        {p.doctor.email}
-                      </Card.Subtitle>
-                      <Card.Text>
-                        {p.medicines.map((m) => (
-                          <li>{m}</li>
-                        ))}
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          )
+          <Userprescription/>
         ) : (
           // </CardGroup>
           ""
