@@ -193,7 +193,7 @@ const Calendar = (props) => {
       for (var i = 0; i < dr_app.length; i++) {
         if (dr_app[i].day === day) {
           //check day
-          if (dr_app[i].from <= 12) {
+          if (dr_app[i].from < 12 && dr_app[i].to <12) {
             const num_slots =
               parseInt(parseInt(dr_app[i].to) - parseInt(dr_app[i].from)) * 2;
             console.log(num_slots);
@@ -231,7 +231,7 @@ const Calendar = (props) => {
                 d += 1;
               }
             }
-          } else if (dr_app[i].from > 12) {
+          } else if (dr_app[i].from >= 12 ) {
             const num_slots =
               parseInt(parseInt(dr_app[i].to) - parseInt(dr_app[i].from)) * 2;
             console.log(num_slots);
@@ -263,6 +263,70 @@ const Calendar = (props) => {
                     slot: `${c}:30 - ${d}:00`,
                     state: false,
                   });
+                  c += 1;
+                  d += 1;
+                }
+              }
+            }
+          }
+          else if (dr_app[i].from < 12 && dr_app[i].to >= 12) {
+            const num_slots =
+              parseInt(parseInt(dr_app[i].to) - parseInt(dr_app[i].from)) * 2;
+            console.log(num_slots);
+            var c = parseInt(dr_app[i].from);
+            var d = parseInt(dr_app[i].from) + 1;
+            for (var k = 0; k < num_slots; k++) {
+              if (k % 2 === 0) {
+                if (reserved.includes(`${c}:00 - ${c}:30`)) {
+                  if(c<12)
+                  {morning_shifts.push({
+                    slot: `${c}:00 - ${c}:30`,
+                    state: true,
+                  });}
+                  else
+                  {evening_shifts.push({
+                    slot: `${c}:00 - ${c}:30`,
+                    state: true,
+                  });}
+                } else {
+                  if(c<12)
+                  {morning_shifts.push({
+                    slot: `${c}:00 - ${c}:30`,
+                    state: false,
+                  });}
+                  else{
+                    evening_shifts.push({
+                      slot: `${c}:00 - ${c}:30`,
+                      state: false,
+                    });
+                  }
+                }
+              } else {
+                if (reserved.includes(`${c}:30 - ${d}:00`)) {
+                  if(c<12){morning_shifts.push({
+                    slot: `${c}:30 - ${d}:00`,
+                    state: true,
+                  });}
+                  else{
+                    evening_shifts.push({
+                      slot: `${c}:30 - ${d}:00`,
+                      state: true,
+                    });
+                  }
+                  c += 1;
+                  d += 1;
+                } else {
+                  if(c<12)
+                  {morning_shifts.push({
+                    slot: `${c}:30 - ${d}:00`,
+                    state: false,
+                  });}
+                  else{
+                    evening_shifts.push({
+                      slot: `${c}:30 - ${d}:00`,
+                      state: false,
+                    });
+                  }
                   c += 1;
                   d += 1;
                 }
