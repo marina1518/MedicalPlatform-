@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import {logout} from '../../actions';
 const Complaint = () => {
   const dispatch = useDispatch();
+  const d = new Date();
   const token = JSON.parse(useSelector((state) => state.auth));
   const navigate = useNavigate();
   const login = () => {
@@ -25,11 +26,14 @@ const Complaint = () => {
     }
   const complaint_api = () => {
     //console.log("MADONNAAAA" , data);
+    const day_date =
+      d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
     axios
     .post('https://future-medical.herokuapp.com/user/complaint',{
       form : data.complaint,
       number : data.phone,
-      mail : data.email
+      mail : data.email ,
+      date : day_date
     },{
       headers: {
     'Authorization': `Bearer ${token.token}`
