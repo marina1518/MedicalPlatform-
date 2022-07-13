@@ -166,7 +166,7 @@ var voice = voices[selected_voice] || null;
         speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
      }
      else{
-     handle_speak = 'انا مش هقدر اساعدك فى التغيير عشان محتاجة كتابة بس انا فتحتلك البروفايل '
+     handle_speak = 'انا مش هقدر اساعدك فى التغيير عشان محتاجة كتابة لكن انا فتحتلك البروفايل '
      dispatch(info());
      navigate('/user');
      speak({ text: handle_speak , voice : voice , rate : 0.9}) 
@@ -175,7 +175,7 @@ var voice = voices[selected_voice] || null;
 
   case 'ازيك ، يارب يومك يكون كويس.ازاي اقدر اساعدك؟' :
      SpeechRecognition.stopListening();
-     handle_speak = 'ايه الأخبار ياريت يومك يكون كويس ازاي اقدر اساعدك؟'
+     handle_speak = 'ايه الأخبار ياريت يومك يكون بخير ازاي اقدر اساعدك؟'
      speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
     break;
     case 'عفوا في خدمتك أي وقت' :
@@ -666,9 +666,9 @@ else {
         if (flag_order){
           handle_speak = "تقدر تحط صورة الروشتة او تقدر تحط من الروشتات اللى موجودة و تطلبها من اى صيدلية من الصيدليات الموجودة" + " "; 
           
-         data.forEach((x) => {
+         /*data.forEach((x) => {
            handle_speak+=x.arabic_name+ "  . ";
-         })
+         })*/
         speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
         }
         else{
@@ -889,7 +889,7 @@ const reserve_meeting = ()=>{
    }
    else { //not logined 
     
-  handle_speak = "لازم تكون فاتح الأكونت بتاعك الأول"
+  handle_speak = "لازم تكن فاتح الأكونت بتاعك الأول"
   speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
   }
 }
@@ -1002,11 +1002,83 @@ const GET_DATES_DOCTORS = (timetable) =>{
             }
           }
         }
-       console.log(morning_shifts)
+        //Check if time gone 
+    console.log("evening speech",evening_shifts)    
+    var return_list = [];
+    var current = new Date();
+     //console.log("timenow",`${current.getHours()}:${current.getMinutes()}`)
+     //console.log("datenow",`${current.getMonth()+1}:${current.getDate()}`)
+     //console.log("given date",`${date.split("-")[1]}:${date.split("-")[2]}`)
+     if (!(date.split("-")[2] == current.getDate() && date.split("-")[1] == current.getMonth()+1))
+     {
+      console.log("nottt same dateeeeeeeeeeeeeeeeee")
+      if(slot == "AM")
+    {
+      
+      return morning_shifts ;
+      
+    }
+    else if (slot == "PM")
+    {
+      return evening_shifts ;
+    }
+    return ;
+     }
+    else { 
+      if (slot == "AM"){
+    for (var i = 0 ; i < morning_shifts.length ; i++)
+    {
+      var compared_slot = morning_shifts[i].split('-')[1].split(':')  ; 
+      var compared_hour = compared_slot[0]
+      var compared_mins = compared_slot[1]
+       console.log("compared_slot",`${compared_hour}:${compared_mins}`)
+        if (current.getHours()>compared_hour)
+     {
+      console.log("not pushed")
+     }
+     else if (current.getHours()==compared_hour && current.getMinutes() > compared_mins)
+     {
+         console.log("not pushed")
+     }
+     else{
+       return_list.push(morning_shifts[i])
+     }
+      
+    }
+    return return_list;
+  }
+  else if (slot =="PM")
+  {
+        for (var i = 0 ; i < evening_shifts.length ; i++)
+    {
+      var compared_slot = evening_shifts[i].split('-')[1].split(':')  ; 
+      var compared_hour = compared_slot[0]
+      var compared_mins = compared_slot[1]
+       console.log("compared_slot",`${compared_hour}:${compared_mins}`)
+        if (current.getHours()>compared_hour)
+     {
+      console.log("not pushed")
+     }
+     else if (current.getHours()==compared_hour && current.getMinutes() > compared_mins)
+     {
+         console.log("not pushed")
+     }
+     else{
+       return_list.push(evening_shifts[i])
+     }
+      
+    }
+    return return_list;
+  }
+  
+  
+  }
+
+      /* console.log(morning_shifts)
       if(slot == "AM")
       {return morning_shifts ;}
       if(slot == "PM")
-      {return evening_shifts ;}
+      {return evening_shifts ;}*/
 
       }
      
@@ -1104,7 +1176,7 @@ if(data !== "no doctors found in this department"){
                    flag_found_slot = true ;
                    var time_slot =  required_slots[0].split("-");
                      console.log(required_slots[0]) ;                     
-                     navigate("/clinicdoctor", { state: { Doctor_id: data[j].email } });
+                     navigate(`/doctor/${data[j].username}`, { state: { Doctor_id: data[j].email } });
                      dispatch(meetings());
                      handle_speak = "اول معاد متاح مع احسن الدكاترة يوم" + `${items[i].format("dddd")}` + " " + `${items[i].format("DD/MM/YYYY")}` +" "+ "مع دكتور" + `${data[j].arabic_username}` ;
                      handle_speak +=  " من الساعة " + time_slot[0] + " الى "+ time_slot[1] ; 

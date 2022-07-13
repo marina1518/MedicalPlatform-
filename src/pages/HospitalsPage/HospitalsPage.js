@@ -200,7 +200,7 @@ const HospitalsPage = () => {
             </div>
           ))}
         </div>):(
-            <div style={{'margin':'auto'}}>
+            <div style={{ 'position': 'absolute',  'top': '80%', 'left': '50%',  'margin': '-25px 0 0 -25px'}}>
                              <Spinner animation="border" variant="primary" />
             </div>
         )}

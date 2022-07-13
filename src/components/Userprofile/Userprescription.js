@@ -52,7 +52,7 @@ useEffect(()=>{
     
     pres.length === 0 ? (
         loading ?(
-                <div style={{'margin':'auto'}}>
+                <div style={{ 'position': 'absolute',  'top': '40%', 'left': '60%',  'margin': '-25px 0 0 -25px'}}>
                 <Spinner animation="border" variant="primary" />
               </div>
         ):(
@@ -68,7 +68,7 @@ useEffect(()=>{
           ) : (
             // <CardGroup>
             loading ?(
-                  <div style={{'margin':'auto'}}>
+                  <div style={{ 'position': 'absolute',  'top': '40%', 'left': '60%',  'margin': '-25px 0 0 -25px'}}>
                 <Spinner animation="border" variant="primary" />
               </div>
             ):(

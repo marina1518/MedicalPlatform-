@@ -24,6 +24,7 @@
     "coupon-code": "^0.4.5",
     "file-url": "^4.0.0",
     "firebase": "^9.6.8",
+    "gh-pages": "^4.0.0",
     "moment": "^2.29.3",
     "moment-timezone": "^0.5.34",
     "pigeon-maps": "^0.21.0",
