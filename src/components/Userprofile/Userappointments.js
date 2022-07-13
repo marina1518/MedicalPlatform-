@@ -18,8 +18,8 @@ function Userappointments() {
   console.log(action_state);
     let navigate = useNavigate();
     const [loading,setloading]=useState(true)
-  const navigation = (docid) => {
-    navigate("/clinicdoctor", { state: { Doctor_id: docid } });
+  const navigation = (docid,docname) => {
+    navigate(`/doctor/${docname}`, { state: { Doctor_id: docid } });
   };
   const dispatch = useDispatch();
   dispatch(channel_name(""));
@@ -245,10 +245,10 @@ useEffect(()=>{
                               style={{ cursor: "pointer" }}
                               width="20%"
                               onClick={() => {
-                                navigation(item.email);
+                                navigation(item.email,item.dr_name);
                               }}
                             >
-                              <Link to={`/clinicdoctor/`}>{item.dr_name}</Link>
+                              <Link to={`/doctor/${item.dr_name}`}>{item.dr_name}</Link>
                             </td>
                            <td width="20%">
                               {check_button_state(item)}
