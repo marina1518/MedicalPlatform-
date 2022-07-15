@@ -30,6 +30,7 @@ import VideoCall from "./components/Meeting_room/Video_chat/VideoCall";
 import Payment from "./components/Coupon/Coupon";
 import Maps from "./components/Maps/Maps";
 import Complaint from "./components/Complaints/complaints"
+import Modelface from "./components/Facemodel/Facemodel"
 // import Keyboard from "./components/KeboardMego/Keyboard";
 function App() {
   let navigate = useNavigate();
@@ -81,7 +82,7 @@ function App() {
         >
           <Routes>
             {<Route path="/" element={<Home />}></Route>}
-            {/*<Route path="/" element={<Voice/>}></Route>*/}
+            {/*/<Route path="/" element={<Modelface/>}></Route>*/}
 
             {/*<Route path="/" element={<Payment />}></Route>*/}
             <Route path="/Doctors/:Deptname" element={<Doctorscards />}></Route>

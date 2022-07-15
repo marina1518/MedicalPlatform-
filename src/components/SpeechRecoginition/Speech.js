@@ -542,6 +542,7 @@ else {
 }}      
 }
 else{
+  SpeechRecognition.stopListening();
   handle_speak =" لا يوجد طلبات للمتابعة"
 }
  speak({ text: handle_speak , voice : voice , rate : 0.9}) //What to say 
