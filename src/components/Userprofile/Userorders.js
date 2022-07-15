@@ -240,7 +240,7 @@ function Userorders() {
                                                     fontWeight: "bold",
                                                   }}
                                                 >
-                                                  Quantity
+                                                  Q
                                                 </TableCell>
                                               </TableRow>
                                             </TableHead>
