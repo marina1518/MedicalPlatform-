@@ -70,7 +70,7 @@ function Userorders() {
       if (err.response) {
         if(err.response.data === "not authorized, token is failed"){
           dispatch(logout());
-          navigate("/")
+          navigate("/login")
         }
       }
 
@@ -95,7 +95,7 @@ function Userorders() {
       if (err.response) {
         if(err.response.data === "not authorized, token is failed"){
           dispatch(logout());
-          navigate("/")
+          navigate("/login")
         }
       }
 
@@ -124,7 +124,7 @@ function Userorders() {
       if (err.response) {
         if(err.response.data === "not authorized, token is failed"){
           dispatch(logout());
-          navigate("/")
+          navigate("/login")
         }
       }
 

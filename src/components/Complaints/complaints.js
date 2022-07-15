@@ -46,7 +46,7 @@ const Complaint = () => {
       if (err.response) {
         if(err.response.data === "not authorized, token is failed"){
           dispatch(logout());
-          navigate("/")
+          navigate("/login")
         }
       }
     });
