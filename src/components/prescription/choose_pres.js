@@ -9,6 +9,7 @@ import Slot from './file';
 import { Back } from "react-bootstrap-icons";
 import {logout} from '../../actions';
 import { useNavigate } from "react-router-dom";
+import Spinner from "react-bootstrap/Spinner";
 
 const Choose_pres=(props)=>{
         const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const Choose_pres=(props)=>{
         const[next, setnext] = useState(false);
         const[dis, setdis] = useState(true);
         const token = JSON.parse(useSelector((state) => state.auth));
+        const [loading,setloading]=useState(true)
        
         const config = {headers: {
             'Authorization': `Bearer ${token.token}`}};
@@ -38,7 +40,7 @@ const Choose_pres=(props)=>{
                 )
      
                 console.log(res.data);
-                if (res.data==="you have no prescriptions yet") {setnext(true);return}
+                if (res.data==="you have no prescriptions yet") {setnext(true);setloading(false);return}
                 var med_state=[];
                 for(var i=0; i<res.data.length;i++)
                 {
@@ -50,7 +52,7 @@ const Choose_pres=(props)=>{
                 }
                 setpres(med_state);
                 setpres2(res.data);
-                
+                setloading(false)
               
             } 
             catch (err) {
@@ -141,14 +143,23 @@ const quanity=()=>{
                  
             <div style={{width:"350px", height:"350px"}}>
                 {
-                    pres2.length ===0 ? 
+                    pres2.length ===0 ? (
+                    loading?(
+                      <div style={{'margin':'auto'}}>
+                     <Spinner animation="border" variant="primary" />
+                   </div>  
+                      ):(
                     <>
                       <Alert key="primary" variant="primary">
                         There are no prescriptions yet.
                       </Alert>
-                  </>
+                  </>))
                   :
-               
+                  loading?(
+                    <div style={{'margin':'auto'}}>
+                   <Spinner animation="border" variant="primary" />
+                 </div>  
+                    ):(
             <Carousel variant="dark">
                     {
                         pres2.map((p)=>
@@ -181,7 +192,7 @@ const quanity=()=>{
   </Carousel.Item>
                         )
                     }
-            </Carousel>}
+            </Carousel>)}
             </div>
                  
                 </Form>
