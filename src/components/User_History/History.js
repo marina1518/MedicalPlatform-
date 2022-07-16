@@ -165,7 +165,7 @@ console.log("value", value);
                 {edit_surgeries ? (
                   <Form.Control
                     as="textarea"
-                    placeholder="Update History"
+                    placeholder="Update Surgeries history"
                     value={news}
                     onChange={(e) => setnews(e.target.value)}
                     style={{ height: "100px" }}
@@ -203,7 +203,7 @@ console.log("value", value);
                 {edit_diseases ? (
                   <Form.Control
                     as="textarea"
-                    placeholder="Update History"
+                    placeholder="Update Diseases history"
                     value={newd}
                     onChange={(e) => setnewd(e.target.value)}
                     style={{ height: "100px" }}
@@ -241,7 +241,7 @@ console.log("value", value);
                 {edit_familyhist ? (
                   <Form.Control
                     as="textarea"
-                    placeholder="Update History"
+                    placeholder="Update family history"
                     value={newf}
                     onChange={(e) => setnewf(e.target.value)}
                     style={{ height: "100px" }}
@@ -279,7 +279,7 @@ console.log("value", value);
                 {edit_medications ? (
                   <Form.Control
                     as="textarea"
-                    placeholder="Update History"
+                    placeholder="Update Medicines"
                     value={newm}
                     onChange={(e) => setnewm(e.target.value)}
                     style={{ height: "100px" }}
