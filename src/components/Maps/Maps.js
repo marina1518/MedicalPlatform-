@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Map, Marker, ZoomControl, GeoJson } from "pigeon-maps";
 import axios from "axios";
 import "./maps.css";
+import Spinner from "react-bootstrap/Spinner";
+
 
 //! This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
 function calcCrow(lat1, lon1, lat2, lon2) {
@@ -34,17 +36,22 @@ const Maps = () => {
     telephone: "",
     address: "",
   });
-  const [center, setCenter] = useState([30.117165, 31.339126]);
-  //! to get my location
-  useEffect(() => {
+  const [center, setCenter] = useState([50.879, 4.6997]);
+  const [flag,setflag]=useState(false)
+  const getlocation =  ()=>{
     navigator.geolocation.getCurrentPosition(function (position) {
       console.log("Latitude is :", position.coords.latitude);
       console.log("Longitude is :", position.coords.longitude);
-      setCenter({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
+      setCenter([position.coords.latitude,position.coords.longitude]);
+      setflag(true)
     });
+  }
+  console.log("center",center)
+  useEffect(()=>{
+   getlocation();
+  },[])
+  //! to get my location
+  useEffect(() => {    
     axios
       .get("https://future-medical.herokuapp.com/entities/info")
       .then((res) => setHospitals(res.data));
@@ -53,7 +60,7 @@ const Maps = () => {
   console.log("Hospitals is", Hospitals);
   const [hue, setHue] = useState(0);
   const color = `hsl(${hue % 360}deg 39% 70%)`;
-  const geoJsonSample = {
+ /* const geoJsonSample = {
     type: "FeatureCollection",
     features: [
       {
@@ -65,21 +72,23 @@ const Maps = () => {
         properties: { prop0: "value0" },
       },
     ],
-  };
+  };*/
   return (
-    <div>
+    <>
+    { flag==true ? (<div>
       <div className="map">
-        <Map
+          <Map
           // height={700}
           center={center}
           // zoom={zoom}
           defaultZoom={15}
+       
         >
           <ZoomControl />
           <Marker
             width={50}
             color={color}
-            anchor={[30.148084998897264, 31.327878769895243]}
+            anchor={center}
           />
 
           {Hospitals.map((space, index) => {
@@ -119,7 +128,12 @@ const Maps = () => {
           </div>
         )}
       </div>
-    </div>
+    </div>):(
+ <div style={{ 'position': 'absolute',  'top': '50%', 'left': '60%',  'margin': '-25px 0 0 -25px'}}>
+                <Spinner animation="border" variant="primary" />
+            </div>
+    )}
+    </>
   );
 };
 
