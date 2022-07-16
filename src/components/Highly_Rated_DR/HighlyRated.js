@@ -24,7 +24,7 @@ Get_Doctors_Entity();
           {Doctors.length !== 0 &&
             Doctors.map(
               (doctor) =>
-                doctor.rate >= 3 && (
+                doctor.rate >= 4 && (
                   <Onedoctor doctor={doctor} key={doctor.id} />
                 )
             )}
