@@ -5,27 +5,26 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import VideoChat from "../../components/Meeting_room/Video_chat/VideoChat";
 import Tooltip from "@mui/material/Tooltip";
 import { channel_name, leave } from "./../../actions";
-import {  Button,    Table,   useAccordionButton , Alert} from "react-bootstrap";
-import {logout} from '../../actions'
+import { Button, Table, useAccordionButton, Alert } from "react-bootstrap";
+import { logout } from "../../actions";
 import { AiFillClockCircle } from "react-icons/ai";
 import Spinner from "react-bootstrap/Spinner";
 
 function Userappointments() {
-
-      const action_state = JSON.parse(
+  const action_state = JSON.parse(
     useSelector((state) => state.meeting_reducer)
   );
   console.log(action_state);
-    let navigate = useNavigate();
-    const [loading,setloading]=useState(true)
-  const navigation = (docid,docname) => {
+  let navigate = useNavigate();
+  const [loading, setloading] = useState(true);
+  const navigation = (docid, docname) => {
     navigate(`/doctor/${docname}`, { state: { Doctor_id: docid } });
   };
   const dispatch = useDispatch();
   dispatch(channel_name(""));
 
   const token = JSON.parse(useSelector((state) => state.auth));
-    const config = {
+  const config = {
     headers: {
       Authorization: `Bearer ${token.token}`,
     },
@@ -41,21 +40,19 @@ function Userappointments() {
       );
 
       console.log(res.data);
-      if (res.data === "you have no meetings yet"){
-        setloading(false)
-         return;
-         
+      if (res.data === "you have no meetings yet") {
+        setloading(false);
+        return;
       }
       setmeetings(res.data);
-      setloading(false)
+      setloading(false);
     } catch (err) {
       if (err.response) {
-        if(err.response.data === "not authorized, token is failed"){
+        if (err.response.data === "not authorized, token is failed") {
           dispatch(logout());
-          navigate("/login")
+          navigate("/login");
         }
       }
-
     }
   };
 
@@ -115,8 +112,8 @@ function Userappointments() {
       </Button>
     );
   }
-  
-       //meeting button
+
+  //meeting button
   const local_date = new Date();
   var utc_offset = local_date.getTimezoneOffset() / 60;
   console.log(utc_offset);
@@ -173,97 +170,92 @@ function Userappointments() {
     }
   };
 
-useEffect(()=>{
+  useEffect(() => {
     get_meetings();
-},[])
+  }, []);
 
   return (
-   
     <div className="card">
-            <div className="card-header bg-transparent border-0">
-              <h3 className="mb-0">
-                <AiFillClockCircle /> Appointments
-              </h3>
-            </div>
-            <div className="card-body pt-0">
-              <div>
-                <Table responsive="sm">
-                  <thead>
-                    <tr>
-                      <th width="20%">Date</th>
-                      <th width="20%">Time</th>
-                      <th width="20%">Dr Name</th>
-                      <th width="20%">Meeting</th>
+      <div className="card-header bg-transparent border-0">
+        <h3 className="mb-0">
+          <AiFillClockCircle /> Appointments
+        </h3>
+      </div>
+      {loading ? (
+        <div style={{ margin: "auto" }}>
+          <Spinner animation="border" variant="primary" />
+        </div>
+      ) : (
+        <div className="card-body pt-0">
+          <div>
+            <Table responsive="sm">
+              <thead>
+                <tr>
+                  <th width="20%">Date</th>
+                  <th width="20%">Time</th>
+                  <th width="20%">Dr Name</th>
+                  <th width="20%">Meeting</th>
 
-                      <th width="20%">State</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {meetings.length === 0 ? (
-                         loading?(
-                 <div style={{'margin':'auto'}}>
-                <Spinner animation="border" variant="primary" />
-              </div>  
-                 ):(
-                        <>
-                          <Alert
-                           key="primary"
-                           variant="primary"
-                           style={{ margin: "1rem 2rem" }}
-                          >
-                     There are no meetings yet.
-                     </Alert>
-            </>)
-                    ) : (
-                               loading?(
-                 <div style={{'margin':'auto'}}>
-                <Spinner animation="border" variant="primary" />
-              </div>  
-                 ):(
-                      <>
-                        {meetings.reverse().map((item) => (
-                          <tr
-                            key={item.id}
-                            style={
-                              item.state === "Pending"
-                                ? { opacity: "1" }
-                                : item.state === "Today"
-                                ? { background: "#B9D9EB" }
-                                : { opacity: "0.5" }
-                            }
-                          >
-                            <td width="20%">
-                              {item.date
-                                .split("T")[0]
-                                .split("-")
-                                .reverse()
-                                .join("-")}
-                            </td>
-                            <td width="20%">{item.slot}</td>
+                  <th width="20%">State</th>
+                </tr>
+              </thead>
+              <tbody>
+                {meetings.length === 0 ? (
+                  <>
+                    <Alert
+                      key="primary"
+                      variant="primary"
+                      style={{ margin: "1rem 2rem" }}
+                    >
+                      There are no meetings yet.
+                    </Alert>
+                  </>
+                ) : (
+                  <>
+                    {meetings.reverse().map((item) => (
+                      <tr
+                        key={item.id}
+                        style={
+                          item.state === "Pending"
+                            ? { opacity: "1" }
+                            : item.state === "Today"
+                            ? { background: "#B9D9EB" }
+                            : { opacity: "0.5" }
+                        }
+                      >
+                        <td width="20%">
+                          {item.date
+                            .split("T")[0]
+                            .split("-")
+                            .reverse()
+                            .join("-")}
+                        </td>
+                        <td width="20%">{item.slot}</td>
 
-                            <td
-                              style={{ cursor: "pointer" }}
-                              width="20%"
-                              onClick={() => {
-                                navigation(item.email,item.dr_name);
-                              }}
-                            >
-                              <Link to={`/doctor/${item.dr_name}`}>{item.dr_name}</Link>
-                            </td>
-                           <td width="20%">
-                              {check_button_state(item)}
-                            </td>
-                            <td width="20%">{item.state}</td>
-                          </tr>
-                        ))}
-                      </>)
-                    )}
-                  </tbody>
-                </Table>
-              </div>
-            </div>
-          </div>)
-  
+                        <td
+                          style={{ cursor: "pointer" }}
+                          width="20%"
+                          onClick={() => {
+                            navigation(item.email, item.dr_name);
+                          }}
+                        >
+                          <Link to={`/doctor/${item.dr_name}`}>
+                            {item.dr_name}
+                          </Link>
+                        </td>
+                        <td width="20%">{check_button_state(item)}</td>
+                        <td width="20%">{item.state}</td>
+                      </tr>
+                    ))}
+                  </>
+                )}
+              </tbody>
+            </Table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default Userappointments
+export default Userappointments;
