@@ -36,6 +36,7 @@ const Doctor = () => {
   let [show_rev, setshoe_rev] = useState([]);
   let [dr_timetable, setdr_timetable] = useState([]);
   const[rate,setrate]=useState(0);
+  const[count, setcount] = useState(0);
   console.log(doctor_data);
   const Get_info_api = async () => {
     try {
@@ -68,6 +69,7 @@ const Doctor = () => {
       setdr_timetable(rr);
       setdoctor_data(Doctor_Api);
       setrate(data.rate);
+      setcount(data.rate_count);
       //setdoctor_data(data);
     } catch (err) {
       console.error(err);
@@ -311,8 +313,8 @@ const Doctor = () => {
              <>
              <div className="card shadow-sm">
              <div className="card-header bg-transparent">
-             <p className="mb-0"><strong className="pr-1"> <MdOutlineStarRate /> Ratings: </strong>  <small className="text-muted"> ({doctor_data.rate_count} verified ratings)</small></p> 
-                 <Star setrating={setrating} dr_id={Docid.Doctor_id}/>
+             <p className="mb-0"><strong className="pr-1"> <MdOutlineStarRate /> Ratings: </strong>  <small className="text-muted"> ({count} verified ratings)</small></p> 
+                 <Star setrating={setrating} dr_id={Docid.Doctor_id} setcount={setcount} count={count}/>
                </div>
              </div>
              <br/>

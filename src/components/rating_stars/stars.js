@@ -4,6 +4,7 @@ import axios from "axios";
 const StarRating = (props) => {
     const [rating, setRating] = useState(0);
     props.setrating(rating);
+    
     const [hover, setHover] = useState(0);
 
     const rating_api = async (rating)=>{
@@ -27,7 +28,7 @@ const StarRating = (props) => {
               type="button"
               key={index}
               className={index <= (hover || rating) ? "on" : "off"}
-              onClick={() => {setRating(index); rating_api(index);}}
+              onClick={() => {setRating(index); rating_api(index); props.setcount(parseInt(props.count)+1);}}
               onMouseEnter={() => setHover(index)}
               onMouseLeave={() => setHover(rating)}
             >
