@@ -99,6 +99,7 @@ const Complaint = () => {
       console.log(data);
       if(token.token){
         complaint_api();
+        navigate("/");
       }
       else{
         login();
