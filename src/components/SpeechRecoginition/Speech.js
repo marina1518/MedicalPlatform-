@@ -990,15 +990,61 @@ const GET_DATES_DOCTORS = (timetable) =>{
             var c = parseInt(dr_app[i].from);
             var d = parseInt(dr_app[i].from) + 1;
             for (var k = 0; k < num_slots; k++) {
-              if (k % 2 === 0) {
-                if (!(reserved.includes(`${c}:00 - ${c}:30`)))
-               { evening_shifts.push(`${c}:00 - ${c}:30`);}
+                          if (k % 2 === 0) {
+                if (reserved.includes(`${c}:00 - ${c}:30`)) {
+                  if(c<12)
+                  {morning_shifts.push({
+                    slot: `${c}:00 - ${c}:30`,
+                    state: true,
+                  });}
+                  else
+                  {evening_shifts.push({
+                    slot: `${c}:00 - ${c}:30`,
+                    state: true,
+                  });}
+                } else {
+                  if(c<12)
+                  {morning_shifts.push({
+                    slot: `${c}:00 - ${c}:30`,
+                    state: false,
+                  });}
+                  else{
+                    evening_shifts.push({
+                      slot: `${c}:00 - ${c}:30`,
+                      state: false,
+                    });
+                  }
+                }
               } else {
-                if (!(reserved.includes(`${c}:30 - ${d}:00`)))
-                {evening_shifts.push(`${c}:30 - ${d}:00`);}
+                if (reserved.includes(`${c}:30 - ${d}:00`)) {
+                  if(c<12){morning_shifts.push({
+                    slot: `${c}:30 - ${d}:00`,
+                    state: true,
+                  });}
+                  else{
+                    evening_shifts.push({
+                      slot: `${c}:30 - ${d}:00`,
+                      state: true,
+                    });
+                  }
+                  c += 1;
+                  d += 1;
+                } else {
+                  if(c<12)
+                  {morning_shifts.push({
+                    slot: `${c}:30 - ${d}:00`,
+                    state: false,
+                  });}
+                  else{
+                    evening_shifts.push({
+                      slot: `${c}:30 - ${d}:00`,
+                      state: false,
+                    });
+                  }
                   c += 1;
                   d += 1;
                 }
+              }
               }
             }
           }
