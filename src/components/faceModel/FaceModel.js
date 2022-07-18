@@ -2,25 +2,48 @@ import axios from "axios";
 import "./login.css";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import Webcam from "react-webcam";
-import { useRef, useState } from "react";
+import { useRef, useState , useEffect } from "react";
 import { db } from "./firebase";
-import {
-  doc,
-  setDoc,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-
+import {  doc,  setDoc,  collection,  getDocs,  query,  where,} from "firebase/firestore";
 import { Spinner } from "react-bootstrap";
-
 import { Link, useNavigate } from "react-router-dom";
 
 const FaceModel = () => {
   // let [imgCount, setImgCount] = useState(0);
   // let img = "No Image";
   // // 1)
+  const All_mails_api = async()=>{
+    try{
+           const res = await axios.get("https://future-medical.herokuapp.com/emails") ;
+           const data = await res.data ;
+           console.log("mails",data)
+    }
+    catch(err)
+    {
+      console.log(err)
+    }
+  }
+
+  
+  const Login_face = async()=>{
+   const res = await axios.post("http://192.168.1.109:5000/face_id",
+   {
+     mails: ["magymagdy@gmail.com","fadygamil@gmail.com"], //FROM MARY API
+    CurrUser : ["fadygamil@gmail.com"]
+   })
+   const data = await res.data ;
+   console.log("API FACE",data)
+   
+  }
+
+  useEffect(()=>{
+   All_mails_api()   
+  },[])
+
+
+   useEffect(()=>{
+    Login_face()
+   },[])
   let allImages = [];
   let imgCount = 0;
 
@@ -32,7 +55,8 @@ const FaceModel = () => {
     //console.log(img);
     imgCount++;
     upload(img, `${imgCount}`); // sec argument unique id
-    get_all_data();
+    Login_face();
+    //get_all_data();
     //get_specific_data("tharwat") // parameter key value to search
     setdone(true);
   };
