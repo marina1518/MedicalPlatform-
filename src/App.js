@@ -29,9 +29,10 @@ import ProfileUI from "./pages/profiles/ProfileUI";
 import VideoCall from "./components/Meeting_room/Video_chat/VideoCall";
 import Payment from "./components/Coupon/Coupon";
 import Maps from "./components/Maps/Maps";
-import Complaint from "./components/Complaints/complaints"
-import Modelface from "./components/Facemodel/Facemodel"
-// import Keyboard from "./components/KeboardMego/Keyboard";
+import Complaint from "./components/Complaints/complaints";
+import Login_face from './components/faceModel/FaceModel';
+import Reg_face from './components/faceModel/FaceModel_register';
+
 function App() {
   let navigate = useNavigate();
   const location = useLocation();
@@ -86,10 +87,16 @@ function App() {
 
             {/*<Route path="/" element={<Payment />}></Route>*/}
             <Route path="/Doctors/:Deptname" element={<Doctorscards />}></Route>
-            <Route path="/login" element={<Login />}>
+            <Route path="/login_normal" element={<Login />}>
+              {" "}
+            </Route>
+            <Route path="/login" element={<Login_face />}>
               {" "}
             </Route>
             <Route path="/signup" element={<Signup />}>
+              {" "}
+            </Route>
+            <Route path="/takeimage" element={<Reg_face />}>
               {" "}
             </Route>
             <Route path="/Entities/:entity" element={<HospitalsPage />}>
