@@ -20,6 +20,7 @@ import { Link, useNavigate } from "react-router-dom";
 //import dr1 from './../../images/dr2.png';
 import Spinner from "react-bootstrap/Spinner";
 import "./login.css";
+import FaceModel_register from "../../components/faceModel/FaceModel_register";
 
 const Signup = () => {
   const token = JSON.parse(useSelector((state) => state.auth)); //state of token
@@ -30,32 +31,32 @@ const Signup = () => {
     navigate("/");
   };
 
-  const register_api = () => {
-    //console.log("MADONNAAAA" , data);
-    axios
-      .post("https://future-medical.herokuapp.com/register", {
-        username: data.username,
-        email: data.email,
-        password: data.password,
-        address: data.add,
-        blood: data.blood,
-        dateOfBirth: data.dob,
-        phone: data.phone,
-        gender: data.gender,
-      })
-      .then((res) => {
-        console.log(res.data);
-        dispatch(signin(res.data)); //save the data
-        navigate("/"); //Go to Home
-      })
-      .catch(function (error) {
-        setloading(false)
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-        }
-      });
-  };
+  // const register_api = () => {
+  //   //console.log("MADONNAAAA" , data);
+  //   axios
+  //     .post("https://future-medical.herokuapp.com/register", {
+  //       username: data.username,
+  //       email: data.email,
+  //       password: data.password,
+  //       address: data.add,
+  //       blood: data.blood,
+  //       dateOfBirth: data.dob,
+  //       phone: data.phone,
+  //       gender: data.gender,
+  //     })
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       dispatch(signin(res.data)); //save the data
+  //       navigate("/"); //Go to Home
+  //     })
+  //     .catch(function (error) {
+  //       setloading(false)
+  //       if (error.response) {
+  //         console.log(error.response.data);
+  //         console.log(error.response.status);
+  //       }
+  //     });
+  // };
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -68,8 +69,7 @@ const Signup = () => {
   const [gender, setgender] = useState("");
   const [msg, setmsg] = useState("");
   const [username, setusername] = useState("");
-
-  const data = [
+  const[data, setdata] = useState(
     {
       email: "",
       password: "",
@@ -81,7 +81,20 @@ const Signup = () => {
       username: "",
       gender: "",
     },
-  ];
+  );
+  // const data = [
+  //   {
+  //     email: "",
+  //     password: "",
+  //     dob: "",
+  //     add: "",
+  //     phone: "",
+  //     history: "",
+  //     blood: "",
+  //     username: "",
+  //     gender: "",
+  //   },
+  // ];
 
   const [e_u, sete_u] = useState("");
   const [e_p, sete_p] = useState("");
@@ -168,8 +181,11 @@ const Signup = () => {
       data.username = username;
       data.gender = gender;
       console.log(data);
-      register_api();
+      //register_api();
+      setdata(data);
       setloading(true)
+      navigate(`/takeimage`, { state: { data: data } });
+      //navigate('/takeimage');
     } else if (flag === 0) {
       setmsg("!! not matching passwords");
        setloading(false)
@@ -369,9 +385,10 @@ const Signup = () => {
                   <Button
                     variant="primary btn-block"
                     type="submit"
-                    onSubmit={submit_value}
+                    onSubmit={(e)=>submit_value()}
+                    //data={data}
                   >
-                    Register
+                    Next
                   </Button>
                 </div>
               </div>

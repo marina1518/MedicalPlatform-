@@ -26,7 +26,7 @@ const Login = () => {
   const { decodedToken, isExpired } = useJwt(token);
   const [error_email, sete_error] = useState("");
   const [error_pass, setp_error] = useState("");
-    const [loading, setloading] = useState(false);
+  const [loading, setloading] = useState(false);
   const dispatch = useDispatch();
   //console.log("Loading state", loading)
   const login_api = () => {
@@ -43,7 +43,7 @@ const Login = () => {
         navigate("/");
       })
       .catch(function (error) {
-        setloading(false)
+        setloading(false);
         if (error.response) {
           console.log(error.response.data);
           console.log(error.response.status);
@@ -78,16 +78,16 @@ const Login = () => {
       //setflag(1);
       flag = 1;
       console.log(flag);
-      setloading(false)
+      setloading(false);
     }
     if (password === "") {
       seterror_p("Password required");
       // setflag(1);
       flag = 1;
-      setloading(false)
+      setloading(false);
     }
     if (flag === 0) {
-      setloading(true)
+      setloading(true);
       data.email = email;
       data.password = password;
       data.type = type;
@@ -96,90 +96,97 @@ const Login = () => {
     }
   };
 
-  return (<>
-    {!loading ?(
-    <div className="login_sigup_container">
-      <Container>
-       <div className="form-container_login">
-         
-          
-          <h1
-            // className="shadow-sm mt-5 p-3 text-center rounded"
-            style={{ color: "#06a3da", marginTop: "30px" }}
-          >
-            Welcome Back
-          </h1>
-          <br />
-          <div className="form-details_login">
-            <Form onSubmit={submit_value}>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <FaUser style={{ color: "#06a3da" }} />{" "}
-                <Form.Label> Email address </Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter email"
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    sete_error("");
-                    seterror_e("");
-                  }}
-                  value={email}
-                />
-                <h6 style={{ color: "red" }}>{error_email}</h6>
-                <h6 style={{ color: "red" }}>{error_e}</h6>
-              </Form.Group>
+  return (
+    <>
+      {!loading ? (
+        <div className="login_sigup_container">
+          <Container>
+            <div className="form-container_login">
+              <h1
+                // className="shadow-sm mt-5 p-3 text-center rounded"
+                style={{ color: "#06a3da", marginTop: "30px" }}
+              >
+                Welcome Back
+              </h1>
               <br />
-              <Form.Group controlId="formBasicPassword">
-                <FaLock style={{ color: "#06a3da" }} />{" "}
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setp_error("");
-                    seterror_p("");
-                  }}
-                />
-                <h6 style={{ color: "red" }}>{error_pass}</h6>
-                <h6 style={{ color: "red" }}>{error_p}</h6>
-              </Form.Group>
-              <br />
-              <div className="d-grid">
-                <Button
-                  variant="primary btn-block"
-                  type="submit"
-                  onSubmit={submit_value}
-                >
-                  Login
-                </Button>
+              <div className="form-details_login">
+                <Form onSubmit={submit_value}>
+                  <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <FaUser style={{ color: "#06a3da" }} />{" "}
+                    <Form.Label> Email address </Form.Label>
+                    <Form.Control
+                      type="email"
+                      placeholder="Enter email"
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        sete_error("");
+                        seterror_e("");
+                      }}
+                      value={email}
+                    />
+                    <h6 style={{ color: "red" }}>{error_email}</h6>
+                    <h6 style={{ color: "red" }}>{error_e}</h6>
+                  </Form.Group>
+                  <br />
+                  <Form.Group controlId="formBasicPassword">
+                    <FaLock style={{ color: "#06a3da" }} />{" "}
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        setp_error("");
+                        seterror_p("");
+                      }}
+                    />
+                    <h6 style={{ color: "red" }}>{error_pass}</h6>
+                    <h6 style={{ color: "red" }}>{error_p}</h6>
+                  </Form.Group>
+                  <br />
+                  <div className="d-grid">
+                    <Button
+                      variant="primary btn-block"
+                      type="submit"
+                      onSubmit={submit_value}
+                    >
+                      Login
+                    </Button>
+                  </div>
+                </Form>
+                <br />
+                <div className="text-center">
+                  <p>
+                    Login using your Face_ID
+                    <Link to={"/login_face"}>
+                      <a className="ml-1 text-blue-900 ">
+                        {" "}
+                        <u>Login Page</u>
+                      </a>
+                    </Link>
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p>
+                    join us now
+                    <Link to={"/signup"}>
+                      <a className="ml-1 text-blue-900 ">
+                        {" "}
+                        <u>Register here</u>
+                      </a>
+                    </Link>
+                  </p>
+                </div>
               </div>
-            </Form>
-
-            <br />
-            <div className="text-center">
-              <p>
-                join us now
-                <Link to={"/signup"}>
-                  <a className="ml-1 text-blue-900 ">
-                    {" "}
-                    <u>Register here</u>
-                  </a>
-                </Link>
-              </p>
             </div>
-          </div>
-        
-
-
+          </Container>
         </div>
-      </Container>
-    </div>):(
-      <div style={{margin:'auto'}}>
-                <Spinner animation="border" variant="primary" />
-              </div>
-    )}
+      ) : (
+        <div style={{ margin: "auto" }}>
+          <Spinner animation="border" variant="primary" />
+        </div>
+      )}
     </>
   );
 };
