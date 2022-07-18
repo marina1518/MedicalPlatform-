@@ -54,17 +54,18 @@ const FaceModel_register = () => {
       });
   };
   let allImages = [];
-  let imgCount = 0;
+  var imgCount = 0;
   const [counter, setcounter] = useState(0);
   const [loading, setloading] = useState(false);
   const webRef = useRef(null);
   let img = "No Image";
   const showImage = () => {
     img = webRef.current.getScreenshot();
-    //console.log(img);
+    //console.log("count_img",imgCount);
     imgCount++;
-    upload(img, `${imgCount}`); // sec argument unique id
-    get_all_data();
+    upload(img, `${counter}`); // sec argument unique id
+    //get_all_data();
+    //setdone(true)
     //get_specific_data("tharwat") // parameter key value to search
     setcounter(parseInt(counter) + 1);
     if (counter == 10) setdone(true);
@@ -73,8 +74,8 @@ const FaceModel_register = () => {
 
   // 2)
   const upload = async (image, uniqueid) => {
-    await setDoc(doc(db, "login@gmail.com", uniqueid), {
-      key: "login@gmail.com",
+    await setDoc(doc(db, data.email, uniqueid), {
+      key: data.email,
       base64: `${image}`,
     });
   }; //we may add key {key:"gg",base64:image}
@@ -130,16 +131,16 @@ const FaceModel_register = () => {
                   {!done ? (
                     <Button
                       variant="primary btn-block"
-                      type="submit"
-                      onclick={showImage}
+                      type="button"
+                      onClick={showImage}
                     >
                       Take Image {counter}
                     </Button>
                   ) : (
                     <Button
                       variant="primary btn-block"
-                      type="submit"
-                      onSubmit={(e) => register_api(data)}
+                      type="button"
+                      onClick={(e) => register_api(data)}
                     >
                       Register
                     </Button>

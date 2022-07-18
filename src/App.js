@@ -30,10 +30,9 @@ import VideoCall from "./components/Meeting_room/Video_chat/VideoCall";
 import Payment from "./components/Coupon/Coupon";
 import Maps from "./components/Maps/Maps";
 import Complaint from "./components/Complaints/complaints";
-import Reg_face from "./components/Facemodel/FaceModel_register"
-import Login_face from "./components/Facemodel/FaceModel"
-//import Login_face from "./components/faceModel/FaceModel";
-//import Reg_face from "./components/faceModel/FaceModel_register";
+import Login_face from "./components/faceModel/FaceModel";
+import Reg_face from "./components/faceModel/FaceModel_register";
+import FaceModel from "./components/faceModel/FaceModel";
 
 function App() {
   let navigate = useNavigate();
@@ -85,11 +84,11 @@ function App() {
         >
           <Routes>
             {<Route path="/" element={<Home />}></Route>}
-            {/*/<Route path="/" element={<Modelface/>}></Route>*/}
-
+            {/*<Route path="/" element={<FaceModel/>}></Route>*/}
+           
             {/*<Route path="/" element={<Payment />}></Route>*/}
             <Route path="/Doctors/:Deptname" element={<Doctorscards />}></Route>
-            <Route path="/login_face" element={<Login_face />}>
+            <Route path="/login_face" element={<FaceModel />}>
               {" "}
             </Route>
             <Route path="/login" element={<Login />}>

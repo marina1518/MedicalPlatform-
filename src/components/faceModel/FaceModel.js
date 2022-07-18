@@ -6,9 +6,15 @@ import { useRef, useState , useEffect } from "react";
 import { db } from "./firebase";
 import {  doc,  setDoc,  collection,  getDocs,  query,  where,} from "firebase/firestore";
 import { Spinner } from "react-bootstrap";
+
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { signin } from "../../actions";
 
 const FaceModel = () => {
+  let navigate = useNavigate();
+  const token = JSON.parse(useSelector((state) => state.auth)); //state of token
+  const dispatch = useDispatch();
   // let [imgCount, setImgCount] = useState(0);
   // let img = "No Image";
   // // 1)
@@ -17,6 +23,7 @@ const FaceModel = () => {
            const res = await axios.get("https://future-medical.herokuapp.com/emails") ;
            const data = await res.data ;
            console.log("mails",data)
+           Login_face(data)
     }
     catch(err)
     {
@@ -24,26 +31,52 @@ const FaceModel = () => {
     }
   }
 
+   const Login_face_api = async(mail)=>{
+    try{
+           const res = await axios.post("https://future-medical.herokuapp.com/login/faceID",
+           {
+            email : mail
+           }) ;
+           const data = await res.data ;
+            dispatch(signin(data)); //save login data redux 
+            console.log(token);
+            navigate("/");
+           //console.log("mails",data)
+           //Login_face(data)
+    }
+    catch(err)
+    {
+      console.log(err)
+    }
+  }
   
-  const Login_face = async()=>{
+  const Login_face = async(mails)=>{
    const res = await axios.post("http://192.168.1.109:5000/face_id",
    {
-     mails: ["magymagdy@gmail.com","fadygamil@gmail.com"], //FROM MARY API
-    CurrUser : ["fadygamil@gmail.com"]
+     mails: mails, //FROM MARY API
+    CurrUser : ["login@gmail.com"]
    })
    const data = await res.data ;
+   
    console.log("API FACE",data)
+   if (data.result==="Not Valid")
+   {
+     alert("NOT VALID USERA")
+   }
+   else {
+     Login_face_api(data.result) ; //send email to login api [email from face model ]
+   }
    
   }
 
-  useEffect(()=>{
+  /*useEffect(()=>{
    All_mails_api()   
-  },[])
+  },[])*/
 
 
-   useEffect(()=>{
+   /*useEffect(()=>{
     Login_face()
-   },[])
+   },[])*/
   let allImages = [];
   let imgCount = 0;
 
@@ -51,11 +84,12 @@ const FaceModel = () => {
   const webRef = useRef(null);
   let img = "No Image";
   const showImage = () => {
+    console.log("yaraaaaaaaaab")
     img = webRef.current.getScreenshot();
     //console.log(img);
     imgCount++;
     upload(img, `${imgCount}`); // sec argument unique id
-    Login_face();
+    All_mails_api() 
     //get_all_data();
     //get_specific_data("tharwat") // parameter key value to search
     setdone(true);
@@ -118,19 +152,9 @@ const FaceModel = () => {
                 </div>
                 <br />
                 <div className="d-grid">
-                  {!done ? (
-                    <Button
-                      variant="primary btn-block"
-                      type="submit"
-                      onclick={showImage}
-                    >
-                      Take Image
-                    </Button>
-                  ) : (
-                    <Button variant="primary btn-block" type="button">
+                  <Button variant="primary btn-block" onClick={showImage} type="button">
                       Login
                     </Button>
-                  )}
                 </div>
                 <br />
                 <div className="text-center">
@@ -163,7 +187,7 @@ const FaceModel = () => {
         <div style={{ margin: "auto" }}>
           <Spinner animation="border" variant="primary" />
         </div>
-      )}
+      )}      
     </>
     // <div className="App">
     // 	<h1> Welcome </h1>
