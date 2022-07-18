@@ -20,7 +20,7 @@ import { Link, useNavigate } from "react-router-dom";
 //import dr1 from './../../images/dr2.png';
 import Spinner from "react-bootstrap/Spinner";
 import "./login.css";
-import FaceModel_register from "../../components/faceModel/FaceModel_register";
+
 
 const Signup = () => {
   const token = JSON.parse(useSelector((state) => state.auth)); //state of token

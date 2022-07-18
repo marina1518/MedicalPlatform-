@@ -30,8 +30,10 @@ import VideoCall from "./components/Meeting_room/Video_chat/VideoCall";
 import Payment from "./components/Coupon/Coupon";
 import Maps from "./components/Maps/Maps";
 import Complaint from "./components/Complaints/complaints";
-import Login_face from "./components/faceModel/FaceModel";
-import Reg_face from "./components/faceModel/FaceModel_register";
+import Reg_face from "./components/Facemodel/FaceModel_register"
+import Login_face from "./components/Facemodel/FaceModel"
+//import Login_face from "./components/faceModel/FaceModel";
+//import Reg_face from "./components/faceModel/FaceModel_register";
 
 function App() {
   let navigate = useNavigate();
